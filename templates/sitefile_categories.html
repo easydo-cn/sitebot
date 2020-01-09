@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+  <div class="tab-content">
+    <div class="tab-pane active" id="downfiles">
+      {% if not file_count %}
+        <div colspan="" class="alert alert-info text-center">
+          {{_('No file')}}
+        </div>
+      {% else %}
+        <div class="well well-small">
+          {{_('All downloaded files')}}
+        </div>
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>{{_('Category')}}</th>
+              <th>{{_('Count')}}</th>
+              <th>{{_('Operation')}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in categories %}
+              <tr>
+                <td>{{_(category.name)}}</td>
+                <td>
+                  {{category.count}}
+                </td>
+                <td>
+                  <a href="{{category.management_url}}">
+                    {{_('View')}}
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+  {{ super() }}
+  {{ anchor_loading() }}
+{% endblock %}

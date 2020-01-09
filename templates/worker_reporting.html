@@ -1,0 +1,491 @@
+<style type="text/css">
+  .log {
+    margin: 15px 15px 0 15px;
+  }
+  .secure {
+    color: green;
+  }
+  .insecure {
+    color: white;
+  }
+  .span1 {
+    width: 80px;
+  }
+  .col-sm-3 {
+    margin-left: 5px;
+  }
+  .panel {
+    margin: 3%;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+  }
+  .button-panel {
+    margin-top: 2%;
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+  body {
+    overflow-y: hidden;
+  }
+  .container {
+    width: 100%;
+  }
+  .row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+  }
+  form {
+    margin-bottom: 0px;
+  }
+  .log_text {
+    max-width: 500px;
+    max-height: 350px;
+    overflow: scroll;
+    white-space: pre;
+    width: auto;
+    word-break: break-all;
+    word-wrap: initial;
+  }
+  .file-title {
+    margin-left: 3%;
+    font-size: 13px;
+  }
+  .file-area {
+    padding-left: 20px;
+    margin-top: 1%;
+  }
+  .error-report-area {
+    padding-left: 20px;
+    margin-top: 1%;
+    height: 65px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .custom-span2 {
+    width: 75px !important;
+    min-height: 10px !important;
+  }
+  .unknown {
+    color: red;
+  }
+  .running {
+    color: green;
+  }
+  .error {
+    color: red;
+  }
+  .finished {
+    color: #3E48CE;
+  }
+  .wait {
+    color: yellow;
+  }
+  .paused {
+    color: #FFC90F;
+  }
+  .prepare {
+    color: blue;
+  }
+  .filename {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    text-rendering: optimizeLegibility;
+  }
+</style>
+<div class="container">
+  <input type="hidden" id="state" value="{{ state }}">
+  <div class="panel">
+    <form role="form" class="detail">
+      <div id="task" class="row">
+        <label class="col-sm-2 control-label span1" for="task_name">{{ _("Task") }}:</label>
+        <div id="task_name" class="col-sm-3 span2">{{ worker_name }}</div>
+        <label class="col-sm-2 control-label span1" for="task_state">{{ _("Status") }}:</label>
+        <div class="col-sm-3">
+          <i id="state_icon" class="fa fa-circle {{ state }}" title="{{ worker_state }}"></i>
+          <span id="task_state">{{ worker_state }}</span>
+        </div>
+      </div>
+      <div id="task_info" class="row hide">
+        <label class="col-sm-2 control-label span1" for="reason">{{ _("Reason") }}:</label>
+        <div id="reason" class="col-sm-3 span2"></div>
+      </div>
+      <div id="progress" class="row">
+        <label class="col-sm-2 control-label span1" for="total_number">{{ _("Total") }}:</label>
+        <div id="total_number" class="col-sm-3 span2">{{ total_number }}</div>
+        <label class="col-sm-2 control-label span1" for="completed_number">{{ _("Completed") }}:</label>
+        <div id="completed_number" class="col-sm-3">{{ completed_number }}</div>
+      </div>
+      <div id="speed" class="row">
+        <label class="col-sm-2 control-label span1" for="current_speed">{{ _("Net Speed") }}:</label>
+        <div id="current_speed" class="col-sm-3 span2">0 KB/S</div>
+        <label class="col-sm-2 control-label span1" for="estimated_time">{{ _("Estimated") }}:</label>
+        <div id="estimated_time" class="col-sm-3">00:00:00</div>
+      </div>
+      <div id="site" class="row">
+        <label class="col-sm-2 control-label span1" for="site_link">{{ _("Site") }}:</label>
+        <div id="site_link" class="col-sm-3 span2">
+          <a href="#" link="{{ site_link }}" onclick="native.openWithBrowser(this.getAttribute('link'));">{{ site_name }}</a>
+          <i class="fa fa-lock {{ secure }}"></i>&nbsp;
+        </div>
+        <label class="col-sm-2 control-label span1" for="username">{{ _("Username") }}:</label>
+        <div id="username" class="col-sm-3">{{ username }}</div>
+      </div>
+      <div id="time" class="row">
+        <label class="col-sm-2 control-label span1" for="start">{{ _("Start time") }}:</label>
+        <div id="start" class="col-sm-3 span2">{{ start_time }}</div>
+        <label class="col-sm-2 control-label span1" for="end">{{ _("End time") }}:</label>
+        <div id="end" class="col-sm-3">{{ end_time }}</div>
+      </div>
+    </form>
+  </div>
+
+  <div id="normal-file" class="hide">
+    <div class="file-title">{{ _("File transfer information") }}</div>
+    <div class="panel file-area">
+      <form role="form">
+        <div class="row-fluid">
+          <label class="control-label custom-span2" for="normal-filename">{{ _("Filename") }}:</label>
+          <div id="normal-filename" class="span8 filename" title="{{ filename }}">{{ filename }}</div>
+        </div>
+        <div class="row-fluid">
+          <label class="control-label custom-span2" for="file-actions"> </label>
+          <div id="file-actions" class="span8">
+            <a id="local-open" href="#" class="action-showinfolder" onclick="showInFolder();">{{ _("Open in local folder") }}</a>&nbsp;&nbsp;
+            <a id="remote-open" href="#" class="action-viewonbrowser" onclick="viewOnBrowser();">{{_("Open on the browser")}}</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="abnormal-file" class="hide">
+    <div class="file-title">{{ _("File transfer exception") }}</div>
+    <div class="panel error-report-area">
+      <form role="form">
+        <div class="row-fluid">
+          <label class="control-label custom-span2" for="error-detail">{{ _("Error detail") }}:</label>
+          <div id="error-detail" class="span9">{{ error_detail }}</div>
+        </div>
+        <div class="row-fluid">
+          <label class="control-label custom-span2" for="filename">{{ _("Filename") }}:</label>
+          <div id="filename" class="span8 filename" title="{{ filename }}">{{ filename }}</div>
+        </div>
+        <div class="row-fluid" id="error-local-file">
+          <label class="control-label custom-span2"></label>
+          <div class="span8">
+            <a href="#" onclick="showInFolder();" class="local-open">{{ _("Open in local folder") }}</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="clearfix button-panel">
+    <div id="op-btn" class="pull-left">
+      <a class="btn start hide" onclick="clickResponse('start');">{{ _("Start") }}</a>
+      <a class="btn retry hide" onclick="clickResponse('start');">{{ _("Retry") }}</a>
+      <a class="btn pause hide" onclick="clickResponse('pause');">{{ _("Stop") }}</a>
+      <a class="btn continue hide" onclick="clickResponse('start');">{{ _("Continue") }}</a>
+      <a class="btn cancel hide" onclick="clickResponse('cancel', 1);">{{ _("Delete") }}</a>
+    </div>
+    <div class="pull-right">
+      <a class="btn viewlog">{{ _("Detail") }}</a>
+    </div>
+  </div>
+</div>
+
+<div class="log hide">
+  <pre class="log_text" id="log">{{ log }}</pre>
+  <div class="text-center">
+    <a class="btn copy_log" onclick="copyLogText();">{{ _("Copy all logs") }}</a>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.utils = {
+    requests: function(method, url, datas) {
+      // 发起 HTTP 请求
+      var params = '';
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (req.readyState === XMLHttpRequest.DONE) {
+          console.info('Request done, status code:', req.status, ', response:', req.responseText);
+          if(req.status == 200){
+            window.native && native.closeWindow();
+          }
+        }
+      };
+      req.open(method, url, true);
+      for (var data in datas) {
+        if (params !== "") {
+          params += "&";
+        }
+        params += data + '=' + datas[data];
+      }
+      req.send(params);
+      return false;
+    }
+  };
+  var setup = {{ setup }};
+  var viewOnBrowser = function() {
+    var link = setup.instance_url + '/++intid++' + setup.file.uid + '/@@view.html';
+    if (!native.openWithBrowser(link)) {
+      console.log("failed to open URL: " + link);
+    }
+    return false;
+  };
+  var showInFolder = function() {
+    if (!native.showInFolder(setup.file.path)) {
+      console.log("failed to show file in folder: " + setup.file.path);
+    }
+    return false;
+  };
+  if (!setup.file.uid || setup.instance_url === "") {
+    // 没有 uid 或站点连接的情况下不显示「在浏览器中打开」
+    var remote_open = document.getElementById('remote-open');
+    remote_open.className = remote_open.className += " hide";
+  }
+  if (!setup.file.path) {
+    var errorLocalOpen = document.getElementById("error-local-file");
+    errorLocalOpen.className = errorLocalOpen.className + " hide";
+  }
+  if (setup['transmission_failed']) {
+    var abnormalFile = document.querySelector('#abnormal-file');
+    abnormalFile.className = "";
+    setup['height'] += abnormalFile.offsetHeight + 10;
+    window.native && native.resizeWindow(setup['width'], setup['height']);
+    document.getElementById('abnormal-file').className = "";
+  } else if (setup['show_file_panel']) {
+    setup['height'] += 97;
+    window.native && native.resizeWindow(setup['width'], setup['height']);
+    document.getElementById('normal-file').className = "";
+  }
+  if (setup['hide_buttons']) {
+    var opButtons = document.getElementById('op-btn');
+    opButtons.className = opButtons.className + ' hide';
+  }
+  const reasonMap = {
+    'network error': '网络错误',
+    'Unknown': '未知错误',
+  };
+  var copyLogText = function() {
+    // 复制日志文本
+    var text = document.getElementsByClassName("log_text")[0].textContent;
+    window.native && native.copyToClipboard(text);
+  };
+  var taskInfo = document.getElementById('task_info');
+  var reasonLabel = document.getElementById('reason');
+  if (setup['state'] === 'error' && typeof reasonMap[setup['reason']] !== 'undefined') {
+    setup['height'] += 40;
+    window.native && native.resizeWindow(setup['width'], setup['height']);
+    taskInfo.className = taskInfo.className.replace('hide', '').trim();
+    reasonLabel.innerText = reasonMap[setup['reason']];
+  }
+  document.querySelector('.viewlog').onclick = function(){
+      var log = document.querySelector('.log');
+      var btn = document.querySelector('.viewlog');
+      var logHeight;
+      if(log.className.indexOf('hide') == -1){
+        logHeight = log.offsetHeight + 15;
+        log.className = log.className.trim() + ' hide';
+        btn.className = btn.className.replace('active', '');
+        setup['height'] -= logHeight;
+      }else{
+        log.className = log.className.replace('hide', '');
+        btn.className = btn.className.trim() + ' active';
+        logHeight = log.offsetHeight + 15;
+        setup['height'] += logHeight;
+      }
+      var height = setup['height'] < 700 ? setup['height'] : 700;
+      window.native && native.resizeWindow(setup['width'], height);
+  };
+  document.querySelector('.container').onselectstart = function(e){
+      return false;
+  };
+  var hideButtons = function() {
+    // 隐藏所有操作按钮，日志按钮除外
+    var buttons = document.querySelectorAll('.btn');
+    for (var i = 0; i < buttons.length; i++) {
+      elem = buttons.item(i);
+      if (elem.className.indexOf('log') == -1 && elem.className.indexOf('hide') == -1) {
+        elem.className = elem.className + ' hide';
+      }
+    }
+  };
+  var displayButtons = function(state) {
+    hideButtons();
+    var button, btnSelector;
+    if (state === 'error') {
+      btnSelector = '.btn.retry';
+    } else if (state === 'running' || state == 'prepare') {
+      btnSelector = '.btn.pause';
+    } else if (state === 'paused') {
+      btnSelector = '.btn.continue';
+    } else if (state === 'wait') {
+      // wait 状态下，【暂停】和【启动】按钮都要显示
+      button = document.querySelector('.btn.pause');
+      button.className = button.className.replace('hide', '').trim();
+      btnSelector = '.btn.start';
+    } else if (state === 'finished') {
+      btnSelector = '.btn.cancel';
+    }
+    if (state != 'running') {
+      // 只要不是 running 状态，就需要显示【删除】按钮
+      button = document.querySelector('.btn.cancel');
+      button.className = button.className.replace('hide', '').trim();
+    }
+    button = document.querySelector(btnSelector);
+    button.className = button.className.replace('hide', '').trim();
+  };
+  var state = document.querySelector('#state').value;
+  displayButtons(state);
+  function clickResponse(apiName, silent) {
+    // 点击按钮调用的函数
+    return function() {
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function(){
+        if (req.readyState === XMLHttpRequest.DONE){
+          console.info('Request done, status code:', req.status, ', response:', req.responseText);
+          if(req.status == 200){
+            window.native && native.closeWindow();
+          }
+        }
+      };
+      req.open('POST', EDO.BaseURL + '/worker/' + apiName, true);
+      if(typeof silent !== 'undefined') {
+        req.send('worker_id=' + setup['worker_id'] + '&silent=1&build_number=*');
+      } else {
+        req.send('worker_id=' + setup['worker_id'] + '&build_number=*');
+      }
+      return false;
+    }();
+  }
+  const progress = document.getElementById('progress');
+  const speedState = document.getElementById('speed');
+  var total = parseInt(setup['total']);
+  var completed = parseInt(setup['completed']);
+  if (isNaN(total) || total <= 1 || state == 'finished') {
+    // 不是批量上传的情况，不需要显示完成进度
+    progress.className = progress.className + ' hide';
+  } else {
+    // 批量上传进行中
+    progress.className = progress.className.replace('hide', '').trim();
+    setup['height'] += 36;
+    window.native && native.resizeWindow(setup['width'], setup['height']);
+  }
+  if (setup.hide_netspeed) {
+    speedState.className = speedState.className + ' hide';
+    setup['height'] -= 36;
+    window.native && native.resizeWindow(setup['width'], setup['height']);
+  }
+  const totalNumber = document.getElementById('total_number');
+  const completedNumber = document.getElementById('completed_number');
+  const taskState = document.getElementById('task_state');
+  const stateIcon = document.getElementById('state_icon');
+  const endTimeNode = document.getElementById("end");
+  const currentSpeed = document.getElementById('current_speed');
+  const estimatedTime = document.getElementById('estimated_time');
+  var updateProgress = function(progressNum, newState, endTime) {
+    // 更新进度信息和任务结束时间
+    if (isNaN(progressNum)) {
+      progressNum = 0;
+    }
+    var percentage = Math.floor(progressNum / total * 100);
+    completedNumber.innerText = progressNum + ' (' + percentage + '%)';
+    if (newState !== null && newState !== '') {
+      var stopTimer = false;
+      var stateString = '';
+      var stateColor = '';
+      switch(newState) {
+        case "running": stateString = '{{ _("Running") }}'; break;
+        case "error": stateString = '{{ _("Error") }}'; stopTimer = true; break;
+        case "finished": stateString = '{{ _("Finished") }}'; stopTimer = true; break;
+        case "paused": stateString = '{{ _("Interrupted") }}'; stopTimer = true; break;
+        case "prepare": stateString = '{{ _("prepare") }}'; break;
+        default: stateString = '{{ _("Unknown") }}'; stopTimer = true; break;
+      }
+      taskState.innerText = stateString;
+      stateIcon.className = stateIcon.className.replace(state, newState);
+      stateIcon.setAttribute('title', stateString);
+      if (stopTimer) {
+        clearInterval(intervalID);
+      }
+      if (newState !== state) {
+        if (total > 1 && newState !== 'running') {
+          // 批量任务时才需要重设窗口尺寸
+          progress.className = progress.className + ' hide';
+          setup['height'] -= 36;
+          window.native && native.resizeWindow(setup['width'], setup['height']);
+        }
+        displayButtons(newState);
+        state = newState;
+      }
+    }
+    if (endTime !== null && endTime !== '') {
+      var ts = parseInt(endTime);
+      if (!isNaN(ts) && ts !== 0) {
+        var date = new Date(ts * 1000),
+            fullYear = date.getFullYear(),
+            month = date.getMonth() + 1,
+            day = date.getDate(),
+            hour = date.getHours(),
+            minute = date.getMinutes();
+        month = (month < 10 ? '0' : '') + month;
+        day = (day < 10 ? '0' : '') + day;
+        hour = (hour < 10 ? '0' : '') + hour;
+        minute = (minute < 10 ? '0' : '') + minute;
+        endTimeNode.innerText = fullYear + '-' + month + '-' + day + ' ' + hour + ':' + minute;
+      }
+    }
+  };
+  var updateSpeedState = function(speed, totalSize, state) {
+    if (setup.hide_netspeed) return;
+    // 更新网速和预计完成时间
+    if (setup['hide_buttons'] || state !== 'running') {
+      clearInterval(intervalID);
+      speedState.className = speedState.className + ' hide';
+      setup['height'] -= 36;
+      window.native && native.resizeWindow(setup['width'], setup['height']);
+    } else if (!isNaN(speed)) {
+      if (speed < 1024) {
+        currentSpeed.innerText = speed.toFixed(2) + ' KB/s';
+      } else {
+        currentSpeed.innerText = (speed / 1024).toFixed(2) + ' MB/s';
+      }
+      if (!isNaN(totalSize) && speed !== 0) {
+        var t = Math.floor(totalSize / 1024 / speed);
+        var s = t % 60;
+        var m = Math.floor((t - s) / 60) % 60;
+        var h = Math.floor((t - s) / 3600);
+        s = (s < 10 ? '0' : '') + s;
+        m = (m < 10 ? '0' : '') + m;
+        h = (h < 10 ? '0' : '') + h;
+        estimatedTime.innerText = h + ':' + m + ':' + s;
+      } else {
+        estimatedTime.innerText = '--:--:--';
+      }
+    } else {
+      currentSpeed.innerText = '0 KB/S';
+      estimatedTime.innerText = '00:00:00';
+    }
+  };
+  totalNumber.innerText = total;
+  var update = function() {
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+      if (req.readyState === XMLHttpRequest.DONE) {
+        if (req.status == 200) {
+          var result = JSON.parse(req.responseText);
+          updateProgress(parseInt(result['detail']['completed']), result['detail']['state'], result['detail']['end_timestamp']);
+          updateSpeedState(parseFloat(result['detail']['speed']), parseInt(result['detail']['total_size']), result['detail']['state']);
+        }
+      }
+    };
+    req.open('POST', EDO.BaseURL + '/worker/state', true);
+    req.send('worker_id=' + setup['worker_id'] + '&build_number=*&fields=' + JSON.stringify(["total", "completed", "state", "end_timestamp", "speed", "total_size"]));
+  };
+  update();
+  var intervalID = setInterval(update, 2000);
+</script>

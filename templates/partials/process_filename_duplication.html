@@ -1,0 +1,123 @@
+<script type="text/template" id="rename-process">
+  <div>
+    <p>{{_('A file with the same name was found when uploading the file')}}</p>
+    <form role="form">
+      <label>
+        <input type="radio" name="duplicatedRadios" value="rename" checked required> {{_('Rename and retry uploading')}}
+      </label>
+      <label class="overwrite">
+        <input type="radio" name="duplicatedRadios" value="overwrite" required> {{_('Overwrite')}}
+      </label>
+      <label>
+        <input type="radio" name="duplicatedRadios" value="cancel" required> {{_('Cancel upload')}}
+      </label>
+    </form>
+    <div id="operations" class="rename">
+      <div class="operation rename">
+        <label>{{_('Filename')}}:&nbsp;</label>
+        <textarea
+          name="filename" id="newname" cols="35" rows="2"
+          style="vertical-align: text-top;" class="layui-layer-input"
+        ></textarea>
+      </div>
+      <div class="operation overwrite">
+        <label>
+          <input type="checkbox" value="auto_overwrite"> {{_('Subsequent file duplicates will be automatically overwritted')}}
+        </label>
+      </div>
+      <div class="operation cancel">
+        <label>
+          <input type="checkbox" value="auto_cancel"> {{_('Subsequent file duplicates will be automatically cancelled')}}
+        </label>
+      </div>
+    </div>
+  </div>
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(document).on('change', '.layui-layer-content input[name=duplicatedRadios]', function(){
+      /** 处理重名文件时，点击选择对应处理策略，切换下方不同后续输入区域的显示/隐藏 **/
+      $('.layui-layer-content #operations')[0].className = this.value;
+
+    }).on('click', 'span.duplicated', function(){
+      var items = filter_items({
+        worker_id: $(this).data('worker_id'),
+        fpath: $(this).data('fpath'),
+        task: $(this).data('task'),
+        direction: $(this).data('direction')
+      });
+      if(items.length === 0){
+        console.warn('No match found for renameupload', $(this));
+        return false;
+      }
+      var item = items[0],
+        fbasename = item.filename.split('.'),
+        extension = fbasename.pop();
+
+      fbasename = fbasename.join('.');
+      // Qt4 的 webview 有定位 bug，如果不滚动一下，文本框操作会卡顿
+      window.scroll(0, window.scrollY);
+      layer.prompt({
+        title: "{{_('Rename process')}}",
+        btn: ["{{_('Submit')}}"],
+        content: $('#rename-process').text(),
+        success: function(layero) {
+          var newname_input = layero.find('.layui-layer-input'),
+            layer_this = this,
+            on_rename = function(index) {  // 改名上传
+              var newname = newname_input.val();
+              if ('' == newname){  // 文件名是空的
+                newname_input.focus();
+              }else{
+                if(newname.length > (layer_this.maxlength || 500)){  // 文件名长度超过最大值限制
+                  layer.tips(
+                    "最多输入"+(layer_this.maxlength||500)+"字",
+                    newname_input, {tips: 3}  // 提示在下方
+                  );
+                }else{
+                  // 文件名含有特殊字符。被禁止的字符包括：\/:*?"<>|
+                  if(/^.*[\\\/\:\*\?\"\<\>\|]+.*$/gi.test(newname)){
+                    layer.tips(
+                      '文件名不能包含下列任何特殊字符:\n\\/:*?"<>|',
+                      newname_input, {tips: 3}  // 提示在下方
+                    );
+                  }else{  // 文件名检查通过，执行后续步骤
+                    utils.process_duplicated_item('rename', item, {filename: newname+'.'+extension});
+                    layer.close(index);
+                  }
+                }
+              }
+            };
+          // 与已经存在的快捷方式重名，不可以进行「覆盖上传」
+          if (item.extra && item.extra.duplicated_types.indexOf('FileShortCut') !== -1) {
+            layero.find('.overwrite').remove();
+          }
+          layer_this.yes = function(index) {
+            var action = $('.layui-layer-content input[type=radio][name=duplicatedRadios]:checked').val(),
+              auto_process = $('.layui-layer-content .operation input[type=checkbox]').is(':checked');
+            switch (action) {
+              // 改名重传需要对用户输入做进一步校验，才能决定是否关闭对话框
+              case 'rename':
+                on_rename(index);
+                break;
+              // 其他操作无需校验，可以直接关闭对话框
+              default:
+                utils.process_duplicated_item(action, item, {auto_process: auto_process});
+                layer.close(index);
+            }
+          };
+          layer_this.cancel = layer.close;
+          newname_input.val(fbasename + '_1').keydown(function(e){
+            if(e.keyCode == 13){  // 回车键
+              on_rename(layer.index);
+              return false;
+            }else if(e.keyCode == 27){  // esc键
+              layer.close(layer.index);
+            }
+          }).focus();
+        }
+      });
+      return false;
+    });
+  });
+</script>

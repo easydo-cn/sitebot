@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+{% if data.content %}
+<strong>{{data.path}}</strong>
+<a href="/admin/help">{{_('Adjust logging output')}}</a>
+<pre>{{data.content}}</pre>
+{% else %}
+<div class="alert alert-warning">
+  {{_('File not found or is empty.')}}
+</div>
+{% endif %}
+</body>
+</html>

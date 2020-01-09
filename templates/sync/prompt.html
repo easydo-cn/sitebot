@@ -1,0 +1,57 @@
+<style type="text/css">
+    .content {
+        padding: 15px;
+    }
+</style>
+<div class="content">
+    <p><strong>{{ _("Do you want to keep the synchronization relationship?") }}</strong></p>
+    <p>{{ _("During the {} process, this folder creates the synchronization relationship with the site to fast synchronization.").format(direction) }}</p>
+    <p>{{ _("If reserve the synchronization, it will auto create the site connection.") }}</p>
+    <div class="buttons pull-left">
+        <a class="btn" id="confirm">{{ _('Reserve') }}</a>
+        <a class="btn btn-danger" id="remove">{{ _('Remove synchronization relationship') }}</a>
+    </div>
+    <div style="display: none;">
+        {% for id in syncfolders %}
+        <span class="sync_id">{{ id }}</span>
+        {% endfor %}
+        <input type="hidden" id="conn_created" value="{{ conn_created }}">
+        <input type="hidden" id="conn_id" value="{{ conn_id }}">
+    </div>
+</div>
+<script type="text/javascript">
+    $("#confirm").click(function() {
+        window.native && native.closeWindow();
+        return false;
+    });
+    $("#remove").click(function() {
+        if ($("#conn_created").val() === "True") {
+            // 如果建立了连接，在解除同步关系的时候也一并去除
+            $.ajax({
+                url: EDO.BaseURL + "/admin/connections",
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                data: {
+                    connection_id: $("#conn_id").val(),
+                    action: "remove"
+                }
+            });
+        }
+        $(".sync_id").each(function(index, elem) {
+            $.ajax({
+                url: EDO.BaseURL + "/sync/delete",
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                data: {
+                    id: $(elem).text()
+                },
+                success: function(d) {
+                    window.native && native.closeWindow();
+                }
+            });
+        });
+        return false;
+    });
+</script>

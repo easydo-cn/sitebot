@@ -1,0 +1,59 @@
+# Compiled Python code
+*.py[cod]
+dist*
+.ropeproject
+.ropeproject/*
+extensions/shellExtension/build/
+build/main
+*.log
+*.txt
+*.tgz
+*.zip
+*.db
+*.pt
+*.orig
+*.winscp
+*.csv
+*~
+*.exe
+*.pdf
+*.msi
+doc*
+# Mac OS X specific
+.DS_Store
+certifi/cacert.pem
+reportlab
+vir
+*.rpm
+*.deb
+*.komodoproject
+*.idea
+pyoauth2
+# compiled translation files
+*.mo
+*.qm
+*.temp.pkgproj
+# Don't know what these are
+.ropeproject
+# These translations are automatically generated during building
+translations/zh
+translations/zh_Hant*
+installer.iss
+
+# Editor config & cache
+.vscode
+.project
+*.sublime-project
+.cache
+
+# External resources
+qpdf
+fonts
+linux_resources
+linux_resources.zip
+external_resources
+external_resources/*
+
+# Others
+automation
+embed

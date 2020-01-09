@@ -1,0 +1,1680 @@
+msgid "* Every 5 minutes pull site files to local"
+msgstr ""
+
+msgid "3D Preview"
+msgstr ""
+
+msgid "3D document viewer is only supported on Windows"
+msgstr ""
+
+msgid "3dpreview"
+msgstr ""
+
+msgid "A file with the same name was found when uploading the file"
+msgstr ""
+
+msgid "Abnormal domain name resolution"
+msgstr ""
+
+msgid "Activate SyncPlugin"
+msgstr ""
+
+msgid "Activation fails"
+msgstr ""
+
+msgid "Adjust logging output"
+msgstr ""
+
+msgid "All downloaded files"
+msgstr ""
+
+msgid "All files of category"
+msgstr ""
+
+msgid "All status"
+msgstr ""
+
+msgid "All {0} files processed"
+msgstr ""
+
+msgid "Already deleted"
+msgstr ""
+
+msgid "Assistant"
+msgstr ""
+
+msgid ""
+"Assistant\n"
+"Version {}.{}"
+msgstr ""
+
+msgid ""
+"Assistant\n"
+"Version {}.{}{}"
+msgstr ""
+
+msgid "Assistant Error Report"
+msgstr ""
+
+msgid "Assistant Task detail"
+msgstr ""
+
+msgid ""
+"Assistant can offer more powerful upload, download, folder "
+"synchronization and other functions, is used to strengthen web browser"
+msgstr ""
+
+msgid ""
+"Assistant cannot detect editing of \"{0}\", have you finished editing "
+"this file?\n"
+"Please leave this message until you've finished editing. (Modification "
+"made to this file during this period will be uploaded)"
+msgstr ""
+
+msgid ""
+"Assistant cannot sync files with this site. You can either downgrade "
+"Assistant or contact system administrator to upgrade this site."
+msgstr ""
+
+msgid "Assistant commandline mode"
+msgstr ""
+
+msgid "Assistant has automatically changed to use the following ports instead."
+msgstr ""
+
+msgid "Assistant has started"
+msgstr ""
+
+msgid "Assistant is connected to the following sites, you can open notification."
+msgstr ""
+
+msgid "Assistant is unabel to exit now"
+msgstr ""
+
+msgid "Assistant launched"
+msgstr ""
+
+msgid "Assistant messaging"
+msgstr ""
+
+msgid "Assistant port conflict"
+msgstr ""
+
+msgid "Assistant troubleshooting"
+msgstr ""
+
+msgid "Assistant: task \"{}\" finished"
+msgstr ""
+
+msgid "Authentication failed"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Auto run at startup"
+msgstr ""
+
+msgid "AutoVue (v20 and newer) is not supported"
+msgstr ""
+
+msgid "Batch download"
+msgstr ""
+
+msgid "Batch upload"
+msgstr ""
+
+msgid "Both created"
+msgstr ""
+
+msgid "Both modified"
+msgstr ""
+
+msgid "Broken connection"
+msgstr ""
+
+msgid "Build"
+msgstr ""
+
+msgid "Build on"
+msgstr ""
+
+msgid ""
+"Can not use explorer to open the webfolder, but you can open explorer "
+"manually"
+msgstr ""
+
+msgid "Can't auto-upgrading"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Cancel upload"
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+msgid ""
+"Cannot sync with this site. You can either <a href=\"#\" "
+"onclick=\"get_assistant()._fail_callback(); return false;\">downgrade "
+"your Assistant</a> or contact your system administrator to upgrade this "
+"site."
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Click to download"
+msgstr ""
+
+msgid "Click to visit"
+msgstr ""
+
+msgid "Click to {}"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Concurrent ports conflicted"
+msgstr ""
+
+msgid ""
+"Concurrent ports conflicted, Assistant has automatically changed to use "
+"the following ports instead."
+msgstr ""
+
+msgid "Conflict"
+msgstr ""
+
+msgid "Conflict not resolved"
+msgstr ""
+
+msgid "Conflict resolved"
+msgstr ""
+
+msgid ""
+"Connections will be created during folder uploading and "
+"downloading,Operate files in desktop, sync to the site easily."
+msgstr ""
+
+msgid "Content Duplicated"
+msgstr ""
+
+msgid "Content duplication process"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Continuous upload"
+msgstr ""
+
+msgid "Copy all logs"
+msgstr ""
+
+msgid "Count"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Create Syncfolder"
+msgstr ""
+
+msgid "Create shortcut"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Deleted items"
+msgstr ""
+
+msgid "Desktop assistant connection"
+msgstr ""
+
+msgid "Desktop assistant connection is existed"
+msgstr ""
+
+msgid "Desktop assistant connection is failed"
+msgstr ""
+
+msgid "Desktop assistant connection success"
+msgstr ""
+
+msgid "Detail"
+msgstr ""
+
+msgid "Detailed build info"
+msgstr ""
+
+msgid "Detele"
+msgstr ""
+
+msgid "Direction"
+msgstr ""
+
+msgid "Discard change the local file"
+msgstr ""
+
+msgid "Do you want to keep the synchronization relationship?"
+msgstr ""
+
+msgid "Document modified by others, prepare to merge..."
+msgstr ""
+
+msgid "Document viewer"
+msgstr ""
+
+msgid "Down"
+msgstr ""
+
+msgid "Down: Download the site file synchronization to the local *"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Download again"
+msgstr ""
+
+msgid "Download failed"
+msgstr ""
+
+msgid "Download finished"
+msgstr ""
+
+msgid "Download started"
+msgstr ""
+
+msgid "Downloading {}"
+msgstr ""
+
+msgid "Duplicated"
+msgstr ""
+
+msgid ""
+"During the {} process, this folder creates the synchronization "
+"relationship with the site to fast synchronization."
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "End time"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Error detail"
+msgstr ""
+
+msgid "Error details"
+msgstr ""
+
+msgid "Error querying duplicate files: {}"
+msgstr ""
+
+msgid "Error: remote file does not exist"
+msgstr ""
+
+msgid "Estimated"
+msgstr ""
+
+msgid "Expired"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Failed to connect, license for this site has expired"
+msgstr ""
+
+msgid "Failed to connect, online user count exceeded limit of site license"
+msgstr ""
+
+msgid "Failed to create locked edit worker."
+msgstr ""
+
+msgid "Failed to download: file does not exist"
+msgstr ""
+
+msgid "Failed to get the expire date of certificate"
+msgstr ""
+
+msgid "Failed to get uid"
+msgstr ""
+
+msgid "Failed to get uid."
+msgstr ""
+
+msgid ""
+"Failed to initialize AutoVue, please make sure you have AutoVue installed"
+" (v19)"
+msgstr ""
+
+msgid ""
+"Failed to initialize eDrawings viewer, please make sure you have "
+"eDrawings installed"
+msgstr ""
+
+msgid ""
+"Failed to initialize, please make sure you have corresponding software "
+"installed"
+msgstr ""
+
+msgid "Failed to view"
+msgstr ""
+
+msgid "Failed to write to disk"
+msgstr ""
+
+msgid "Failed. Please make sure you have required software installed"
+msgstr ""
+
+msgid "File Sync"
+msgstr ""
+
+msgid "File does not exist"
+msgstr ""
+
+msgid "File has not changed, does not trigger upload"
+msgstr ""
+
+msgid "File name is too long"
+msgstr ""
+
+msgid "File not found"
+msgstr ""
+
+msgid "File not found or is empty."
+msgstr ""
+
+msgid "File push"
+msgstr ""
+
+msgid "File removed"
+msgstr ""
+
+msgid "File size limit exceeded"
+msgstr ""
+
+msgid "File sync"
+msgstr ""
+
+msgid "File sync information"
+msgstr ""
+
+msgid "File transfer exception"
+msgstr ""
+
+msgid "File transfer information"
+msgstr ""
+
+msgid "File viewing"
+msgstr ""
+
+msgid "File with the same name (see attachments) already exists"
+msgstr ""
+
+msgid "File {} modified during uploading, aborted"
+msgstr ""
+
+msgid "Filename"
+msgstr ""
+
+msgid "Files"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Finished"
+msgstr ""
+
+msgid "Folder"
+msgstr ""
+
+msgid "Folder sync information"
+msgstr ""
+
+msgid "Folder with the same name (see attachments) already exists"
+msgstr ""
+
+msgid "Force release"
+msgstr ""
+
+msgid "Force upload"
+msgstr ""
+
+msgid "Forced upload"
+msgstr ""
+
+msgid "Found a cached local copy of {}"
+msgstr ""
+
+msgid "Found conflict with {}"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "HTTP Port"
+msgstr ""
+
+msgid "HTTPS Port"
+msgstr ""
+
+msgid "Handling file conflicts"
+msgstr ""
+
+msgid "Have you finished editing? (Assistant)"
+msgstr ""
+
+msgid "Here are all the tasks of Assistant:"
+msgstr ""
+
+msgid "I've finished editing"
+msgstr ""
+
+msgid "If reserve the synchronization, it will auto create the site connection."
+msgstr ""
+
+msgid "If sync status icon does not work, you need to"
+msgstr ""
+
+msgid ""
+"If the above steps do not work,it is recommended to reinstall the "
+"operating system."
+msgstr ""
+
+msgid ""
+"If the first step does not work, please run this command {} to scan the "
+"system and try to fix the broken files."
+msgstr ""
+
+msgid "Install (Requires Administrator privilege)"
+msgstr ""
+
+msgid "Install .Net 4.0 runtime"
+msgstr ""
+
+msgid "Install webfolder driver"
+msgstr ""
+
+msgid "Install webfolder driver program as Administrator"
+msgstr ""
+
+msgid "Interrupted"
+msgstr ""
+
+msgid "It will not be deleted from your computer."
+msgstr ""
+
+msgid "Item with the same name (see attachments) already exists"
+msgstr ""
+
+msgid "Last Deal Time"
+msgstr ""
+
+msgid "Local deleted"
+msgstr ""
+
+msgid "Local file"
+msgstr ""
+
+msgid "Local folder"
+msgstr ""
+
+msgid "Local path"
+msgstr ""
+
+msgid "Local removed"
+msgstr ""
+
+msgid "Local reserve"
+msgstr ""
+
+msgid "Locally removed"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Lock"
+msgstr ""
+
+msgid "Lock failed"
+msgstr ""
+
+msgid "Locked edit"
+msgstr ""
+
+msgid "Locks"
+msgstr ""
+
+msgid "Login user"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "MD5 checksum"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Messaging"
+msgstr ""
+
+msgid "Messaging on {1} turned off for {0}"
+msgstr ""
+
+msgid "Messaging on {1} turned on for {0}"
+msgstr ""
+
+msgid "Missing parameter"
+msgstr ""
+
+msgid "Missing system patch: {} and the webfolder driver"
+msgstr ""
+
+msgid "Mount MemoryFS"
+msgstr ""
+
+msgid "Mount site folders as disk drives in your computer"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Net Speed"
+msgstr ""
+
+msgid "Netdrive"
+msgstr ""
+
+msgid "Network error"
+msgstr ""
+
+msgid ""
+"Network error occurred.\n"
+"Please check your network connection."
+msgstr ""
+
+msgid "Network error. Can't connect server!"
+msgstr ""
+
+msgid "Network error. Can't not move anything."
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "New message"
+msgstr ""
+
+msgid "New revision of file {} failed to upload due to quota exceeding"
+msgstr ""
+
+msgid "New revision of file {} uploaded"
+msgstr ""
+
+msgid "New task"
+msgstr ""
+
+msgid "New task: {}"
+msgstr ""
+
+msgid "New version required, upgrade started. Please try again after upgrading."
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "No Proper Programs Found"
+msgstr ""
+
+msgid "No Running"
+msgstr ""
+
+msgid "No conflict"
+msgstr ""
+
+msgid "No deleted items."
+msgstr ""
+
+msgid "No file"
+msgstr ""
+
+msgid "No file of category"
+msgstr ""
+
+msgid "No item in table"
+msgstr ""
+
+msgid "No lock"
+msgstr ""
+
+msgid "No matching connection."
+msgstr ""
+
+msgid "No matching result"
+msgstr ""
+
+msgid "No matching syncfolder."
+msgstr ""
+
+msgid "No matching webfolder."
+msgstr ""
+
+msgid "No netdrive"
+msgstr ""
+
+msgid "No path specified"
+msgstr ""
+
+msgid "No problems found."
+msgstr ""
+
+msgid "No program could edit {} file"
+msgstr ""
+
+msgid "No program could open files with extension of {}"
+msgstr ""
+
+msgid "No program could open {} file"
+msgstr ""
+
+msgid "No site connections"
+msgstr ""
+
+msgid "No such task"
+msgstr ""
+
+msgid "No sync folder"
+msgstr ""
+
+msgid "No syncfolder info"
+msgstr ""
+
+msgid "No task"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Not allowed to create script task"
+msgstr ""
+
+msgid "Not finished yet"
+msgstr ""
+
+msgid "Not started yet"
+msgstr ""
+
+msgid ""
+"Notice: Maybe you should restart your computer to take effect after the "
+"installation is complete."
+msgstr ""
+
+msgid "Notification"
+msgstr ""
+
+msgid "Notification off"
+msgstr ""
+
+msgid "Notification on"
+msgstr ""
+
+msgid "Obtaining the remote path was failed."
+msgstr ""
+
+msgid "Offline"
+msgstr ""
+
+msgid "One-time"
+msgstr ""
+
+msgid "Ongoing"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Open Assistant"
+msgstr ""
+
+msgid "Open error"
+msgstr ""
+
+msgid "Open in local folder"
+msgstr ""
+
+msgid "Open on the browser"
+msgstr ""
+
+msgid "Open the location of local certificate"
+msgstr ""
+
+msgid "Opened"
+msgstr ""
+
+msgid "Opening file..."
+msgstr ""
+
+msgid "Operation"
+msgstr ""
+
+msgid "Operations"
+msgstr ""
+
+msgid "Overrwitted"
+msgstr ""
+
+msgid "Overwrite"
+msgstr ""
+
+msgid "Owned by"
+msgstr ""
+
+msgid "Package type"
+msgstr ""
+
+msgid "Parameters incomplete or illegal"
+msgstr ""
+
+msgid "Pause"
+msgstr ""
+
+msgid "Paused"
+msgstr ""
+
+msgid "Permission denied"
+msgstr ""
+
+msgid "Permission denied. Please visit via loopback address."
+msgstr ""
+
+msgid "Please contact your network administrator to check DNS"
+msgstr ""
+
+msgid "Please follow the instructions below to fix it."
+msgstr ""
+
+msgid "Please follow the instructions on the SyncPage to activate it."
+msgstr ""
+
+msgid "Please follow these steps to fix it:"
+msgstr ""
+
+msgid ""
+"Please follow this link to get the system patch: {}. If already "
+"installed, just ignore this prompt."
+msgstr ""
+
+msgid "Please replace the certificate files and relaunch the Assistant"
+msgstr ""
+
+msgid "Please select a file"
+msgstr ""
+
+msgid "Please select a file / folder"
+msgstr ""
+
+msgid "Please select a folder"
+msgstr ""
+
+msgid "Please select a local path for syncfolder"
+msgstr ""
+
+msgid "Please select a non-sync folder"
+msgstr ""
+
+msgid "Please select files"
+msgstr ""
+
+msgid "Please visit this link to download a new certificate"
+msgstr ""
+
+msgid "Please wait"
+msgstr ""
+
+msgid "Preparing"
+msgstr ""
+
+msgid "Preparing..."
+msgstr ""
+
+msgid "Preview 3D file"
+msgstr ""
+
+msgid "Problem diagnosis"
+msgstr ""
+
+msgid "Problem: {}"
+msgstr ""
+
+msgid "Process duplicate"
+msgstr ""
+
+msgid "Process subsequent file content duplicates automatically"
+msgstr ""
+
+msgid "Processing..."
+msgstr ""
+
+msgid "Push"
+msgstr ""
+
+msgid "Push conflicts"
+msgstr ""
+
+msgid "Querying file information"
+msgstr ""
+
+msgid "Quit"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Recent file transfers"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Remote file does not exist"
+msgstr ""
+
+msgid "Remote remove"
+msgstr ""
+
+msgid "Remote removed"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Remove file failed: "
+msgstr ""
+
+msgid "Remove folder failed: "
+msgstr ""
+
+msgid "Remove sync"
+msgstr ""
+
+msgid "Remove synchronization relationship"
+msgstr ""
+
+msgid "Remove this file?"
+msgstr ""
+
+msgid "Rename and retry"
+msgstr ""
+
+msgid "Rename and retry uploading"
+msgstr ""
+
+msgid "Rename process"
+msgstr ""
+
+msgid "Renamed"
+msgstr ""
+
+msgid "Reserve"
+msgstr ""
+
+msgid "Resolve conflict"
+msgstr ""
+
+msgid "Restart explorer"
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "Reveal in folder"
+msgstr ""
+
+msgid "Running"
+msgstr ""
+
+msgid "Script task"
+msgstr ""
+
+msgid ""
+"Script task #{} failed, script name: {}, args: {}, kw: {}\n"
+"traceback information:\n"
+"{}"
+msgstr ""
+
+msgid ""
+"Script task #{} failed, traceback information:\n"
+"{}"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Select a file"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Server-side path"
+msgstr ""
+
+msgid "Set default"
+msgstr ""
+
+msgid "Setting Save Successfully."
+msgstr ""
+
+msgid "Setup sync folder"
+msgstr ""
+
+msgid "Shared editing"
+msgstr ""
+
+msgid "Show sync menu item and status icon for files."
+msgstr ""
+
+msgid "Site"
+msgstr ""
+
+msgid "Site file"
+msgstr ""
+
+msgid "Site file and local file will be deleted, Are you sure?"
+msgstr ""
+
+msgid "Site file is deleted and new version can not be uploaded."
+msgstr ""
+
+msgid "Site folder"
+msgstr ""
+
+msgid "Site name"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Solution: "
+msgstr ""
+
+msgid ""
+"Someone else modified this file during your editing, your file has been "
+"saved as a branched version."
+msgstr ""
+
+msgid "Source file deleted"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Start sync"
+msgstr ""
+
+msgid ""
+"Start the command line as an administrator and run this command {}, try "
+"to start the NULL service."
+msgstr ""
+
+msgid "Start time"
+msgstr ""
+
+msgid "Started"
+msgstr ""
+
+msgid "Started at"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Stop folder sync"
+msgstr ""
+
+msgid "Stop sync"
+msgstr ""
+
+msgid "Subcommands"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Subsequent file duplicates will be automatically cancelled"
+msgstr ""
+
+msgid "Subsequent file duplicates will be automatically overwritted"
+msgstr ""
+
+msgid "Successful activation"
+msgstr ""
+
+msgid "Sync"
+msgstr ""
+
+msgid "Sync conflicts"
+msgstr ""
+
+msgid "Sync finished"
+msgstr ""
+
+msgid "Sync folder"
+msgstr ""
+
+msgid ""
+"Sync status icon and webfolders won't work properly until you restart "
+"explorer."
+msgstr ""
+
+msgid "Sync time"
+msgstr ""
+
+msgid "Sync: Local and site are synchronized with each other *"
+msgstr ""
+
+msgid "Syncing"
+msgstr ""
+
+msgid "Task"
+msgstr ""
+
+msgid "Task \"{}\" failed.You can view this task in \"Task\" page in Assistant."
+msgstr ""
+
+msgid "Task Error"
+msgstr ""
+
+msgid "Task ID not specified"
+msgstr ""
+
+msgid "Task deleted"
+msgstr ""
+
+msgid "Task detail"
+msgstr ""
+
+msgid "Task does not exist"
+msgstr ""
+
+msgid "Task finished"
+msgstr ""
+
+msgid "Task paused"
+msgstr ""
+
+msgid "Task recovery"
+msgstr ""
+
+msgid "Task running abnormaly"
+msgstr ""
+
+msgid "Task started"
+msgstr ""
+
+msgid "Task started, {:d} items to download"
+msgstr ""
+
+msgid "Task terminated"
+msgstr ""
+
+msgid "Tasks"
+msgstr ""
+
+msgid "Tasks recovered"
+msgstr ""
+
+msgid "The NULL service is abnormal."
+msgstr ""
+
+msgid "The SyncPlugin is not activated."
+msgstr ""
+
+msgid "The assistant auto-upgrade was disabled"
+msgstr ""
+
+msgid "The certificate has expired"
+msgstr ""
+
+msgid "The certificate is close to expiring date"
+msgstr ""
+
+msgid "The current version webfolder can only run on Windows"
+msgstr ""
+
+msgid "The folder sync task has been aborted: {}"
+msgstr ""
+
+msgid "The folder will no longer be synchronized, Are you sure?"
+msgstr ""
+
+msgid ""
+"The length of local path is {} characters, which exceeds the path limit "
+"of Windows."
+msgstr ""
+
+msgid "The local file is deleted."
+msgstr ""
+
+msgid "The local file(version {}) and site file both changed."
+msgstr ""
+
+msgid "The local has changed!"
+msgstr ""
+
+msgid ""
+"The local synchronization directory has been deleted, synchronization "
+"relationship will be released."
+msgstr ""
+
+msgid "The path has not been synchronized."
+msgstr ""
+
+msgid "The site connection does not exist"
+msgstr ""
+
+msgid "The site file is deleted."
+msgstr ""
+
+msgid "The site folder was removed"
+msgstr ""
+
+msgid "The site has updated!"
+msgstr ""
+
+msgid "The source folder does not exists"
+msgstr ""
+
+msgid "The syncfolder of webfolder {}"
+msgstr ""
+
+msgid ""
+"The upload task found {} duplicate names or duplicate files, please "
+"handle them in the transfer progress page"
+msgstr ""
+
+msgid "There are {} files conflict"
+msgstr ""
+
+msgid ""
+"There files conflict occurred when synchronizing, please resolve these "
+"conflicts"
+msgstr ""
+
+msgid ""
+"There have some excel files which on the editing mode, please exit the "
+"current editing cell."
+msgstr ""
+
+msgid "This current version WebFolder does not support this OS"
+msgstr ""
+
+msgid "This feature is not supported in current version"
+msgstr ""
+
+msgid "This file has not been synchronized."
+msgstr ""
+
+msgid "This task is already running"
+msgstr ""
+
+msgid "This task is already running, please wait..."
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Transform Progress"
+msgstr ""
+
+msgid "Troubleshooting"
+msgstr ""
+
+msgid "Try reset ports on next assistant start."
+msgstr ""
+
+msgid "Try to reinstall Assistant"
+msgstr ""
+
+msgid "Unable to download target file"
+msgstr ""
+
+msgid "Unable to edit your file {}"
+msgstr ""
+
+msgid "Unable to open file"
+msgstr ""
+
+msgid ""
+"Unable to start locked_edit worker.\n"
+"Reason: {}"
+msgstr ""
+
+msgid ""
+"Unable to view online.\n"
+"Reason: {}"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Unlock failed"
+msgstr ""
+
+msgid "Unlock failed, retry."
+msgstr ""
+
+msgid "Unmount"
+msgstr ""
+
+msgid "Unsupported OS version"
+msgstr ""
+
+msgid "Unsupported operating system"
+msgstr ""
+
+msgid "Up"
+msgstr ""
+
+msgid "Up: Update the local file synchronization to the site"
+msgstr ""
+
+msgid "Update (Linux)"
+msgstr ""
+
+msgid "Update certificate"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "Upload again"
+msgstr ""
+
+msgid "Upload as new revision"
+msgstr ""
+
+msgid "Upload file failed: Permission denied"
+msgstr ""
+
+msgid "Upload finished"
+msgstr ""
+
+msgid "Upload started"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "View detail"
+msgstr ""
+
+msgid "View log"
+msgstr ""
+
+msgid "View new local deleted items"
+msgstr ""
+
+msgid "View online"
+msgstr ""
+
+msgid "View online version"
+msgstr ""
+
+msgid "View task"
+msgstr ""
+
+msgid "Viewer launched"
+msgstr ""
+
+msgid "Waiting"
+msgstr ""
+
+msgid "WaitingFinished"
+msgstr ""
+
+msgid "Web server log"
+msgstr ""
+
+msgid "Webfolder"
+msgstr ""
+
+msgid "Webfolder driver is not installed"
+msgstr ""
+
+msgid ""
+"Webfolder is currently unavailable as the dependencies have not been "
+"installed."
+msgstr ""
+
+msgid "Webfolder {} removed"
+msgstr ""
+
+msgid "Windows does not support downloading files with long file names"
+msgstr ""
+
+msgid "Worker {} removed"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "You are already editing {}"
+msgstr ""
+
+msgid ""
+"You are editing one or more files so Assistant is unable to quit.\n"
+"Please finish editing first before trying to quit."
+msgstr ""
+
+msgid ""
+"You can compare the different content of these file and merge it into "
+"local file."
+msgstr ""
+
+msgid "You can now enable Assistant messaging"
+msgstr ""
+
+msgid "You can visit that site to enable notification"
+msgstr ""
+
+msgid "You cancelled uploading of this file. It was moved to {}"
+msgstr ""
+
+msgid "You have no permission to download {}, skipped"
+msgstr ""
+
+msgid ""
+"You have not selected a folder to download for a long time. Please try "
+"again"
+msgstr ""
+
+msgid "You have not selected a folder. Please try again"
+msgstr ""
+
+msgid "You need to downgrade to an old version to use Assistant on this site."
+msgstr ""
+
+msgid "You need to downgrade to use Assistant on this site."
+msgstr ""
+
+msgid ""
+"You need to have webfolder driver installed. Please run troubleshooting "
+"from context menu of tray icon."
+msgstr ""
+
+msgid ""
+"You need to set above ports at personal menu > Assistant at the the top "
+"right corner in sites you use."
+msgstr ""
+
+msgid "You should manually turn on messaging on {}: {}"
+msgstr ""
+
+msgid ""
+"Your editor or operating system seems to be misconfigured, please "
+"consider reinstalling the editor."
+msgstr ""
+
+msgid ""
+"Your operating system is outdated, Windows 7 SP1 or newer is required to "
+"use webfolder"
+msgstr ""
+
+msgid "Your selected folder is not valid. Please try again"
+msgstr ""
+
+msgid "[Image] {}"
+msgstr ""
+
+msgid "[{}][Chat] {} said"
+msgstr ""
+
+msgid "[{}][Notify] {} {}"
+msgstr ""
+
+msgid "auto"
+msgstr ""
+
+msgid "commented"
+msgstr ""
+
+msgid "conflict_backup"
+msgstr ""
+
+msgid "content_duplicated_file_link_text"
+msgstr ""
+
+msgid "context_duplicated_file_prefix"
+msgstr ""
+
+msgid "context_duplicated_file_suffix"
+msgstr ""
+
+msgid "created"
+msgstr ""
+
+msgid "document"
+msgstr ""
+
+msgid "down"
+msgstr ""
+
+msgid "download"
+msgstr ""
+
+msgid "edit"
+msgstr ""
+
+msgid "edit programs"
+msgstr ""
+
+msgid "edited"
+msgstr ""
+
+msgid "error"
+msgstr ""
+
+msgid "file edit application"
+msgstr ""
+
+msgid "file extention is required"
+msgstr ""
+
+msgid "file removal is disabled"
+msgstr ""
+
+msgid "finished"
+msgstr ""
+
+msgid "fixed revision"
+msgstr ""
+
+msgid "folder removal is disabled"
+msgstr ""
+
+msgid "free"
+msgstr ""
+
+msgid "help.text.log_debug"
+msgstr ""
+
+msgid "help.title.log_debug"
+msgstr ""
+
+msgid "input file extention, eg: .mp3"
+msgstr ""
+
+msgid "install the webfolder driver (Requires Administrator privilege)"
+msgstr ""
+
+msgid "manual"
+msgstr ""
+
+msgid "mentioned you in comment"
+msgstr ""
+
+msgid "mentioned you in group"
+msgstr ""
+
+msgid "open windows fail"
+msgstr ""
+
+msgid "open windows success"
+msgstr ""
+
+msgid "p2pdownload"
+msgstr ""
+
+msgid "pause sync success"
+msgstr ""
+
+msgid "paused"
+msgstr ""
+
+msgid "prepare"
+msgstr ""
+
+msgid "published"
+msgstr ""
+
+msgid "reminded"
+msgstr ""
+
+msgid "requires privileged access"
+msgstr ""
+
+msgid "resigned workflow"
+msgstr ""
+
+msgid "running"
+msgstr ""
+
+msgid "search edit program"
+msgstr ""
+
+msgid "set as default"
+msgstr ""
+
+msgid "set edit program for different file type"
+msgstr ""
+
+msgid "shared"
+msgstr ""
+
+msgid "signed workflow"
+msgstr ""
+
+msgid "sync"
+msgstr ""
+
+msgid "syncfolder error"
+msgstr ""
+
+msgid "the syncfolder is exist"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "up"
+msgstr ""
+
+msgid "updated revision"
+msgstr ""
+
+msgid "upload"
+msgstr ""
+
+msgid "version"
+msgstr ""
+
+msgid "view"
+msgstr ""
+
+msgid "{0} items ({1} ...)  uploaded"
+msgstr ""
+
+msgid "{0} processed"
+msgstr ""
+
+msgid "{1} uploaded"
+msgstr ""
+
+msgid "{:d} folder(s), {:d} file(s)"
+msgstr ""
+
+msgid ""
+"{}\n"
+"  {} items"
+msgstr ""
+
+msgid ""
+"{}\n"
+"attachments: "
+msgstr ""
+
+msgid ""
+"{}\n"
+"related: {}"
+msgstr ""
+
+msgid "{} conflicts found during this pulling"
+msgstr ""
+
+msgid "{} has been blocked from running because it's not signed."
+msgstr ""
+
+msgid "{} is not exists! Stop editing"
+msgstr ""
+
+msgid "{} is not in a sync folder"
+msgstr ""
+
+msgid "{} running error and will retry soon"
+msgstr ""
+
+msgid "{}. Local path is: {}"
+msgstr ""
+
+msgid "{}attachments: "
+msgstr ""
+
+msgid "{}related: {}"
+msgstr ""
+

@@ -1,0 +1,694 @@
+{% from "macro.html" import form_radio%}
+
+<!doctype html>
+<html lang="{{lang}}">
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="/static/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/static/jquery.jsonp.min.js"></script>
+    <script type="text/javascript" src="/static/layer/layer.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+    <style rel="stylesheet">
+        body{
+            background: #F0F0F0;
+        }
+        .form-horizontal{
+            width: 100%;
+            margin-top: 1em;
+        }
+        .form-horizontal .control-group{
+            margin-bottom: 8px;
+            margin-right: 1em;
+            margin-top: 0.5em;
+        }
+        .form-horizontal .controls{
+            margin-left: 120px;
+        }
+        .form-horizontal .control-label{
+            float: left;
+            width: 100px;
+            padding-top:5px;
+            text-align: right;
+            cursor: default;
+        }
+        .label{
+            cursor: default;
+        }
+        .controls{
+            margin-top:5px;
+        }
+        .container{
+            width:100%;
+        }
+
+        .panel {
+            margin: 15px;
+            margin-bottom: 5px;
+            background-color: white;
+            min-height: 170px;
+            border-width: 1px;
+            border-style: solid; 
+            border-color: #D9D9D9
+        }
+ 
+        .button-panel{
+            margin-top: 0.5em;
+            margin-left: 1em;
+            margin-right: 1em;
+            float: right;
+        }
+
+        .layui-layer-content
+        {
+            margin: 1em;
+            min-width: 310px;
+        }
+
+        .layui-layer-content#conflict_count
+        {
+            margin: 1em;
+            max-height: 70px;
+        }
+
+        .layui-layer-content#conflict-files {
+            height: 120px;
+            padding: 5px 10px 5px 10px;
+            overflow-x: hidden;
+        }
+        .layui-layer-content#conflict-files #batch_action_btn input {
+            display: inline;
+            margin: 0px;
+            vertical-align: baseline;
+        }
+        .layui-layer-content#conflict-files #batch_action_btn label {
+            display: inline;
+        }
+        .layui-layer-content#conflict-files .conflict-file {
+            margin-bottom: 5px;
+            min-width: 300px;
+        }
+        .layui-layer-content#conflict-files .conflict-file input {
+            display: inline;
+            margin: 0px;
+            vertical-align: baseline;
+        }
+        .layui-layer-content#conflict-files .conflict-file label {
+            display: inline;
+        }
+        #default-syncfolder {
+            background: transparent;
+            background-color: #F7F7F7;
+            border: 1px solid #CFCFCF;
+            border-radius: 5px;
+            font-size: 12px;
+            height: 16px;
+            line-height: 16px;
+            padding: 5px;
+            width: 200px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+{% if not sync_folder %}
+    {{ _('No syncfolder info') }}
+{% else %}
+    <div class="container">
+        <form role="form" id="edit-form" class="form-horizontal" method="post" action="/sync/edit">
+            <div class="panel">
+                <input type="hidden" id="id" name="id" value="{{ sync_folder.id }}">
+                <div class="control-group sync-display" id="default_syncfolder">
+                    <label class="control-label" for="syncfolders">{{ _('Site') }} :</label>
+                    <div class="controls" id="syncfolders">
+                    {% if sync_folder.related_syncfolders|length > 1 %}
+                        <select id="default-syncfolder" data-default="{{ sync_folder.default_syncfolder }}">
+                        {% for s in sync_folder.related_syncfolders %}
+                            <option
+                                value="{{ s.id }}"
+                                {% if s.id == sync_folder.default_syncfolder %}
+                                 selected="selected"
+                                {% endif %}
+                            >
+                                {{ s.instance_name }}
+                            </option>
+                        {% endfor %}
+                        </select>
+                        <a id="set-default-btn" class="btn" style="display: none; line-height: 12px; font-size: 12px;" onclick="setDefault();">{{ _('Set default') }}</a>
+                    {% else %}
+                        <p style="margin: 0;">{{ sync_folder.related_syncfolders[0].instance_name }}</p>
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="control-group sync-display" id="site_filename_group">
+                    <label class="control-label" for="uid">{{ _('Site folder') }} :</label>
+                    <div class="controls" >
+                        {% if conn %}
+                            {% if sync_folder.site_filename == 'The site folder was removed' %}
+                                {{ _("The site folder was removed") }}
+                            {% else %}
+                                <a href="/sync/open_item" class="syncfolder_url", title="{{ sync_folder.site_filename }}"
+                                   id="syncfoder_url" data-instance_url="{{ conn.instance_url }}" data-uid="{{ sync_folder.uid }}">
+                                    {{ sync_folder.site_filename }}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group sync-display" id="local_folder_group">
+                    <label class="control-label" for="path">{{ _('Local folder') }} :</label>
+                    <div class="controls">
+                        <a href="/ui/open" class="syncfolder_path" title="{{ sync_folder.path }}"
+                           id="syncfolder_path" data-path="{{ sync_folder.path }}" style="word-wrap: break-word;">
+                            {% if '.mounted' not in sync_folder.path %}
+                                {{ sync_folder.path.split('\\')[-1] or '' }}
+                            {% else %}
+                                {{ _('The syncfolder of webfolder {}').format(sync_folder.mountpoint) }}
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                <div class="control-group sync-display" id="sync_time_group">
+                    <label class="control-label" >{{ _('Sync time') }} :</label>
+                    <div class="controls">
+                        <p>{{ sync_folder.last_sync_time }}</p>
+                    </div>
+                </div>
+                <div class="control-group sync-display" id="status_group">
+                    <label class="control-label" for="state">{{ _('Status') }} :</label>
+                    <div class="controls">
+                        {%  if conn %}
+                            {#手动#}
+                            {% if sync_folder.policy == 'manual' %}
+                                {% if sync_folder.state in ('running', 'prepared') %}
+                                    {{ _(sync_folder.sync_type) }}{{ _('Syncing') }}
+                                {% elif sync_folder.state in ('error', ) %}
+                                    {{ _('Error') }}
+                                {% else %}
+                                    {{ _('No Running') }}
+                                {% endif %}
+                            {#自动#}
+                            {% elif sync_folder.policy == 'auto' %}
+                                {% if sync_folder.state in ('running', 'prepared', 'free', 'finished') %}
+                                    <a id="auto-sync-worker" data-id="{{ sync_folder.sync_worker().id }}" href="#">{{ _(sync_folder.sync_type) }}{{ _('Syncing') }}</a>
+                                {% elif sync_folder.state in ('error',) %}
+                                    {{ _('Error') }}
+                                {% else %}
+                                    {{ _('No Running') }}
+                                {% endif %}
+                            {% endif %}
+                            {#未连接#}
+                        {% else %}
+                            {{ _('The site connection does not exist') }}
+                        {% endif %}
+                        <a href="#" id="conflict_count"></a>
+                    </div>
+                </div>
+                <div class="control-group sync-display" id="deleted_items">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="controls">
+                        <a href="#" class="syncfolder_deleted_items" title="{{ _('Deleted items') }}" id="syncfolder_deleted_items" data-path="{{ sync_folder.path }}" data-id="{{ sync_folder.id }}" data-uid="{{ sync_folder.uid }}" style="word-wrap; break-word;">{{ _('View new local deleted items') }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="button-panel">
+                {% if conn %}
+                    {% if sync_folder.policy == 'manual'
+                        and sync_folder.state in ('running', 'prepared') %}
+                        <a class="href-start-sync btn sync-choose" id="stop-sync" href="/sync/pause" data-id="{{ sync_folder.id }}"><i class="fa fa-stop fa-1"></i> {{ _('Stop sync') }}</a>
+                    {% elif sync_folder.policy == 'auto'
+                        and sync_folder.state in ('running', 'prepared', 'free', 'finished', 'error') %}
+                        <a class="href-start-sync btn sync-choose" id="stop-sync" href="/sync/pause"
+                            data-id="{{ sync_folder.id }}" data-sync_type="{{ sync_folder.sync_type }}">
+                            <i class="fa fa-stop fa-1"></i> {{ _('Stop sync') }}
+                        </a>
+                    {% elif sync_folder.policy == 'manual'
+                        and sync_folder.state in ('finished', 'error', 'free')
+                        and sync_folder.site_filename != "The site folder was removed" %}
+                        <a class="href-sync-one btn sync-display" id="submit-sync-one" href="/sync/run" data-id="{{ sync_folder.id }}" data-sync_type="up"><i class="fa fa-long-arrow-up fa-1"></i> {{ _('Upload') }}</a>
+                        <a class="href-sync-one btn sync-display" id="submit-sync-one" href="/sync/run" data-id="{{ sync_folder.id }}" data-sync_type="down"><i class="fa fa-long-arrow-down fa-1"></i> {{ _('Download') }}</a>
+                        <a class="href-pause btn sync-display" id="submit-sync-auto" href="#" data-id="{{ sync_folder.id }}"><i class="fa fa-play fa-1"></i> {{ _('Start sync') }}</a>
+                    {% endif %}
+                {% endif %}
+                {% if '.mounted' not in sync_folder.path %}
+                    <a id="submit-delete" type="button" class="btn btn-lg btn-danger sync-display"><i class="fa fa-trash-o fa-1"></i>{{ _('Remove sync') }}</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <div style="display: none">
+        <div class="direction_panel" id="sync_type_group">
+            <label class="control-label" for="sync_type">{{ _('Direction') }} :</label>
+            <div class="controls">
+                {{ form_radio('sync_type', 'Up: Update the local file synchronization to the site', 'up', sync_folder.sync_type) }}
+                {{ form_radio('sync_type', 'Down: Download the site file synchronization to the local *', 'down', sync_folder.sync_type) }}
+                {{ form_radio('sync_type', 'Sync: Local and site are synchronized with each other *', 'sync', sync_folder.sync_type) }}
+                {{ _('* Every 5 minutes pull site files to local')}}
+            </div>
+        </div>
+    </div>
+    <div style="display: none">
+        <div class="deleted_items_panel" id="deleted_item_group">
+            <label class="control-label" id="local_deleted">{{ _('Local deleted') }} :</label>
+            <ul id="local_deleted_list"></ul>
+        </div>
+    </div>
+    <div style="display: none">
+        <div class="conflict_files" id="conflict_file_group">
+            <div id="batch_action_btn">
+                <a class="btn" id="force-upload" onclick="forceUpload();">{{ _("Forced upload") }}</a>
+                <a class="btn" id="discard-local" onclick="discardLocal();">{{ _("Discard change the local file") }}</a>
+                <div style="float: right; margin-top: 5px;">
+                    <input type="checkbox" id="select-all" checked> <label for="select-all">{{ _("Select all") }}</label>
+                </div>
+            </div>
+            <div id="conflict_file_list" data-oc_server="{{ conn.oc_server if conn else ''}}"
+                data-account="{{ conn.account if conn else '' }}" data-instance="{{ conn.instance if conn else '' }}"
+                data-token="{{ conn.token if conn else '' }}" data-version="*" data-build_number="*"></div>
+        </div>
+    </div>
+{% endif %}
+<script type="text/javascript">
+    document.onselectstart = function(){return false;};
+    if (!String.prototype.format) {
+        String.prototype.format = function() {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function(match, number) {
+                return typeof args[number] != 'undefined' ? args[number] : match;
+            });
+        };
+    }
+    var generateLink = function(id, filename, url) {
+        var shortName = filename;
+        if (filename.length > 25) {
+            var end = filename.slice(filename.lastIndexOf('.') + 1);
+            var start = filename.slice(0, 16);
+            shortName = start + '...' + end;
+        }
+        return '<a data-id="{0}" href="{1}" title="{2}">{3}</a>'.format(id, url, filename, shortName);
+    }
+    var getCheckedFiles = function() {
+        // 获取勾选的文件
+        var checked_files = [];
+        $('.layui-layer-content #conflict_file_list .conflict-file').each(
+            function(index, elem) {
+                if ($(elem).find(':checkbox').filter(':checked').length > 0) {
+                    checked_files.push($(elem).find('a').data('id'));
+                }
+            }
+        );
+        return checked_files;
+    };
+    var resolveConflict = function(msg, action) {
+        var parent = $(".layui-layer-content #conflict_file_list");
+        var checked_files = getCheckedFiles();
+        if (checked_files.length == 0) {
+            layer.msg("请勾选要操作的文件！");
+            return;
+        }
+        layer.confirm(
+            msg, {icon: 3, title: '提示'},
+            yes=function() {
+                $.ajax({
+                    cache: false,
+                    url: '/worker/new/resolve_conflict',
+                    type: 'POST',
+                    data: {
+                        oc_server: parent.data('oc_server'),
+                        account: parent.data('account'),
+                        instance: parent.data('instance'),
+                        token: parent.data('token'),
+                        ids: checked_files,
+                        action: action,
+                        version: parent.data('version'),
+                        build_number: parent.data('build_number')
+                    },
+                    dataType: 'json',
+                    success: function() {
+                        native.closeWindow();
+                    }
+                });
+            },
+            cancel=function(index) {
+                layer.close(index);
+            }
+        );
+    };
+    var forceUpload = function() {
+        // 强制上传按钮的响应函数
+        resolveConflict("是否要将选中文件强制上传？", "use_local");
+    }
+    var discardLocal = function() {
+        // 放弃本地修改的响应函数
+        resolveConflict("是否放弃选中文件的本地修改？<br>本地修改将备份到同步区的 .edo 文件夹", "use_remote");
+    };
+    var setDefault = function() {
+        var selection = $("#default-syncfolder"),
+            defaultID = selection.val(),
+            btn = $("#set-default-btn");
+        selection.data("default", defaultID);
+        btn.css("display", "none");
+        $.ajax({
+            cache: false,
+            url: '/sync/set_default',
+            type: 'POST',
+            data: {
+                id: defaultID,
+                path: $('#syncfolder_path').data('path')
+            },
+            dataType: 'json'
+        });
+    };
+    $(document).ready(function () {
+        $(document).on("change", "#default-syncfolder", function() {
+            var default_id = $(this).data("default");
+            var display = "none";
+            if (this.value !== default_id) {
+                display = "inline-block";
+            }
+            $("#set-default-btn").css("display", display);
+        });
+        {% if conn %}
+        $.ajax({
+            cache: false,
+            url: '/filestore/conflicts',
+            type: 'POST',
+            data: {
+                uid: "{{ sync_folder.uid }}",
+                oc_server: "{{ conn.oc_server if conn else '' }}",
+                account: "{{ conn.account if conn else '' }}",
+                instance: "{{ conn.instance if conn else '' }}",
+                root_local_folder: $('#syncfolder_path').data('path'),
+                token: "{{ conn.token if conn else '' }}",
+                version: "*",
+                build_number: "*"
+            },
+            dataType: 'json',
+            success: function(d){
+                if (d.conflicts.length != 0)
+                {
+                    $('#conflict_count').show();
+                    $('#conflict_count').html('{{ _("There are {} files conflict") }}'.replace('{}', d.conflicts.length));
+                    d.conflicts.forEach(function(item, index, array){
+                        var state_url = '/sync/ui_item_state?path=' + item.local_path;
+                        var file_name = item.server_path.split('/').reverse()[0] + ' ';
+                        $("#conflict_file_list").append(
+                            '<div class="conflict-file"><input type="checkbox" name="conflict_file" value="{0}" id="conflict_file_{1}" checked /> <label for="conflict_file_{1}">{2}</label></div>'.format(file_name, index, generateLink(item.id, file_name, state_url))
+                        );
+                    });
+                }
+            }
+        });
+        {% endif %}
+
+        // 冲突文件列表界面
+        $('#conflict_count').click(function(){
+            layer.open({
+                type: 1,
+                id: 'conflict-files',
+                shadeClose: true,
+                closeBtn: 1,
+                btn: [],
+                title: '{{ _("Handling file conflicts") }}',
+                content: $('#conflict_file_group').html()
+            });
+            $('.layui-layer-content a').click(function(){
+                $.ajax({
+                    etarget:$(this),
+                    cache: false,
+                    url: $(this).attr('href'),
+                    type: 'GET',
+                    data: null,
+                    dataType: 'json',
+                    success: function (d) {
+                        native.closeWindow();
+                    }
+                });
+                return false;
+            });
+            // 全选
+            $('.layui-layer-content #select-all').change(function() {
+                if ($(this).is(':checked')) {
+                    $('.layui-layer-content #conflict_file_list .conflict-file [type=checkbox]').each(function(index, elem) {
+                        $(elem).prop('checked', true);
+                    });
+                } else {
+                    $('.layui-layer-content #conflict_file_list .conflict-file [type=checkbox]').each(function(index, elem) {
+                        $(elem).prop('checked', false);
+                    });
+                }
+            });
+        });
+
+        // 删除同步区
+        $('#submit-delete').click(function(){
+            var syncfolder_id = $(this).closest('form').find('input[name="id"]').val();
+            layer.confirm('{{ _("The folder will no longer be synchronized, Are you sure?") }}',
+            {
+                title: false,
+                closeBtn: 0,
+                btn: ['{{_( "Yes" )}}', '{{ _("No") }}']
+            } ,function(){
+                $.ajax({
+                    url: '/sync/delete',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { id: syncfolder_id },
+                    success: function(d){
+                        native.closeWindow();
+                    }
+                });
+            });
+        });
+    });
+
+    //打开关联站点文件夹
+    $('#syncfoder_url').click(function () {
+        $.ajax({
+            etarget:$(this),
+            cache: false,
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                instance_url: $(this).data('instance_url'),
+                uid: $(this).data('uid')
+            },
+            dataType: 'json',
+            success: function (d) {
+            }
+        });
+        return false;
+    });
+
+    //打开同步错误的日志
+    $('#error_detail').click(function () {
+        $.ajax({
+            etarget:$(this),
+            cache: false,
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                'href': $(this).data('instance_url')
+            },
+            dataType: 'json',
+            success: function (d) {
+            }
+        });
+        return false;
+    });
+    // 打开本地文件夹
+    $('#syncfolder_path').click(function () {
+        $.ajax({
+            etarget:$(this),
+            cache: false,
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                local_path: $(this).data('path')
+            },
+            dataType: 'json',
+            success: function (d) {
+            }
+        });
+        return false;
+    });
+    // 启动单次同步
+    $('.href-sync-one').click(function(){
+        var formObj = $('#edit-form');
+        formObj.append('<input type="hidden" name="policy" value="manual" /> ');
+        formObj.append('<input type="hidden" name="sync_type" value="'+ $(this).data('sync_type') +'" /> ');
+        var startButton = $(this);
+        $.ajax({
+            url: '/sync/edit',
+            type: 'POST',
+            data: formObj.serialize(),
+            dataType: 'json',
+            success: function(d){
+                if(d.success){
+                    $.ajax({
+                        etarget: formObj,
+                        cache: false,
+                        url:startButton.attr('href'),
+                        dataType: 'JSON',
+                        type: 'POST',
+                        data: {
+                            id: startButton.data('id')
+                        },
+                        success: function (result) {
+                            native.closeWindow();
+                        }
+                    });
+                }else{
+                    // TODO 显示一个出错提示
+                    native.closeWindow();
+                }
+            }
+        });
+        $(this).closest('input[type="submit"]').attr('enabled', false);
+        return false;
+    });
+
+    // 启动自动同步
+    $('#submit-sync-auto').click(function(){
+        // 显示自动同步遮罩
+        layer.open({
+            type: 1,
+            title: false,
+            btn: ["{{ _('Start') }}"],
+            closeBtn: 0,
+            shadeClose: true,
+            content: $('#sync_type_group').html(),
+            yes: function(){
+                var formObj = $('#edit-form')
+                formObj.append('<input type="hidden" name="policy" value="auto" /> ');
+                formObj.append('<input type="hidden" name="sync_type" value="'+ $('input[type="radio"][name="sync_type"]:checked').val() +'" /> ');
+                // 修改同步区属性
+                $.ajax({
+                    url: '/sync/edit',
+                    type: 'POST',
+                    data: formObj.serialize(),
+                    dataType: 'json',
+                    success: function(d){
+                        if(d.success){
+                            // 启动自动同步
+                            $.ajax({
+                                etarget: formObj,
+                                cache: false,
+                                url: '/sync/run',
+                                dataType: 'JSON',
+                                type: 'POST',
+                                data: {
+                                    id: "{{ sync_folder.id }}"
+                                },
+                                success: function (result) {
+                                    native.closeWindow();
+                                }
+                            });
+                        }else{
+                            // TODO 显示一个出错提示
+                            native.closeWindow();
+                        }
+                    }
+                });
+                layer.closeAll();
+            }
+        });
+        return false;
+    });
+
+
+    $('#stop-sync').click(function(){
+        var stop_button = $(this);
+        // 暂停同步
+        $.ajax({
+            url: $(this).attr('href'),
+            cache: false,
+            type: 'POST',
+            data: {'id': $(this).data('id')},
+            dataType: 'json',
+            success: function (result){
+                // 修改同步区属性
+                $.ajax({
+                    url: '/sync/edit',
+                    type: 'POST',
+                    data: {
+                        'id': stop_button.data('id'),
+                        'policy': 'manual',
+                        'sync_type': stop_button.data('sync_type')
+                    },
+                    dataType: 'json',
+                    success: function(d){
+                        native.closeWindow();
+                    }
+                });
+            }
+        });
+        return false;
+    });
+
+    // 显示删除项
+    $('#syncfolder_deleted_items').click(function(){
+        $.ajax({
+            url: "/sync/deleted_items",
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            data: {
+                local_path: $(this).data("path"),
+                id: $(this).data("id"),
+                uid: $(this).data("uid")
+            },
+            success: function(d) {
+                if(d.local.length === 0) {
+                    $('#local_deleted').hide();
+                } else {
+                    $('#local_deleted').show();
+                    $('#local_deleted_list > li').remove();
+                    $.each(d.local, function(i, el){
+                        $('#local_deleted_list').append(
+                            $('<li><a class="remove_item" href="/sync/ui_item_state" data-path="' + el.local_path + '">' + el.name + '</a></li>')
+                        );
+                    });
+                }
+                layer.open({
+                    type: 1,
+                    title: false,
+                    area: '300px',
+                    btn: ["{{ _('Close') }}"],
+                    closeBtn: 0,
+                    shadeClose: true,
+                    content: (d.local.length === 0) ? "{{ _('No deleted items.') }}" : $('#deleted_item_group').html(),
+                });
+            }
+        });
+        return false;
+    });
+    $('body').on('click', '.remove_item', function(){
+        $.ajax({
+            url: $(this).attr('href'),
+            method: 'POST',
+            type: 'POST',
+            data: {'path': $(this).data('path')},
+            success: function(){
+                native.closeWindow();
+            },
+            cache: false
+        });
+        return false;
+    });
+    // 点击同步状态，跳转到同步任务详情窗口
+    $("#auto-sync-worker").click(function() {
+        $.ajax({
+            url: "/ui/report_detail",
+            method: 'POST',
+            type: 'POST',
+            data: {'worker_id': $(this).data('id')},
+            success: function() {
+                native.closeWindow();
+            },
+            cache: false
+        });
+    });
+</script>
+</body>

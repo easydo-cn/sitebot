@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+  <div class="tab-pane active" id="downfiles">
+    {% if not files %}
+      <div colspan="" class="alert alert-info text-center">
+        {{_('No file of category')}} "{{usage}}"
+      </div>
+    {% else %}
+      <div class="well well-small">
+        {{_('All files of category')}} "{{_(usage)}}"
+      </div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>{{_('Local path')}}</th>
+            <th>{{_('Server-side path')}}</th>
+            <th class="sort" data-sort="int">{{_('Last Deal Time')}}</th>
+            <th>{{_('Operation')}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for site_file in files %}
+            {% if site_file.usage == '3dpreview' %}{% else %}
+              <tr>
+                <td>
+                  <a href="/ui/open" class="localpath-control-open">
+                    {{site_file.local_path}}
+                  </a>
+                </td>
+                <td>
+                  <a href="javascript:void(0);">
+                    {{site_file.server_path}}
+                  </a>
+                </td>
+                <td data-sort-value="{{site_file.sort_time}}">
+                  {{site_file.last_deal}}
+                </td>
+                <td>
+                  <a href="/filestore/delete_file" class="btn btn-small btn-danger file-control-delete" data-localpath="{{site_file.local_path}}" data-oc_server="{{site_file.server}}" data-instance="{{site_file.instance}}" data-account="{{site_file.account}}">
+                    {{_('Remove')}}
+                  </a>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ anchor_loading() }}
+<script type="text/javascript">
+  $('table').stupidtable();
+  $('#downfiles table thead th').eq(2).stupidsort('desc');
+  $('a.file-control-delete').on('click', function(e){
+    var _row = $(this).closest('tr');
+    if(confirm(
+      '{{_('Remove this file?')}}\n' +
+      '{{_('It will not be deleted from your computer.')}}'
+    )){
+      $.ajax({
+        etarget: $(this),
+        cache: false,
+        url: $(this).attr('href'),
+        dataType: 'JSON',
+        type: 'POST',
+        data: {
+          local_path: $(this).data('localpath'),
+          oc_server: $(this).data('oc_server'),
+          instance: $(this).data('instance'),
+          account: $(this).data('account')
+        },
+        success: function(result){
+          if(result.success){
+            _row.fadeOut({
+              duration: 300,
+              complete: function(){$(this).remove()}
+            });
+          }
+        }
+      });
+    }
+    return false;
+  });
+</script>
+{% endblock %}

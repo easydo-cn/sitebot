@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block styles %}
+{{ super() }}
+  <style type="text/css">
+    .toolbar-table td { text-align: center !important; }
+  </style>
+{% endblock %}
+
+{% block main_content %}
+  {% if not worker %}
+    <div class="well well-small text-center alert alert-info"> {{_('No such task')}} </div>
+  {% else %}
+    <h2>{{ _('Task detail') }}: {{ _(worker_title) }}</h2>
+    <table class="table table-bordered toolbar-table">
+      <tbody>
+        <tr>
+          <td>ID: {{ worker.id }}</td>
+          <td>{{ _('Started at') }} {{ worker_start_time }}</td>
+          <td class="worker_state
+            {% if worker.state == 'finished' %}
+              success
+            {% elif worker.state == 'error' %}
+              error
+            {% elif worker.state == 'paused' %}
+              warning
+            {% elif worker.state == 'prepare' %}
+              warning
+            {% elif worker.state == 'running' %}
+              info
+            {% endif %}
+            ">
+              {% if worker.state == 'running' %}
+                {{_('Running')}}
+              {% elif worker.state == 'finished' %}
+                {% if worker.auto %}
+                    {{_('Waiting')}}
+                {% else %}
+                    {{_('Finished')}}
+                {% endif %}
+              {% elif worker.state == 'paused' %}
+                {{_('Paused')}}
+              {% elif worker.state == 'error' %}
+                {{_('Error')}}
+              {% elif worker.state =='prepare' %}
+                {{_('Preparing')}}
+              {% endif %}
+          </td>
+          <td>
+            {% if worker.name == 'edit' and worker.state == 'running' %}
+            {% else %}
+            <div class="btn-group">
+              {% if worker.state == 'running' %}
+                <a class="btn btn-mini worker-control" href="/worker/pause">
+                  {{_('Pause')}}
+                </a>
+              {% elif worker.state == 'paused' %}
+                <a class="btn btn-mini worker-control" href="/worker/start">
+                  {{_('Continue')}}
+                </a>
+              {% elif worker.state == 'error' %}
+                <a class="btn btn-mini worker-control" href="/worker/start">
+                  {{_('Retry')}}
+                </a>
+              {% elif worker.state == 'finished' %}
+                {% if worker.auto %}
+                  <a class="btn btn-mini worker-control" href="/worker/start">
+                    {{_('Start')}}
+                  </a>
+                  <a class="btn btn-mini worker-control" href="/worker/pause">
+                    {{_('Pause')}}
+                  </a>
+                {% endif %}
+              {% endif %}
+              <a class="btn btn-mini worker-control" href="/worker/cancel">
+                {{_('Detele')}}
+              </a>
+            </div>
+            {% endif %}
+          </td>
+          <td>
+              <a href="/admin/viewlog?name=worker_{{worker_id}}" data-name="worker_{{worker_id}}" class="viewlog">
+              {{ _('View log') }}
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    {% autoescape false %}
+      {{ worker_detail }}
+    {% endautoescape %}
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ anchor_loading() }}
+<script type="text/javascript">
+  $('a.worker-control').on('click', function(e){
+    var _row = $(this).closest('tr');
+    $.ajax({
+      etarget: $(this),
+      url: $(this).attr('href'),
+      dataType: 'JSON',
+      data: {
+        build_number: {{build_number}},
+        worker_id: {{worker_id}}
+      },
+      type: 'POST',
+      success: function(result){
+        setTimeout(function(){
+          window.location = '/';
+        }, 1 * 1000);
+      }
+    });
+    return false;
+  });
+
+</script>
+{% endblock %}

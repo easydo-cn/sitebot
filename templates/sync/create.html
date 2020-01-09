@@ -1,0 +1,168 @@
+{% from "macro.html" import form_radio%}
+
+<!doctype html>
+<html lang="{{lang}}">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <style rel="stylesheet">
+        body{
+            background: #F0F0F0;
+        }
+        .form-horizontal{
+            width: 100%;
+            margin-top: 1em;
+        }
+        .form-horizontal .control-group{
+            margin-bottom: 8px;
+            margin-right: 1em;
+            margin-top:0.5em;
+        }
+        .form-horizontal .controls{
+            margin-left: 120px;
+        }
+        .form-horizontal .control-label{
+            float: left;
+            width: 100px;
+            padding-top:5px;
+            text-align: right;
+            cursor: default;
+        }
+        .label{
+            cursor: default;
+        }
+        .controls{
+            margin-top:5px;
+        }
+        .container{
+            width:100%;
+        }
+
+        .panel {
+            margin: 15px;
+            margin-bottom: 5px;
+            background-color: white;
+            min-height: 100px;
+            border-width: 1px;
+            border-style: solid; 
+            border-color: #D9D9D9
+        }
+ 
+        .button-panel{
+            margin-top: 0.5em;
+            margin-left: 1em;
+            margin-right: 1em;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form role="form" id="create_form" class="form-horizontal" action="/sync/create" method="post">
+        <div class="panel">
+            <input id="oc_server" name="oc_server" type="hidden" value="{{ oc_server }}">
+            <input id="server" name="server" type="hidden" value="{{ server }}">
+            <input id="instance" name="instance" type="hidden" value="{{ instance }}">
+            <input id="account" name="account" type="hidden" value="{{ account }}">
+            <input id="token" name="token" type="hidden" value="{{ token }}">
+            <input id="instance_name" name="instance_name" type="hidden" value="{{ instance_name }}">
+            <input id="instance_url" name="instance_url" type="hidden" value="{{ instance_url }}">
+            <input id="policy" name="policy" type="hidden" value="manual">
+            <input id="uid" name="uid" type="hidden" value="{{ uid }}">
+            <input id="sync_type" name="sync_type" type="hidden" value="sync">
+            <input id="pid" name="pid" type="hidden" value="{{ pid }}">
+            <input id="username" name="username" type="hidden" value="{{ username }}">
+            <div class="control-group">
+                <label class="control-label" for="uid" >{{ _('Site folder') }}</label>
+                <div class="controls">
+                    <a href="/sync/open_item" class="syncfolder_url"
+                       id="syncfoder_url" data-instance_url="{{ instance_url }}" data-uid="{{ uid }}">
+                        {{ folder_name }}
+                    </a>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="path">{{ _('Local folder') }}</label>
+                <div class="controls">
+                    <div class="input-append">
+                        <input class="span2" name="path" type="text" id="path"
+                               value="{{ path or '' }}" readonly>
+                        <button class="btn" type="button" id="select_path">{{ _('Select') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="button-panel">
+            <button type="submit" class="btn btn-lg btn-primary">{{ _('Create') }}</button>
+        </div>
+    </form>
+</div>
+
+
+<script type="text/javascript" src="/static/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="/static/jquery.jsonp.min.js"></script>
+<script type="text/javascript" src="/static/layer/layer.js"></script>
+<script type="text/javascript">
+    document.onselectstart = function(){return false;};
+    $(document).ready(function () {
+        $('button#select_path').click(function () {
+            $.get("{{ url_for('ui.api_select_paths', mode='folder') }}", function (data, status) {
+                var path = JSON.parse(data)['paths'];
+                $('input#path').val(path[0]);
+            })
+        })
+    })
+    $('#create_form').submit(function(e)
+    {
+        var formObj = $(this);
+        var formUrl = formObj.attr("action");
+        var postData = formObj.serializeArray();
+        console.log(formObj.serialize());
+        $.ajax({
+            url: formUrl,
+            type: "POST",
+            data: postData,
+            beforeSend: function(jqXHR, settings){
+                var path= $("input#path").val()
+                if (path == "")
+                {
+                   layer.msg('{{ _("Please select a local path for syncfolder") }}');
+                   return false
+                }
+                native.hideWindow();
+            },
+            success:function(data, textStatus, jqXHR){
+                $.ajax({
+                    url: '/sync/ui_item_state',
+                    type: "GET",
+                    data: {
+                        'path': $("input#path").val()
+                    }
+                });
+                native.closeWindow();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                native.showWindow();
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#syncfoder_url').click(function () {
+        $.ajax({
+            etarget:$(this),
+            cache: false,
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                instance_url: $(this).data('instance_url'),
+                uid: $(this).data('uid')
+            },
+            dataType: 'json',
+            success: function (d) {
+            }
+        });
+        return false;
+    });
+</script>
+</body>

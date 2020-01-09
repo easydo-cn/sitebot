@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    {% block styles %}
+    <style type="text/css">
+      .footer{
+        text-align: center;
+        padding: 30px 0;
+        margin-top: 70px;
+        border-top: 1px solid #e5e5e5;
+        background-color: #f5f5f5;
+      }
+      .tab-content{
+        overflow: visible;
+      }
+      .sorting-desc:after, .sorting-asc:after{
+        display: inline-block;
+        width: 0;
+        height: 0;
+        vertical-align: middle;
+        content: "";
+        margin-left: 4px;
+      }
+      .sorting-desc:after{
+        border-top: 4px solid #000000;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+      }
+      .sorting-asc:after{
+        border-bottom: 4px solid #000000;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+      }
+      .sort{
+        cursor: pointer;
+      }
+      .page-header{
+        border: none;
+      }
+      .advanced-links a{
+        margin-right: 1em;
+      }
+      a.localpath-control-open{
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+      a.toggle-view{
+        text-decoration: none;
+      }
+      a.toggle-view.now{
+        color: inherit;
+      }
+      td.error {
+        background-color: #f2dede !important;
+        color: #b94a48;
+      }
+      td.success {
+        background-color: #dff0d8 !important;
+        color: #468847;
+      }
+      td.warning {
+        background-color: #fcf8e3 !important;
+        color: #c09853;
+      }
+      td.info {
+        background-color: #d9edf7 !important;
+        color: #3a87ad;
+      }
+    </style>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class="container">
+      {% block page_header %}
+        <div class="page-header">
+          <h2>{{_('Assistant')}}</h2>
+          <p>
+            {{_('Assistant can offer more powerful upload, download, folder synchronization and other functions, is used to strengthen web browser')}}
+          </p>
+        </div><!-- div.page-header -->
+      {% endblock %}
+
+      {% block tab_navigation %}
+        {% include 'tabnav.html' %}
+      {% endblock %}
+
+      <div class="tab-content">
+        {% block main_content %}{% endblock %}
+      </div><!-- div.tab-content -->
+      {% block toolbar %}
+        {% include "toolbar.html" %}
+      {% endblock %}
+    </div><!-- div.container -->
+
+{% block page_footer %}
+    <div class="footer">
+      <p>
+        {{_('Assistant')}}
+        {{_('version')}}
+        {{version}}.{{build_number}}
+      </p>
+      {% if git_info %}
+        <p>{{_('Detailed build info')}}: {{git_info}}</p>
+      {% endif %}
+    </div>
+{% endblock %}
+
+{% macro anchor_loading() %}
+    {#
+        This macro adds `Loading...` indicator for ajax anchor elements.
+        Must be placed after jQuery and other requirements imported.
+    #}
+    <script type="text/javascript">
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings){
+          xhr.etarget = settings.etarget;
+          var _target = xhr.etarget;
+          _target.data('href', _target.attr('href'));
+          _target.data('text', _target.text());
+
+          _target.attr({'href': 'javascript:void(0);'});
+          _target.text('{{_('Please wait')}}...');
+        },
+        complete: function(xhr, textStatus){
+          var _target = xhr.etarget;
+          if(_target.data('href') && _target.data('text')){
+            _target.attr({'href': _target.data('href')});
+            _target.text(_target.data('text'))
+
+            _target.data('href', '');
+            _target.data('text', '');
+          }
+        }
+      });
+</script>
+{% endmacro %}
+{% block scripts %}
+    <script type="text/javascript" src="/static/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/static/jquery.jsonp.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/stupidtable.min.js"></script>
+    <script type="text/javascript">
+      $('[data-toggle="tooltip"]').tooltip();
+      $(document.body).on('click', 'a.localpath-control-open', function(e){
+        var local_path = $.trim($(this).data('path')) || $.trim($(this).text());
+        window.console && console.log(local_path);
+        $.ajax({
+          etarget: $(this),
+          url: $(this).attr('href'),
+          cache: false,
+          dataType: 'JSON',
+          data: {
+            local_path: local_path
+          },
+          type: 'POST'
+        });
+        return false;
+      });
+    </script>
+{% endblock %}
+  </body>
+</html>

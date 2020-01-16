@@ -7,5 +7,6 @@ redis==2.9.1
 hiredis==0.2.0
 transaction==2.2.1
 # For various Ops takss
+requests==2.22.0
 fabric<2.0
 fabric2

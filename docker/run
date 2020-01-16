@@ -1,0 +1,20 @@
+#!/bin/bash
+export LANG=en_US.UTF-8
+action=$1
+
+case $action in
+    start)
+        ln -s /assistent/fonts/s552.ttf /assistent/fonts/wqy-zenhei.ttc
+        cd /assistent && pybabel compile -d translations
+        python /sitebot.py $2
+        ;;
+    shell)
+        exec /bin/bash
+        ;;
+    python)
+        exec python
+        ;;
+    *)
+        echo "Available CMD: start | python | shell"
+        ;;
+esac

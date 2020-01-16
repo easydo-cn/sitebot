@@ -1,0 +1,11 @@
+# Required by edo_client
+oss2==2.5.0
+paho-mqtt==1.3.1
+# Required by mdfs
+boto==2.48.0
+redis==2.9.1
+hiredis==0.2.0
+transaction==2.2.1
+# For various Ops takss
+fabric<2.0
+fabric2

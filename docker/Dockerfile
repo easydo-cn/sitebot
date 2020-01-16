@@ -8,7 +8,7 @@ RUN apt update && \
 
 RUN pip install --trusted-host $PIP_TRUSTED_HOST --index-url $PIP_INDEX_URL --upgrade pip
 
-COPY gitlab/assistent/docker/requirements.txt /sitebot_requirements.txt
+COPY gitlab/sitebot/docker/requirements.txt /sitebot_requirements.txt
 RUN pip wheel --wheel-dir=/root/wheels -i $PIP_INDEX_URL -r /sitebot_requirements.txt
 
 # --no-index, --find-links 参数指定从本地安装

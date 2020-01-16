@@ -8,30 +8,37 @@ RUN apt update && \
 
 RUN pip install --trusted-host $PIP_TRUSTED_HOST --index-url $PIP_INDEX_URL --upgrade pip
 
+COPY gitlab/sitebot/requirements.txt /
+RUN pip wheel --wheel-dir=/root/wheels -i $PIP_INDEX_URL -r /requirements.txt
+
 COPY gitlab/sitebot/docker/requirements.txt /sitebot_requirements.txt
 RUN pip wheel --wheel-dir=/root/wheels -i $PIP_INDEX_URL -r /sitebot_requirements.txt
 
 # --no-index, --find-links 参数指定从本地安装
+RUN pip install --ignore-installed --no-index --find-links=/root/wheels -r requirements.txt
 RUN pip install --ignore-installed --no-index --find-links=/root/wheels -r /sitebot_requirements.txt
 RUN pip install --trusted-host $PIP_TRUSTED_HOST --index-url $PIP_INDEX_URL pyOpenSSL
 
 COPY gitlab/edo_client /edo_client
+COPY gitlab/mdfs /mdfs
 COPY gitlab/ztq/ztq_core /ztq_core
 
 RUN cd /edo_client && \
     python setup.py install && \
     rm -rf /edo_client
-
 RUN cd /ztq_core && \
     python setup.py install && \
+    cd /mdfs && \
+    python setup.py install && \
+    rm -rf /mdfs && \
     rm -rf /ztq_core
 
-COPY gitlab/sitebot /sitebot
-RUN mv /sitebot/docker/sitebot.py /sitebot.py && \
-    mv /sitebot/docker/run /usr/local/bin/run && \
+COPY gitlab/assistent /assistent
+RUN mv /assistent/docker/sitebot.py /sitebot.py && \
+    mv /assistent/docker/run /usr/local/bin/run && \
     chmod +x /usr/local/bin/run
 
-WORKDIR /sitebot
+WORKDIR /assistent
 ENTRYPOINT ["/usr/local/bin/run"]
 CMD ["start"]
 EXPOSE 4999

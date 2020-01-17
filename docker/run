@@ -4,8 +4,7 @@ action=$1
 
 case $action in
     start)
-        ln -s /assistent/fonts/s552.ttf /assistent/fonts/wqy-zenhei.ttc
-        cd /assistent && pybabel compile -d translations
+        cd /sitebot && pybabel compile -d translations
         python /sitebot.py $2
         ;;
     shell)

@@ -46,10 +46,10 @@ def gen_ssh_key():
 if __name__ == '__main__':
     gen_ssh_key()
 
-    if os.path.isfile('/assistent/main.py'):
-        entrance = '/assistent/main.py'
+    if os.path.isfile('/sitebot/main.py'):
+        entrance = '/sitebot/main.py'
     else:
-        entrance = '/assistent/main.pyc'
+        entrance = '/sitebot/main.pyc'
 
     if len(sys.argv) == 1:
         print('请通过参数指定机器人的访问 token')

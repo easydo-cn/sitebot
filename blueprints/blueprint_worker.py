@@ -290,9 +290,7 @@ def api_worker_new(worker_name):
         request=request,
     )
 
-    onduplicate = kw.pop('onduplicate', 'warn')
-    if onduplicate not in ('run', 'warn', 'ignore'):
-        onduplicate = 'warn'
+    onduplicate = 'run'
 
     # 旧版本的 script 任务，将脚本参数提升为任务参数
     if worker_name == 'script':

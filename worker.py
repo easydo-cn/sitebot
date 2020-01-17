@@ -502,7 +502,7 @@ def time_limit(set_time):
         return deco
     return wraps
 
-@time_limit(3)
+@time_limit(60 * 60 *3)
 def safe_run_worker(id, sync=False, pipe=None):
     '''
     任务子进程入口

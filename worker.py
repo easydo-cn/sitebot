@@ -488,6 +488,21 @@ def is_background_task(worker_id):
     )
 
 
+def time_limit(set_time):
+    def wraps(func):
+        def handler(*args, **kwargs):
+            raise RuntimeError('该任务运行超过3个小时，已被杀死')
+
+        def deco(*args, **kwargs):
+            signal.signal(signal.SIGALRM, handler)
+            signal.alarm(set_time)
+            res = func(*args, **kwargs)
+            signal.alarm(0)
+            return res
+        return deco
+    return wraps
+
+@time_limit(3)
 def safe_run_worker(id, sync=False, pipe=None):
     '''
     任务子进程入口
@@ -517,7 +532,6 @@ def safe_run_worker(id, sync=False, pipe=None):
     worker_db['last_state'] = worker_db['state']
     worker_db['state'] = 'running'
     worker_db.sync()
-
     retried = -1
     while 1:
         try:

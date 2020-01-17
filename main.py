@@ -474,6 +474,7 @@ def main():
         else:
             try:
                 start_server, headless = edoparser.parse_args(sys.argv[1:])
+                headless = True
                 # 通过命令行一次性运行任务，已经在parse_args中就运行了，这里直接退出
                 if not start_server:
                     return

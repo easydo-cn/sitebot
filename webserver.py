@@ -12,7 +12,6 @@ import traceback
 
 from flask import Blueprint, Flask, request, redirect, url_for, g as flask_g
 import gevent.wsgi
-from PyQt4 import QtGui, QtCore
 
 import worker
 from utils import (
@@ -25,11 +24,6 @@ import config
 from config import (
     BUILD_NUMBER, VERSION, ALLOW_DOMAIN, EDO_TEMP, WORKERS,
     CURRENT_DIR, DISABLE_UPGRADE, LOG_DATA, HEADLESS,
-)
-from qtui import (
-    SystemTrayIcon, PyQtGreenlet, TrayIconMixin,
-    Question, FileDialog, ProgressWindow,
-    AssistantApplication,
 )
 from libs.managers import get_site_manager
 
@@ -52,9 +46,6 @@ P2P_QUEUE = None
 
 _ = translate
 
-# 设置编码，让 .tr 支持非 ASCII 字符串
-QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-
 # 创建本地服务器
 fapp = Flask(
     __name__,
@@ -68,8 +59,7 @@ fapp.config['PROPAGATE_EXCEPTIONS'] = False
 
 # 注册所有的路由模块
 for module_name in [
-    'blueprint_admin', 'blueprint_worker', 'blueprint_ui', 'blueprint_sync',
-    'blueprint_desktop', 'blueprint_filestore',
+    'blueprint_admin', 'blueprint_worker'
 ]:
     fapp.register_blueprint(
         importlib.import_module('blueprints.{}'.format(module_name)).blueprint,

@@ -33,12 +33,12 @@ RUN cd /ztq_core && \
     rm -rf /mdfs && \
     rm -rf /ztq_core
 
-COPY gitlab/assistent /assistent
-RUN mv /assistent/docker/sitebot.py /sitebot.py && \
-    mv /assistent/docker/run /usr/local/bin/run && \
+COPY gitlab/sitebot /sitebot
+RUN mv /sitebot/docker/sitebot.py /sitebot.py && \
+    mv /sitebot/docker/run /usr/local/bin/run && \
     chmod +x /usr/local/bin/run
 
-WORKDIR /assistent
+WORKDIR /sitebot
 ENTRYPOINT ["/usr/local/bin/run"]
 CMD ["start"]
 EXPOSE 4999

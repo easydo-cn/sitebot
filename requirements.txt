@@ -6,6 +6,7 @@ jinja2==2.8
 flask==0.12.2
 # edo_client>=6.3.3  # please manually install from source
 py-oauth2
+setuptools==41.2.0
 Fabric2
 pycryptodome==3.4.7
 netifaces

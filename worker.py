@@ -308,13 +308,6 @@ def new_worker(worker_name, **kw):
     获取（递增的）任务 ID 并保存任务数据到任务的数据库中
     '''
     new_id = get_next_id()
-    # 使用 allow_duplicate 可以避开任务去重；默认行为是不允许创建重复任务
-    if not kw.pop('allow_duplicate', False):
-        # 任务重入检查：不允许运行重复任务
-        _kw = copy.deepcopy(kw)
-        _kw['name'] = worker_name
-        if worker_exists(_kw):
-            return 0
 
     # 开始日志记录
     # 清理上一次的工作数据库和日志记录，避免日志混杂

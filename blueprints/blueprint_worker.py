@@ -290,17 +290,12 @@ def api_worker_new(worker_name):
         request=request,
     )
 
-    onduplicate = kw.pop('onduplicate', 'warn')
-    if onduplicate not in ('run', 'warn', 'ignore'):
-        onduplicate = 'warn'
-
     # 旧版本的 script 任务，将脚本参数提升为任务参数
     if worker_name == 'script':
         script_kw = {}
         for k in ('script_vars', 'args', 'kw',):
             script_kw[k] = json.loads(request.form.get(k))
         kw.update(script_kw)
-    kw['allow_duplicate'] = onduplicate == 'run'
     # 此参数不能通过 HTTP 请求控制，只能在这里设置，并且在脚本任务中会被预先移除
     # 用途是：通过 HTTP 请求创建脚本任务，如果请求中 ast_token 验证通过，将可以不验证站点信任和脚本签名有效性
     kw['_request_verified'] = flask_g.request_verified
@@ -312,23 +307,8 @@ def api_worker_new(worker_name):
         logger.error(u'新建任务出错', exc_info=True)
         worker_id = 0
 
-    # 0 表示任务重复，实际没有创建
-    if worker_id == 0:
-        if onduplicate == 'warn':
-            show_msg(
-                _(worker.get_worker_title(worker_name)),
-                _(u'This task is already running, please wait...'),
-                type='info'
-            )
-        return json.dumps({
-            'msg': _('This task is already running, please wait...'),
-            'is_alive': False,
-            'worker_id': 0,
-            'type': 'info'
-        })
-    else:
-        # 开始任务
-        result = worker.start_worker(worker_id, pipe=current_app.P2P_QUEUE)
+    # 开始任务
+    result = worker.start_worker(worker_id, pipe=current_app.P2P_QUEUE)
     return json.dumps(result)
 
 

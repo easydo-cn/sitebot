@@ -688,23 +688,8 @@ class Messaging(threading.Thread):
             'report_to_pid': from_user_id,
             'args': json.dumps(event_data.pop('args', [])),
             'kw': json.dumps(event_data.pop('kw', {})),
-            'onduplicate': event_data.pop('onduplicate', 'warn'),
         }
         response = ui_client.new_worker(worker_info).json()
-        # 如果任务重复，提醒 `from` 用户
-        if response.get('worker_id', 0) == 0\
-                and from_user_id is not None:
-            self.message_client.message_v2.trigger_notify_event(
-                'default',
-                event_data={
-                    'from': {
-                        'name': self.username,
-                        'id': self.pid,
-                    },
-                    'to': [from_user_id],
-                    'body': response['msg'],
-                }
-            )
         return response
 
     def handle_notification(self, msg):

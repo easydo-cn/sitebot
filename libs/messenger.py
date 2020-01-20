@@ -677,6 +677,7 @@ class Messaging(threading.Thread):
             'instance': self.instance,
             'oc_server': event_data.get('oc_server', self.oc_server),
             'script_name': script_name,
+            'timeout': event_data.pop('timeout', None),
             'callback_url': event_data.pop('callback_url', None),
             'error_callback_url': event_data.pop('error_callback_url', None),
             'return_script': event_data.pop('return_script', None),

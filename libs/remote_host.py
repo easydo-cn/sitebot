@@ -177,6 +177,9 @@ def get_remote_host(host, platform, __worker_db=None, __logger=None, *args, **kw
         'workonline', worker_db['oc_server'], worker_db['account'], worker_db['instance'],
         token=worker_db['token']
     )
+    if not __logger:
+	import logging
+	__logger = logging.getLogger('RemoteHost')
     return RemoteHost(wo_client=wo_client, host=host, platform=platform, logger=__logger, *args, **kwargs)
 
 

@@ -432,7 +432,7 @@ def online_script(
         'wo_client': wo_client,
         'get_remote_host': partial(get_remote_host,
                                    __worker_db=worker_db,
-                                   __logger=logger if not remote_log else remote_log),
+                                   __logger=remote_log),
         'load_i18n': load_i18n,
         '_': custom_translate,
     })

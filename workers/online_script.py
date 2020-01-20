@@ -245,7 +245,7 @@ def online_script(
     script_name, args, kw,
     error_callback_url=None, error_script=None, error_params=None,
     callback_url=None, return_script=None, return_params=None,
-    progress_script=None, progress_params=None,timeout=None,
+    progress_script=None, progress_params=None,timeout=0,
     __sync=False, pipe=None,
 ):
     '''Script task'''
@@ -312,7 +312,7 @@ def online_script(
     # 为了避免污染公用的脚本执行环境，为每一任务提供一继承于SCRIPT_ENV的环境
     script_env = SCRIPT_ENV.copy()
     # 获取远端脚本执行引擎。
-    rse = wo_client.get_rse(script_env, not trusted and not request_verified, timeout=timeout)
+    rse = wo_client.get_rse(script_env, not trusted and not request_verified, timeout=int(timeout))
     # 手动加载脚本以便在脚本执行前获取脚本信息。
     script_obj = rse.load_script(script_name)
 

@@ -13,7 +13,7 @@ from invoke.exceptions import UnexpectedExit
 from requests import post
 import edo_client
 import ui_client
-from libs.progress_log_handler import ProgressLogHandler
+from libs.progress_log_handler import ProgressLogHandler, StdoutCollector
 from libs.remote_host import get_remote_host
 from worker import register_worker, get_worker_db
 import utils
@@ -323,6 +323,7 @@ def online_script(
 
 
     # 快速构造消息客户端
+    message_client = None
     if not __sync:
         if worker_db.get('message_server', None):
             message_client = get_message_client(
@@ -438,6 +439,8 @@ def online_script(
     })
 
     try:
+        sys.stdout = __stdout__ = StdoutCollector(out=sys.stdout, worker_db=worker_db,
+                                                  message_client=message_client, progress_params=progress_params)
         result = rse.call(script_name, *args, **kw)
     except ScriptSecurityError:
         if __sync:
@@ -550,8 +553,9 @@ def online_script(
         return []
 
     finally:
+        if isinstance(sys.stdout, StdoutCollector):
+            sys.stdout = sys.stdout.original
         if not __sync:
             worker_db = get_worker_db(worker_id)
             worker_db['_request_verified'] = not trusted
             worker_db.sync()
-

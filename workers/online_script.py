@@ -273,13 +273,24 @@ def online_script(
     args = json.loads(args) if args else []
     kw = json.loads(kw) if kw else {}
 
+    # need_verify：是否需要签名校验。
+    trusted = _trusted_site(oc_server, account, instance)
+
+    request_verified = False
+    if not __sync:
+        worker_db = get_worker_db(worker_id)
+        # _request_verified： 
+        # 从桌面助手的本地数据库获取任务是否已经经过了校验。
+        # 若已经校验过了就不需要再次进行校验。
+        request_verified = worker_db.pop('_request_verified', False)
+
     remote_log = None
     if progress_script and progress_params:
         progress_params = json.loads(progress_params)
         progress_log_handler = ProgressLogHandler(
             wo_client=wo_client,
             progress_script=progress_script,
-            script_title=kw.get('script_title', ''),
+            script_title=worker_db.get('title', ''),
             progress_params=progress_params)
         # 如果只有一个级别则为这个级别，多个级别则取最低级别，默认为info级别
         # 兼容流程中直接指定level: 'info', 开发调试时选择选项数组
@@ -297,17 +308,6 @@ def online_script(
         remote_log = get_logger('RemoteHost:' + str(threading.currentThread().ident))
         remote_log.handlers = []
         remote_log.addHandler(progress_log_handler)
-
-    # need_verify：是否需要签名校验。
-    trusted = _trusted_site(oc_server, account, instance)
-
-    request_verified = False
-    if not __sync:
-        worker_db = get_worker_db(worker_id)
-        # _request_verified： 
-        # 从桌面助手的本地数据库获取任务是否已经经过了校验。
-        # 若已经校验过了就不需要再次进行校验。
-        request_verified = worker_db.pop('_request_verified', False)
 
     # 为了避免污染公用的脚本执行环境，为每一任务提供一继承于SCRIPT_ENV的环境
     script_env = SCRIPT_ENV.copy()
@@ -471,7 +471,7 @@ def online_script(
                     logger.debug(u'使用新版本错误回调脚本：%s', error_script)
                     error_result = wo_client.xapi(
                         error_script,
-                        script_title=kw.get('script_title', ''),
+                        script_title=worker_db.get('title', ''),
                         uid=error_params['uid'],
                         traceback=traceback.format_exc(),
                         pid=error_params.get('pid', []),
@@ -528,7 +528,7 @@ def online_script(
                     logger.debug(u'使用新版本回调脚本：%s', return_script)
                     return_result = wo_client.xapi(
                         return_script,
-                        script_title=kw.get('script_title', ''),
+                        script_title=worker_db.get('title', '执行中的任务'),
                         result=json.dumps(result),
                         uid=return_params['uid'],
                         pid=return_params.get('pid', []),

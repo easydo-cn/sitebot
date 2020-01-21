@@ -53,9 +53,8 @@ class StdoutCollector(object):
 
         # if in echo mode, send each printed text as a separate message
         if self.progress_params and x:
-            text = u'{worker_title} (#{worker_id}) : {text}'.format(
+            text = u'{worker_title}: {text}'.format(
                 worker_title=unicode(self.worker_db.get('title', '执行中的任务')),
-                worker_id=self.worker_db.id,
                 text=x,
             )
             for group in self.progress_params.get('uid', []):

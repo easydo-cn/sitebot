@@ -52,7 +52,7 @@ class StdoutCollector(object):
                 x = x.decode(self.original.encoding).strip()
 
         # if in echo mode, send each printed text as a separate message
-        if self.progress_params and x:
+        if 'debug' in self.progress_params.get('level', []) and x:
             text = u'{worker_title}: {text}'.format(
                 worker_title=unicode(self.worker_db.get('title', '执行中的任务')),
                 text=x,

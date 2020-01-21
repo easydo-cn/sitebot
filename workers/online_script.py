@@ -284,6 +284,18 @@ def online_script(
         # 若已经校验过了就不需要再次进行校验。
         request_verified = worker_db.pop('_request_verified', False)
 
+    # 为了避免污染公用的脚本执行环境，为每一任务提供一继承于SCRIPT_ENV的环境
+    script_env = SCRIPT_ENV.copy()
+    # 获取远端脚本执行引擎。
+    rse = wo_client.get_rse(script_env, not trusted and not request_verified, timeout=int(timeout))
+    # 手动加载脚本以便在脚本执行前获取脚本信息。
+    script_obj = rse.load_script(script_name)
+
+    if not __sync:
+        worker_db['title'] = script_obj['title']
+        worker_db.sync()
+        ui_client.refresh_webview('workers')
+
     remote_log = None
     if progress_script and progress_params:
         progress_params = json.loads(progress_params)
@@ -308,18 +320,6 @@ def online_script(
         remote_log = get_logger('RemoteHost:' + str(threading.currentThread().ident))
         remote_log.handlers = []
         remote_log.addHandler(progress_log_handler)
-
-    # 为了避免污染公用的脚本执行环境，为每一任务提供一继承于SCRIPT_ENV的环境
-    script_env = SCRIPT_ENV.copy()
-    # 获取远端脚本执行引擎。
-    rse = wo_client.get_rse(script_env, not trusted and not request_verified, timeout=int(timeout))
-    # 手动加载脚本以便在脚本执行前获取脚本信息。
-    script_obj = rse.load_script(script_name)
-
-    if not __sync:
-        worker_db['title'] = script_obj['title']
-        worker_db.sync()
-        ui_client.refresh_webview('workers')
 
 
     # 快速构造消息客户端
@@ -439,7 +439,8 @@ def online_script(
     })
 
     try:
-        sys.stdout = __stdout__ = StdoutCollector(out=sys.stdout, worker_db=worker_db,
+        if progress_params:
+            sys.stdout = __stdout__ = StdoutCollector(out=sys.stdout, worker_db=worker_db,
                                                   message_client=message_client, progress_params=progress_params)
         result = rse.call(script_name, *args, **kw)
     except ScriptSecurityError:
@@ -553,8 +554,9 @@ def online_script(
         return []
 
     finally:
-        if isinstance(sys.stdout, StdoutCollector):
-            sys.stdout = sys.stdout.original
+        if progress_params:
+            if isinstance(sys.stdout, StdoutCollector):
+                sys.stdout = sys.stdout.original
         if not __sync:
             worker_db = get_worker_db(worker_id)
             worker_db['_request_verified'] = not trusted

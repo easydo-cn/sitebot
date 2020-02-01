@@ -321,7 +321,6 @@ def online_script(
         worker_db.sync()
         ui_client.refresh_webview('workers')
 
-
     # 快速构造消息客户端
     if not __sync:
         if worker_db.get('message_server', None):

@@ -245,7 +245,7 @@ def online_script(
     script_name, args, kw,
     error_callback_url=None, error_script=None, error_params=None,
     callback_url=None, return_script=None, return_params=None,
-    progress_script=None, progress_params=None,timeout=0,
+    progress_script=None, progress_params=None, progress_level=None, timeout=0,
     __sync=False, pipe=None,
 ):
     '''Script task'''
@@ -276,14 +276,16 @@ def online_script(
     remote_log = None
     if progress_script and progress_params:
         progress_params = json.loads(progress_params)
+        progress_level = json.loads(progress_level)
         progress_log_handler = ProgressLogHandler(
             wo_client=wo_client,
             progress_script=progress_script,
             script_title=kw.get('script_title', ''),
-            progress_params=progress_params)
+            progress_params=progress_params,
+            )
         # 如果只有一个级别则为这个级别，多个级别则取最低级别，默认为info级别
         # 兼容流程中直接指定level: 'info', 开发调试时选择选项数组
-        level = progress_params['level']
+        level = progress_level
         if isinstance(level, (str, unicode)):
             level = level.upper()
         elif level:

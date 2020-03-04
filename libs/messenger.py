@@ -686,6 +686,7 @@ class Messaging(threading.Thread):
             'error_params': json.dumps(event_data.pop('error_params', None)),
             'progress_script': event_data.pop('progress_script', None),
             'progress_params': json.dumps(event_data.pop('progress_params', None)),
+            'progress_level': json.dumps(event_data.pop('progress_params', None)),
             'report_to_pid': from_user_id,
             'args': json.dumps(event_data.pop('args', [])),
             'kw': json.dumps(event_data.pop('kw', {})),

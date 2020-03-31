@@ -13,7 +13,7 @@ from invoke.exceptions import UnexpectedExit
 from requests import post
 import edo_client
 import ui_client
-from edo_client import get_remote_host
+from edo_client.remote_host import get_remote_host
 from libs.progress_log_handler import ProgressLogHandler
 from worker import register_worker, get_worker_db
 import utils

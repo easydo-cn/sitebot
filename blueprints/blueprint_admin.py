@@ -302,7 +302,7 @@ def view_connection_management():
         })
 
 
-@blueprint.route("/site_connections", methods=["POST", "OPTIONS"])
+@blueprint.route("/site_connections", methods=["POST", "GET", "OPTIONS"])
 @addr_check
 @jsonp
 def api_site_connections():

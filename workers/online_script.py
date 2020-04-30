@@ -227,17 +227,6 @@ SCRIPT_ENV = {
 }
 
 
-def _trusted_site(oc_server, account, instance):
-    # 如果站点连接受信任，可以运行
-    from libs.managers import get_site_manager
-    manager = get_site_manager()
-    site = manager.get_site(oc_server, account, instance)
-    if site and site.get_config('allow_script'):
-        return True
-
-    return False
-
-
 @register_worker
 def online_script(
     worker_id,
@@ -300,21 +289,13 @@ def online_script(
         remote_log.handlers = []
         remote_log.addHandler(progress_log_handler)
 
-    # need_verify：是否需要签名校验。
-    trusted = _trusted_site(oc_server, account, instance)
-
-    request_verified = False
     if not __sync:
         worker_db = get_worker_db(worker_id)
-        # _request_verified： 
-        # 从桌面助手的本地数据库获取任务是否已经经过了校验。
-        # 若已经校验过了就不需要再次进行校验。
-        request_verified = worker_db.pop('_request_verified', False)
 
     # 为了避免污染公用的脚本执行环境，为每一任务提供一继承于SCRIPT_ENV的环境
     script_env = SCRIPT_ENV.copy()
     # 获取远端脚本执行引擎。
-    rse = wo_client.get_rse(script_env, not trusted and not request_verified)
+    rse = wo_client.get_rse(script_env, False) # 站点机器人不需要对脚本签名校验
     # 手动加载脚本以便在脚本执行前获取脚本信息。
     script_obj = rse.load_script(script_name)
 
@@ -553,6 +534,5 @@ def online_script(
     finally:
         if not __sync:
             worker_db = get_worker_db(worker_id)
-            worker_db['_request_verified'] = not trusted
             worker_db.sync()
 

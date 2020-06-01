@@ -10,11 +10,14 @@ class ProgressLogHandler(Handler):
         self.script_title = script_title
 
     def emit(self, record):
-        self.wo_client.xapi(
-            self.progress_script,
-            script_title = self.script_title,
-            uid=self.progress_params['uid'],
-            message=record.getMessage(),
-            uids=self.progress_params['uid']
-        )
+        try:
+            self.wo_client.xapi(
+                self.progress_script,
+                script_title = self.script_title,
+                uid=self.progress_params['uid'],
+                message=record.getMessage(),
+                uids=self.progress_params['uid']
+            )
+        except Exception as e:
+            print e
 

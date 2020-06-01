@@ -282,6 +282,7 @@ def online_script(
             progress_script=progress_script,
             script_title=kw.get('script_title', ''),
             progress_params=progress_params,
+            logger=logger,
             )
         # 如果只有一个级别则为这个级别，多个级别则取最低级别，默认为info级别
         # 兼容流程中直接指定level: 'info', 开发调试时选择选项数组

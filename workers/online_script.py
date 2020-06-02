@@ -471,10 +471,8 @@ def online_script(
                     error_result = wo_client.xapi(
                         error_script,
                         script_title=kw.get('script_title', ''),
-                        uid=error_params['uid'],
                         traceback=traceback.format_exc(),
-                        pid=error_params.get('pid', []),
-                        uids=error_params['uid']
+                        **error_params
                     )
                     logger.debug(error_result)
                     if error_result.get('errcode') != 0:
@@ -529,9 +527,7 @@ def online_script(
                         return_script,
                         script_title=kw.get('script_title', ''),
                         result=json.dumps(result),
-                        uid=return_params['uid'],
-                        pid=return_params.get('pid', []),
-                        uids=return_params['uid']
+                        **return_params
                     )
                     logger.info(return_result)
                     if return_result.get('errcode') != 0:

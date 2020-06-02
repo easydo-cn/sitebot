@@ -15,9 +15,8 @@ class ProgressLogHandler(Handler):
             self.wo_client.xapi(
                 self.progress_script,
                 script_title = self.script_title,
-                uid=self.progress_params['uid'],
                 message=record.getMessage(),
-                uids=self.progress_params['uid']
+                **self.progress_params
             )
         except Exception:
             self.logger.exception('进度回调失败！')

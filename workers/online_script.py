@@ -271,6 +271,7 @@ def online_script(
             progress_script=progress_script,
             script_title=kw.get('script_title', ''),
             progress_params=progress_params,
+            logger=logger,
             )
         # 如果只有一个级别则为这个级别，多个级别则取最低级别，默认为info级别
         # 兼容流程中直接指定level: 'info', 开发调试时选择选项数组
@@ -451,10 +452,8 @@ def online_script(
                     error_result = wo_client.xapi(
                         error_script,
                         script_title=kw.get('script_title', ''),
-                        uid=error_params['uid'],
                         traceback=traceback.format_exc(),
-                        pid=error_params.get('pid', []),
-                        uids=error_params['uid']
+                        **error_params
                     )
                     logger.debug(error_result)
                     if error_result.get('errcode') != 0:
@@ -509,9 +508,7 @@ def online_script(
                         return_script,
                         script_title=kw.get('script_title', ''),
                         result=json.dumps(result),
-                        uid=return_params['uid'],
-                        pid=return_params.get('pid', []),
-                        uids=return_params['uid']
+                        **return_params
                     )
                     logger.info(return_result)
                     if return_result.get('errcode') != 0:

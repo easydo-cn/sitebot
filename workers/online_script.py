@@ -289,6 +289,7 @@ def online_script(
         remote_log = get_logger('RemoteHost:' + str(threading.currentThread().ident))
         remote_log.handlers = []
         remote_log.addHandler(progress_log_handler)
+        logger.addHandler(progress_log_handler)
 
     if not __sync:
         worker_db = get_worker_db(worker_id)

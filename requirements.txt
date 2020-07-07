@@ -4,6 +4,7 @@ gevent==1.1b6
 jinja2==2.8
 Werkzeug==0.16.0
 # flask 1.0 has requirement Jinja2>=2.10.
+Werkzeug==0.16.0
 flask==0.12.2
 # edo_client>=6.3.3  # please manually install from source
 py-oauth2

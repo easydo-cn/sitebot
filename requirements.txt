@@ -3,6 +3,7 @@ gevent==1.1b6
 # The version of Jinja after 2.8 uses the async/await syntax in Python3.
 jinja2==2.8
 # flask 1.0 has requirement Jinja2>=2.10.
+Werkzeug==0.16.0
 flask==0.12.2
 # edo_client>=6.3.3  # please manually install from source
 py-oauth2

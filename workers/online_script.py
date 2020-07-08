@@ -275,10 +275,10 @@ def online_script(
             )
         # 如果只有一个级别则为这个级别，多个级别则取最低级别，默认为info级别
         # 兼容流程中直接指定level: 'info', 开发调试时选择选项数组
-        level = progress_level
-        if isinstance(level, (str, unicode)):
-            level = level.upper()
-        elif level:
+        level = ''
+        if isinstance(progress_level, (str, unicode)):
+            level = progress_level.upper()
+        if level:
             # 遍历level，转成int，用sorted排序，取最低level。对于不存在的level都认为是info。
             level = sorted(
                 map(lambda l: dict(DEBUG=logging.DEBUG, INFO=logging.INFO, ERROR=logging.ERROR).get(l.upper(), 'INFO'),

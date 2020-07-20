@@ -188,16 +188,19 @@ def get_messaging_status(wo_server, message_server, account, instance, pid):
 
 
 def remove_worker_db(worker_id):
-    print 'requested to delete ', worker_id
+    logger = get_logger(
+        'worker', filename='worker.log', init_level=logging.WARN
+    )
     process = PROCESSES.get(worker_id, None)
     if process is not None:
         kill_process(process)
+        logger.warn(u'worker process {} killed'.format(worker_id))
     db_path = get_db_path(worker_id)
     log_path = get_log_path(worker_id)
     # 删除数据库
     try:
         os.remove(db_path)
-        print u'Worker {} deleted'.format(worker_id)
+        logger.warn(u'worker log {} deleted'.format(worker_id))
     except:
         pass
     # 删除日志文件
@@ -212,6 +215,7 @@ def remove_worker_db(worker_id):
         pass
 
     refresh_worker_tab()
+    close_logger(logger)
 
 
 def worker_exists(db, ignore_ids=None, logger=None):
@@ -1083,8 +1087,7 @@ def worker_guardian():
         for wid in list_worker_ids():
             work = get_worker_db(wid)
             if not work:
-                logger.warn(u'任务（ID: %s）可能已经损坏，将删除', wid)
-                pending_removal_workers.append(wid)
+                logger.warn(u'任务（ID: %s）数据可能已经损坏', wid)
                 continue
 
             try:

@@ -278,11 +278,11 @@ def online_script(
         level = ''
         if isinstance(progress_level, (str, unicode)):
             level = progress_level.upper()
-        elif level:
+        elif progress_level:
             # 遍历level，转成int，用sorted排序，取最低level。对于不存在的level都认为是info。
             level = sorted(
                 map(lambda l: dict(DEBUG=logging.DEBUG, INFO=logging.INFO, ERROR=logging.ERROR).get(l.upper(), 'INFO'),
-                    level))[0]
+                    progress_level))[0]
         else:
             level = 'INFO'
         progress_log_handler.setLevel(level)

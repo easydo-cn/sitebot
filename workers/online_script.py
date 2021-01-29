@@ -417,7 +417,7 @@ def online_script(
         'get_remote_host': partial(get_remote_host,
                                    __worker_db=worker_db,
                                    __logger=remote_log,
-                                   __package_version=kw['package_version_']),
+                                   __package_versions=kw['package_versions_']),
         'load_i18n': load_i18n,
         '_': custom_translate,
     })

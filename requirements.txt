@@ -9,7 +9,6 @@ flask==0.12.2
 py-oauth2
 setuptools==41.2.0
 Fabric2
-patchwork
 pycryptodome==3.4.7
 netifaces
 certifi

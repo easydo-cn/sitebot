@@ -426,10 +426,11 @@ def online_script(
             # 'get_remote_host': partial(get_remote_host, __worker_db=worker_db),
             'acquire_lock': acquire_lock,
             'release_lock': release_lock,
-            'report': report,
+            'report': report
         })
 
     rse.script_exec_env.update({
+    	'RSE_NAME': 'bot',
         'logger': logger,
         'wo_client': wo_client,
         'get_remote_host': partial(get_remote_host,

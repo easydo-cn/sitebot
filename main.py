@@ -31,7 +31,7 @@ from utils import (
     get_certificate_expire_date_by_file, update_certificate, process_exists
 )
 from config import (
-    FILE_STORE_DIR, SCHEME, DATA_VERSION, DATA_VERSION_FILE, APP_DATA,
+    FILE_STORE_DIR, DATA_VERSION, DATA_VERSION_FILE, APP_DATA,
     INTERNAL_URL,
 )
 import ui_client
@@ -368,94 +368,6 @@ def prepare_ports():
         post_port_change(http_port, https_port)
 
 
-def start_gui():
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
-
-    prepare_ports()
-    database_upgrade()
-
-    from libs.managers import get_site_manager
-    # GUI 模式启动桌面助手时，只启动允许通知的连接的消息线程
-    for site in get_site_manager().list_sites():
-        if site.get_config("notification"):
-            site.get_message_thread().connect()
-
-    from webserver import start_server
-    start_server()
-
-
-def flash_window():
-    import qtui  # API'QString'只能设置一次，引入桌面助手的设置，防止冲突
-    from PyQt4 import QtGui
-    from PyQt4 import QtCore
-    app = QtGui.QApplication(sys.argv)
-    splash = QtGui.QSplashScreen()  # 欢迎窗口
-    splash.resize(1, 1)  # 大小为0不会失焦，需要1像素
-    loop = QtCore.QEventLoop()  # 设定一个事件循环
-    timer = QtCore.QTimer()  # 设定一个定时器
-    timer.timeout.connect(loop.quit)  # 连接定时器，到时后执行loop.quit
-    splash.show()  # 显示一个窗口
-    timer.start(500)  # 0.5秒定时器
-    loop.exec_()  # 事件循环
-
-
-def invoke_scheme(url):
-    '''
-        基于输入的edo-ast://xxx协议字符串，调用匹配的API
-    '''
-    result = urlparse.urlparse(url)
-    api_path = result.path
-    api_data = None
-    # 1. edo-ast://start只以主进程方式启动（有界面）
-    if result.netloc == 'start':
-        logger.debug(u'协议：启动桌面助手')
-        return start_gui()
-    # 2. 协议字符串样例：edo-ast://assistant/api_path?param=JTdCJTIydG9rZW4lMjIlM
-    else:
-        api_data = urlparse.parse_qs(result.query)['params'][0]
-        # 前端传递参数格式：btoa(encodeURIComponent(JSON.stringify(data)))
-        api_data = json.loads(urllib.unquote(base64.b64decode(api_data)))
-
-    # 检查是否有桌面助手在运行
-    expected_process = {
-        "win32": "edo_assistent.exe",
-        "darwin": "edo_assistent",
-    }.get(sys.platform, "")
-    if not process_exists(expected_process):
-        # 2.a 如果没有，应该以主进程模式运行，启动新线程去POST API
-
-        def delayed_api_call():
-            logger.debug(u'在后台线程中等待调用主进程API...')
-            while 1:
-                try:
-                    ui_client._request_api('about', internal=True)
-                except Exception:
-                    logger.debug(u'主进程尚未就绪')
-                    time.sleep(1)
-                else:
-                    break
-
-            logger.debug(u'主进程已经就绪，api=%s, data=%s', api_path, api_data)
-            ui_client._request_api(api_path, kw=api_data, internal=True)
-
-        caller = threading.Thread(target=delayed_api_call, name='delayed_api_call')
-        caller.daemon = True
-        caller.start()
-
-        start_gui()
-    else:
-        # 2.b 如果有，直接POST API然后退出
-        logger.debug(u'桌面助手已经在运行，直接调用 api=%s, data=%s', api_path, api_data)
-        try:
-            result = ui_client._request_api(api_path, kw=api_data, internal=True)
-            logger.debug(u'调用结果: %s', result.content)
-            sys.exit()
-        except Exception:
-            logger.error(u'调用出错')
-            sys.exit(2)
-
-
 def main():
     # PyInstaller 多进程支持
     freeze_support()
@@ -463,44 +375,23 @@ def main():
     load_logging_config()
     check_certificate()  # TODO 这个好像不应该在这里？
 
-    # Ignore start command
-    if len(sys.argv) > 1:
-        config.DEBUG = True
-        if sys.argv[-1].startswith(SCHEME):
-            scheme_data = sys.argv.pop(-1)
-            flash_window()
-            logger.debug(u'桌面助手被自定义协议启动，数据: %s', scheme_data)
-            return invoke_scheme(scheme_data)
-        else:
-            try:
-                start_server, headless = edoparser.parse_args(sys.argv[1:])
-                headless = True
-                # 通过命令行一次性运行任务，已经在parse_args中就运行了，这里直接退出
-                if not start_server:
-                    return
+    config.DEBUG = True
 
-                logger.debug(
-                    u'桌面助手以 %s 模式启动',
-                    u'静默' if headless else u'cmdline',
-                )
-                if headless:
-                    from libs.managers import get_site_manager
-                    # 无界面模式启动桌面助手，所有连接的消息线程都要启动
-                    for site in get_site_manager().list_sites():
-                        site.get_message_thread().connect()
-                    from headless_server import start_server
-                    start_server()
-                else:
-                    start_gui()
-            except SystemExit:
-                raise
-            except KeyboardInterrupt:
-                raise SystemExit('Exit by key interrupt')
-            except Exception as e:
-                logger.debug(u'桌面助手无法解析命令 %r，将会启动图形界面', sys.argv, exc_info=True)
-                start_gui()
-    else:
-        start_gui()
+    try:
+        logger.debug(
+            u'桌面助手以 %s 模式启动',
+            u'静默' if headless else u'cmdline',
+        )
+        from libs.managers import get_site_manager
+        # 无界面模式启动桌面助手，所有连接的消息线程都要启动
+        for site in get_site_manager().list_sites():
+            site.get_message_thread().connect()
+        from headless_server import start_server
+        start_server()
+    except SystemExit:
+        raise
+    except KeyboardInterrupt:
+        raise SystemExit('Exit by key interrupt')
 
 
 if __name__ == "__main__":

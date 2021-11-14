@@ -67,25 +67,6 @@ def message(title, body, type='none'):
         pass
 
 
-def quit_assistant():
-    try:
-        global API_REQUEST_SUPPRESSED
-        API_REQUEST_SUPPRESSED = _request_api('quit').json().get('success', False)
-    except Exception:
-        pass
-
-
-def ready_to_quit():
-    NetworkError = (
-        requests.exceptions.HTTPError,
-        requests.exceptions.Timeout
-    )
-    try:
-        return _request_api('ready_to_quit').json().get('ready', False)
-    except NetworkError as e:
-        print "Capture %s" % str(e)
-        return False
-
 
 def start_worker(id):
     '''

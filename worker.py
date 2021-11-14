@@ -146,20 +146,6 @@ def get_worker_title(name=None, auto=False, id=None, title=None):
     return title or WORKER_REG.get(name, {}).get('title', name)
 
 
-def ready_to_quit():
-    '''
-    检查当前正在进行的任务是否允许桌面助手退出
-    有外部编辑等任务时不允许退出（外部进程会阻塞端口）。
-    Rerurns: (ready_to_quit, reason)
-    '''
-    forbidden_works = ('edit', )
-    for work in list_workers():
-        if work['state'] in ('running', )\
-                and work.get('name') in forbidden_works:
-            return False, get_worker_title(name=work['name'])
-    return True, None
-
-
 def get_messaging_status(wo_server, message_server, account, instance, pid):
     '''
     获取指定站点指定人员的消息提醒任务状态

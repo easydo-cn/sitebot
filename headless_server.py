@@ -13,7 +13,7 @@ import gevent.wsgi
 
 import worker
 from utils import (
-    translate, addr_check, jsonp, extract_data, clear_old_files,
+    translate, addr_check, jsonp, extract_data
 )
 import config
 from config import (
@@ -218,9 +218,6 @@ def start_server():
     global http_greenlet, https_greenlet
     http_greenlet = gevent.spawn(http_server.serve_forever)
     https_greenlet = gevent.spawn(https_server.serve_forever)
-
-    # clear the database
-    clear_old_files()
 
     if worker.load_workers():
         from utils import console_message

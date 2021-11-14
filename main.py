@@ -25,7 +25,6 @@ from multiprocessing import freeze_support
 
 from werkzeug.urls import url_decode
 
-import edoparser
 from utils import (
     translate as _, get_logger, load_logging_config,
     get_certificate_expire_date_by_file, update_certificate, process_exists
@@ -296,7 +295,11 @@ def get_available_port(expected_port, blacklist=[]):
 def main():
     # PyInstaller 多进程支持
     freeze_support()
-    edoparser.parse_args(sys.argv[1:])
+    if len(sys.argv) == 1:
+        print('请通过参数指定机器人的访问 token')
+        sys.exit(1)
+    else:
+        os.environ['APP_TOKEN'] = sys.argv[1]
 
     load_logging_config()
     check_certificate()  # TODO 这个好像不应该在这里？

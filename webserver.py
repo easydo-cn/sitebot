@@ -423,162 +423,6 @@ def api_call_script_sync():
         })
 
 
-@fapp.route("/v2/ui/select_paths", methods=['POST', 'GET', 'OPTIONS', ])
-@addr_check
-@jsonp
-def api_v2_select_paths():
-    '''
-    选择本地路径
-    '''
-    mode, system_folder, check_syncfolder = extract_data(
-        ('mode', 'system_folder', 'check_syncfolder', ),
-        request=request
-    )
-    mode = mode or 'files'
-    # 选择内置的一些文件夹，直接返回路径
-    if system_folder and system_folder.lower() in ('edo_temp', ):
-        return json.dumps({
-            'paths': [EDO_TEMP, ]
-        })
-
-    title = {
-        # 'file': '选择一个文件',
-        # 'files': '选择文件',
-        # 'folder': '选择一个非同步区文件夹',
-        'file': _('Please select a file'),
-        'files': _('Please select files'),
-        'folder': _('Please select a non-sync folder'),
-    }.get(mode, _('Please select a file / folder'))  # 选择文件 / 文件夹
-
-    if FILEDIALOG.selected_files is None:
-        if not FILEDIALOG.isVisible():
-            FILEDIALOG.reinit(title=title, mode=mode)
-            # TESTING 将主窗口（进度窗口）关闭，这样弹出的选择框将成为桌面助手程序的首个窗口，可以弹到最前面
-            QtCore.QCoreApplication.instance().progress_window.close()
-            FILEDIALOG.show()
-        return json.dumps({})
-    else:
-        paths = [unicode(f) for f in FILEDIALOG.selected_files]
-
-        FILEDIALOG.reinit(mode)
-        return json.dumps({'paths': paths})
-
-
-@fapp.route('/v2/ui/question/start', methods=('POST', 'OPTIONS', ))
-@addr_check
-@jsonp
-def api_v2_question_start():
-    '''
-    弹出询问窗口
-    '''
-    title, text, buttons = extract_data(
-        ('title', 'text', 'buttons', ), request=request
-    )
-    if not all([title, text, ]) or not is_internal_call(request):
-        return json.dumps({
-            'success': False,
-            'code': 403,
-        })
-
-    buttons = json.loads(buttons) if buttons else None
-    return json.dumps({
-        'success': True,
-        'id': arrange_question(title, text, buttons=buttons)
-    })
-
-
-@fapp.route('/v2/ui/question/status', methods=('POST', 'OPTIONS', ))
-@addr_check
-@jsonp
-def api_v2_question_status():
-    '''
-    查询弹出窗口的状态
-    '''
-    msgbox_id = extract_data(
-        'id',
-        request=request
-    )
-    if not msgbox_id or not is_internal_call(request):
-        return json.dumps({
-            'success': False,
-            'code': 403,
-        })
-
-    return json.dumps({
-        'success': True,
-        'selected': get_answer(msgbox_id),
-    })
-
-
-def arrange_question(title, text, buttons=None):
-    '''
-    弹窗询问
-    弹窗结束后释放，让之后别的任务可以重用
-    弹窗结束后保持结果，直到有人查询走了就删掉对应值
-    '''
-    global QUESTIONS
-    # 新建弹窗
-    fapp.logger.debug(u'已经有 %d 个弹窗', len(QUESTIONS))
-    fapp.logger.debug(u'已有的弹窗: %s', QUESTIONS.keys())
-    msgbox_id = len(QUESTIONS) + 1
-    QUESTIONS[msgbox_id] = Question(
-        title, text, msgbox_id, buttons=buttons
-    )
-    fapp.logger.debug(u'新建了一个弹窗，键为 %s', msgbox_id)
-    return msgbox_id
-
-
-def get_answer(msgbox_id):
-    '''
-    查询弹窗结果，并在有选择结果后删除弹窗
-    Args:
-        msgbox_id <int> 询问窗口的 ID
-    Return:
-        None: 用户还没选择
-        False: 窗口关闭（通过关闭按钮）
-        其他: 按钮上的字符串
-    '''
-    msgbox_id = int(msgbox_id)
-    global QUESTIONS
-    question = QUESTIONS.get(msgbox_id, None)
-    if question is None:
-        return False
-    result = question.selected
-    if result:
-        del question
-        del QUESTIONS[msgbox_id]
-    return result
-
-
-def sync_msg_box_state(worker_id, box_result):
-    '''
-    worker 之前请求了弹窗询问，将用户的选择结果写入到任务数据库中
-    '''
-    worker_id = int(worker_id)
-    workerdb = worker.get_worker_db(worker_id)
-    if workerdb:
-        workerdb['_question'] = box_result
-        workerdb.sync()
-    else:
-        logger.warn(u'ID 为 %d 的 worker 数据库无效', worker_id)
-    # Remember to release the Question object
-    # No need to delete now, just destroy(),
-    # and the signal will tell the app to delte this reference
-    # button.window().close()
-    logger.debug(
-        u'ID 为 %d 的 worker 请求的弹窗，用户选择了 %s',
-        worker_id, box_result
-    )
-
-
-def init_filedialog():
-    global FILEDIALOG
-    if FILEDIALOG is None:
-        FILEDIALOG = FileDialog(
-            title=_('Select a file'),
-            parent=trayIcon.parent()
-        )  # 选择文件
-
 
 def start_server(ui=True):
     if os.environ.get('APP_TOKEN'):
@@ -599,96 +443,19 @@ def start_server(ui=True):
 
     app = None
     window = None
-    if ui:
-        app = AssistantApplication(sys.argv)
-        # Don't know why, but QWebView requires this for better font rendering
-        app.setFont(QtGui.QFont('Microsoft YaHei', 10, QtGui.QFont.Normal))
-        try:
-            # i18n related
-            translator = QtCore.QTranslator(app)
-            # Automatic locale adaption is like this:
-            # translator.load(
-            #     'qt_{}.qm'.format(QtCore.QLocale.system().name()),
-            #     QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath)
-            # )
-
-            qm_location = os.path.join(
-                CURRENT_DIR,
-                'translations',
-                detect_locale()[-1],
-                'LC_MESSAGES'
-            )
-            # Qt 内部翻译存放在 qt.qm
-            for qm_file in ('qt.qm', ):
-                if translator.load(qm_file, qm_location):
-                    fapp.logger.debug(u'Qt 界面翻译 (%s) 已加载', qm_file)
-                else:
-                    fapp.logger.info(
-                        u'Qt 界面翻译 (%s) 加载失败, 预期位置: %s',
-                        qm_file, os.path.join(qm_location, qm_file)
-                    )
-            app.installTranslator(translator)
-        except:
-            app.logger.error(u'翻译加载失败', exc_info=True)
-        # widget = QtGui.QWidget()
-        # 使用一个隐形、大小为 0 的窗口，放在最前面，并且隐藏掉任务栏的窗口图标
-        # 这样之后选择文件时，激活这个窗口，这样文件选择框就可以处于最前面
-        window = QtGui.QMainWindow()
-        # Make window content transparent
-        window.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        # Remove dock icon or so
-        window.setWindowFlags(window.windowFlags() | QtCore.Qt.Tool)
-        # Remove system window border (includes title bar)
-        window.setWindowFlags(window.windowFlags() | QtCore.Qt.FramelessWindowHint)
-        # Always stay on top, even if focus lost
-        window.setWindowFlags(window.windowFlags() |
-                              QtCore.Qt.WindowStaysOnTopHint)
-        # Make it invisible at all
-        window.resize(0, 0)
-        window.show()
-
-        def _closeEvent(evt):
-            logger.debug('QCloseEvent received: %s', evt)
-            # worker.stop_all_workers()
-            evt.accept()
-        window.closeEvent = _closeEvent
 
     global trayIcon
-    trayIcon = None
-    if ui:
-        icon_path = os.path.join(CURRENT_DIR, 'images', 'zopen.png')
-        trayIcon = SystemTrayIcon(window, icon=icon_path)
-
-        trayIcon.tool_tip(
-            unicode(
-                _('Assistant\nVersion {}.{}')
-            ).format(VERSION, BUILD_NUMBER)
-            # u'桌面助手\nVersion {}.{}'.format(VERSION, BUILD_NUMBER)
-        )
-
-        app.setQuitOnLastWindowClosed(False)
-        setattr(app, 'trayIcon', trayIcon)
-        trayIcon.show()
-
-        # trayIcon.message(
-        #     unicode(_('Assistant')), unicode(_('Assistant launched'))
-        # )
-
-    else:
-        trayIcon = TrayIconMixin()
-        from utils import console_message
-        console_message(
-            unicode(_('Assistant')), unicode(_('Assistant launched'))
-        )
+    trayIcon = TrayIconMixin()
+    from utils import console_message
+    console_message(
+        unicode(_('Assistant')), unicode(_('Assistant launched'))
+    )
 
     # clear the database
     clear_old_files()
 
     # Store a reference into flask g object, so we can access it in blueprint
     fapp.trayIcon = trayIcon
-    if ui:
-        fapp.progress_window = ProgressWindow()
-        app.progress_window = fapp.progress_window
     global P2P_QUEUE
     fapp.P2P_QUEUE = P2P_QUEUE = Queue()
     fapp.LOCKS = {}
@@ -696,20 +463,12 @@ def start_server(ui=True):
     import worker
     result = worker.load_workers()
     if result:
-        if ui:
-            trayIcon.message(
-                unicode(_('Task recovery')), unicode(_('Tasks recovered'))
-            )
-        else:
-            from utils import console_message
-            console_message(
-                unicode(_('Task recovery')), unicode(_('Tasks recovered'))
-            )
+        from utils import console_message
+        console_message(
+            unicode(_('Task recovery')), unicode(_('Tasks recovered'))
+        )
 
-    if ui:
-        qt_greenlet = PyQtGreenlet.spawn(app)
-    else:
-        qt_greenlet = None
+    qt_greenlet = None
 
     def kill_all():
         http_greenlet.kill(block=False)
@@ -726,9 +485,6 @@ def start_server(ui=True):
         i for i in (http_greenlet, https_greenlet, qt_greenlet)
         if i is not None
     ]
-
-    if ui:
-        init_filedialog()
 
     # start
     gevent.joinall(greenlets)

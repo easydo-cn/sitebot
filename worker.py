@@ -1271,9 +1271,6 @@ def load_workers():
 
     [remove_worker_db(i) for i in set(pending_removal_workers)]
     # 尝试清理一下旧版本的shell扩展
-    if sys.platform == 'win32' and not HEADLESS:
-        from utils.win32_utils import cleanup_old_syncplugins
-        cleanup_old_syncplugins()
 
     # 启动监视线程
     global DAEMON_THREAD, DAEMON_THREAD_STOP_EVENT

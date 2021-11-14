@@ -282,7 +282,6 @@ if not os.path.exists(ADDON_DIR):
 if FROZEN:
     WORKERS = [
         'download', 'upload', 'sync', 'view',
-        'edit', 'setup_syncfolder',
         'p2pdownload', 'new_webfolder', 'upload_v2', 'script',
         'online_script', 'resolve_conflict', 'process_duplicate',
         'locked_edit',

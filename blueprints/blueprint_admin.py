@@ -194,9 +194,6 @@ def view_manage_config():
     if request.method == 'POST':
         # 点击【重启资源管理器】按钮
         action = extract_data('action', request)
-        if action == 'restart_explorer' and sys.platform == 'win32':
-            from utils.win32_utils import restart_explorer
-            restart_explorer()
         if action == 'reset_ports_on_next_start':
             if os.path.exists(config.CONFIG_FILE):
                 with open(config.CONFIG_FILE, 'r+b') as f:

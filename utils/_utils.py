@@ -1117,33 +1117,6 @@ def get_time_range(rtype, use_timestamp=False):
     return (start, end)
 
 
-def add_syncfolder(oc_server, instance, account, uid, local_path, type_='down', policy='manual'):
-    api_url = '{}{}'.format(config.INTERNAL_URL, '/sync/add')
-
-    server_info = urlparse.urlparse(oc_server)
-    oc_server_host = getattr(server_info, 'hostname')
-
-    data = {
-        'oc_server_host': oc_server_host, 'oc_server': oc_server,
-        'instance': instance, 'account': account,
-        'uid': uid, 'path': local_path, 'type': type_, 'policy': policy
-    }
-
-    return requests.post(api_url, data=data)
-
-
-def list_syncfolders(oc_server, instance, account, uid, server_path):
-    # TODO This does not belong here
-    # should refactor SyncManager to handle multiprocess reading
-    return requests.post(
-        '{}/sync/list'.format(INTERNAL_URL),
-        data=dict(
-            uid=uid, server_path=server_path,
-            account=account, instance=instance,
-            oc_server=oc_server,
-        )
-    ).json()
-
 
 def list_supported_settings():
     '''列出当前平台支持的所有设置项'''
@@ -1152,54 +1125,6 @@ def list_supported_settings():
     return []
 
 
-def is_syncplugin_installed():
-    '''
-    Return True if SyncPlugin installed, otherwise False
-    '''
-    if platform.system() == 'Windows':
-        from .win32_utils import get_installed_syncplugin_dll
-        dll_path = get_installed_syncplugin_dll()
-        return dll_path and os.path.isfile(dll_path)
-    else:
-        return False
-
-
-def get_sync_assistant_build_number():
-    '''
-    返回同步助手的 build 号
-    - 0 表示没有安装
-    - * 表示当前操作系统暂时不支持同步助手功能
-    - 其他整数表示对应的 build 号
-    '''
-    if platform.system() == 'Windows':
-        # 新版本的同步助手 dll 在桌面助手的安装目录里
-        from .win32_utils import get_syncplugin_path
-        syncplugin_filepath = get_syncplugin_path()
-
-        if not syncplugin_filepath or not os.path.isfile(syncplugin_filepath):
-            syncplugin_filepath = os.path.join(
-                os.getenv('APPDATA'), 'EdoSync', 'main.dll'
-            )
-
-        # 已经安装了同步助手，读取同步助手的版本号
-        if os.path.isfile(syncplugin_filepath):
-            import win32api
-            info = win32api.GetFileVersionInfo(syncplugin_filepath, u'\\')
-            return win32api.LOWORD(info['FileVersionMS'])
-
-        # 并没有安装，，返回 0
-        return 0
-    else:
-        # 非 Windows 平台目前没有同步助手，不需要安装
-        return '*'
-
-
-def get_sync_system_info():
-    if platform.system() == 'Windows':
-        if platform.machine() == 'AMD64':
-            return 'sync_win_x64'
-        else:
-            return 'sync_win_x32'
 
 
 def classify_exception(e):

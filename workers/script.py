@@ -13,7 +13,7 @@ from utils import (
     get_site_public_key,
 )
 from libs import verify
-from config import FROZEN, ADDON_DIR
+from config import ADDON_DIR
 
 # Add ADDON_DIR to python path
 sys.path.insert(0, ADDON_DIR)
@@ -125,8 +125,7 @@ def script(
         report(text.format(worker_id, extract_traceback()))
         raise
     else:
-        if not FROZEN:
-            logger.info(u'Result is: %s', result)
+        logger.info(u'Result is: %s', result)
         if callback_url:
             try:
                 response = post(callback_url, data={

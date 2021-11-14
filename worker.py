@@ -21,7 +21,7 @@ from errors import AssistantException, Retry, LogicError
 from config import (
     WORKER_STORAGE_DIR, LOG_DATA, VERSION,
     BUILD_NUMBER, RETRY_INTERVAL, AUTO_START_INTERVAL,
-    FROZEN, GIT_INFO, WORKERS,
+    GIT_INFO, WORKERS,
 )
 from ui_client import _request_api
 from utils import (
@@ -579,9 +579,6 @@ def run_worker(id, sync=False, pipe=None):
         real_args = prepare_worker_args(name, id)
         # 关闭日志处理器，防止日志文件移动等操作无法完成
         close_logger(logger)
-        # Monkey patch
-        from libs import monkey
-        monkey.patch_all()
         # 运行任务
         success = func(id, *real_args, pipe=pipe)
         # 重新获取日志处理器
@@ -770,12 +767,10 @@ def send_worker_notify(id=None):
         if worker.get('name') in self_managed_workers and not work_error:
             return
         else:
-            if not FROZEN:
-                print u'[debug notify] [to: {}] {}: {}, attachments: {}'.format(
-                    worker['detail']['pid'], title, data, uids
-                )
-                return
-            ui_client.message(title, data)
+            print u'[debug notify] [to: {}] {}: {}, attachments: {}'.format(
+                worker['detail']['pid'], title, data, uids
+            )
+            return
     except:
         raise
 

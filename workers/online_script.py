@@ -21,7 +21,7 @@ from utils import (
     translate as _, get_message_client,  # get_site_public_key,
     require, get_logger, detect_locale
 )
-from config import FROZEN, ADDON_DIR, APP_KEY, APP_SECRET, HEADLESS
+from config import ADDON_DIR, APP_KEY, APP_SECRET, HEADLESS
 from errors import (
     LockAcquireTimeout, LockAcquireFailure, ScriptDownloadError,
     Retry, ScriptSecurityError,
@@ -395,8 +395,7 @@ def online_script(
         else:
             raise raw_traceback[0], raw_traceback[1], raw_traceback[2]
     else:
-        if not FROZEN:
-            logger.info(u'Result is: %s', result)
+        logger.info(u'Result is: %s', result)
         if __sync:
             return result
 

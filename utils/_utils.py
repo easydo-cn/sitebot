@@ -21,7 +21,7 @@ from functools import wraps
 from datetime import datetime, timedelta
 
 import config
-from config import EDO_TEMP, CURRENT_DIR, APP_DATA, LOG_DATA, RUNTIME_DIR, INTERNAL_URL
+from config import CURRENT_DIR, APP_DATA, LOG_DATA, RUNTIME_DIR, INTERNAL_URL
 from edo_client import (
     WoClient, OcClient, MessageClient, UploadClient, OrgClient,
 )
@@ -894,7 +894,7 @@ def get_site_public_key(wo_server, account, instance, token=None):
     '''
     Get public key of given site, cache enabled
     '''
-    from config import APP_DATA, FROZEN
+    from config import APP_DATA
 
     # Prepare cache_key for cache searching
     key_cache_file = os.path.join(APP_DATA, '.know_keys')
@@ -904,11 +904,7 @@ def get_site_public_key(wo_server, account, instance, token=None):
     global PUBLIC_KEY_CACHE
     if PUBLIC_KEY_CACHE is None:
         # Only use cache in release bundle, not for source code mode
-        if FROZEN and os.path.isfile(key_cache_file):
-            with open(key_cache_file, 'r') as rf:
-                PUBLIC_KEY_CACHE = json.load(rf)
-        else:
-            PUBLIC_KEY_CACHE = {}
+        PUBLIC_KEY_CACHE = {}
     public_key = PUBLIC_KEY_CACHE.get(cache_key, None)
 
     # Cache missed, grab public key via API, and update cache

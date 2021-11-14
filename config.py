@@ -12,14 +12,13 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/534.34 (KHTML, lik
 MY_DOCUMENTS = USER_HOME = os.path.expanduser('~')
 APP_DATA = os.path.join(USER_HOME, 'edo_assistent')
 LOG_DATA = os.path.join(APP_DATA, 'logs')
-EDO_TEMP = os.path.join(MY_DOCUMENTS, 'edo_temp')
 
 # Folder that holds all database of workers
 WORKER_STORAGE_DIR = os.path.join(APP_DATA, 'workers')
 
 # Make sure all the above folders exist
 for folder in (
-    APP_DATA, LOG_DATA, EDO_TEMP, WORKER_STORAGE_DIR, FILE_STORE_DIR,
+    APP_DATA, LOG_DATA, WORKER_STORAGE_DIR, FILE_STORE_DIR,
 ):
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -83,9 +82,7 @@ MSG_QOS = 1
 # 桌面助手指令 topic
 COMMAND_CATEGORY = 'command'
 
-FROZEN = getattr(sys, 'frozen', False)
-if not FROZEN:
-    GIT_INFO += ' (source code mode)'
+GIT_INFO += ' (source code mode)'
 
 # 数据库接口变更了一次
 DATA_VERSION = 3
@@ -149,11 +146,7 @@ NOUNCE_FIELD = '__nounce'
 LANGUAGE, __ = locale.getdefaultlocale()
 FS_ROOTDIR = os.path.abspath(os.sep)
 # CURRENT_DIR is the app root path, and RUNTIME_DIR is the code root path
-if not FROZEN:
-    RUNTIME_DIR = CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
-else:
-    CURRENT_DIR = os.path.abspath(os.path.dirname(sys.executable))
-    RUNTIME_DIR = os.path.abspath(os.path.dirname(__file__))
+RUNTIME_DIR = CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 while not os.path.isdir(CURRENT_DIR) and CURRENT_DIR != FS_ROOTDIR:
     CURRENT_DIR = os.path.dirname(CURRENT_DIR)
 while not os.path.isdir(RUNTIME_DIR) and RUNTIME_DIR != FS_ROOTDIR:
@@ -175,20 +168,11 @@ ADDON_DIR = os.path.join(APP_DATA, 'addons')
 if not os.path.exists(ADDON_DIR):
     os.mkdir(ADDON_DIR)
 
-if FROZEN:
-    WORKERS = [
-        'download', 'upload', 'sync', 'view',
-        'p2pdownload', 'new_webfolder', 'upload_v2', 'script',
-        'online_script', 'resolve_conflict', 'process_duplicate',
-        'locked_edit',
-        'install_webfolder_driver',
-    ]
-else:
-    import pkgutil
-    WORKERS = [
-        _w for _a, _w, _c in pkgutil.iter_modules(['workers'])
-        if _w != 'threedpreview'
-    ]
+import pkgutil
+WORKERS = [
+    _w for _a, _w, _c in pkgutil.iter_modules(['workers'])
+    if _w != 'threedpreview'
+]
 
 
 # 证书临近过期时间段

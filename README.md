@@ -131,15 +131,3 @@ if __name__ == '__main__':
 
 
 注册 worker 之后，就可以通过 `/worker/new/{worker 名字}` 这个接口来调用了。
-
-### Patch 模块 ###
-
-有些模块在运行时需要动态 patch，例如 `certifi` 模块的证书文件在打包时被改变了路径。
-所有的 monkey patch 方法都放在 `monkey.py` 中，这样来应用所有可用的 patch：
-
-```python
-import monkey
-monkey.patch_all()
-```
-`monkey.patch_all` 接受唯一一个参数 patch_ssl=True，指示是否关闭 HTTPS 请求的 SSL 证书验证，默认为 True。
-

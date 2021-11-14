@@ -6,9 +6,6 @@ import urlparse
 
 import config
 
-from libs import monkey
-monkey.patch_all(not config.IGNORE_SSL, load_certs=True)
-
 from contextlib import closing
 import getpass
 import os

@@ -42,7 +42,6 @@ for module_name in WORKERS:
 
 DEBUG = True
 FILEDIALOG = None
-P2P_QUEUE = None
 
 _ = translate
 
@@ -456,8 +455,6 @@ def start_server(ui=True):
 
     # Store a reference into flask g object, so we can access it in blueprint
     fapp.trayIcon = trayIcon
-    global P2P_QUEUE
-    fapp.P2P_QUEUE = P2P_QUEUE = Queue()
     fapp.LOCKS = {}
 
     import worker

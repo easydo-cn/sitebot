@@ -172,7 +172,7 @@ def api_worker_restart():
         worker_db.sync()
 
         # restart the worker
-        return json.dumps(worker.start_worker(id, pipe=current_app.P2P_QUEUE))
+        return json.dumps(worker.start_worker(id))
 
     else:
         # the task has stopped
@@ -233,7 +233,7 @@ def api_worker_start():
                 'msg': _('You can now enable Assistant messaging')
             })
 
-        return json.dumps(worker.start_worker(id, pipe=current_app.P2P_QUEUE))
+        return json.dumps(worker.start_worker(id))
     return json.dumps({
         'is_alive': False,
         'msg': _('Task ID not specified')
@@ -308,7 +308,7 @@ def api_worker_new(worker_name):
         worker_id = 0
 
     # 开始任务
-    result = worker.start_worker(worker_id, pipe=current_app.P2P_QUEUE)
+    result = worker.start_worker(worker_id)
     return json.dumps(result)
 
 

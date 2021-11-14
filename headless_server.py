@@ -48,7 +48,6 @@ for module_name in allow_workers:
     importlib.import_module('workers.{}'.format(module_name))
 
 _ = translate
-P2P_QUEUE = None
 # 创建本地服务器
 fapp = Flask(
     __name__,
@@ -215,7 +214,6 @@ def start_server():
         certfile=os.path.join(APP_DATA, 'certifi', 'assistant.crt'),
     )
     fapp.LOCKS = {}
-    fapp.P2P_QUEUE = None
 
     global http_greenlet, https_greenlet
     http_greenlet = gevent.spawn(http_server.serve_forever)

@@ -1042,10 +1042,6 @@ def worker_guardian():
       - 成功和出错的任务，结束时间过去一周的，删除
       - 首次扫描先等待 2 秒，让服务器启动
     '''
-    if HEADLESS:
-        from headless_server import P2P_QUEUE
-    else:
-        from webserver import P2P_QUEUE
     AUTO_REMOVE_DELAY = 7 * 24 * 60 * 60
     logger = get_logger('DAEMON_THREAD', filename='daemon_thread.log', init_level=logging.INFO)
     logger.info(u'监视线程启动')
@@ -1141,11 +1137,11 @@ def worker_guardian():
                     logger.info(u'启动后首次扫描，删除了上次运行的 %s 任务（ID: %s）', name, wid)
                     continue
                 if name in one_time_workers:
-                    start_worker(wid, pipe=P2P_QUEUE)
+                    start_worker(wid)
                     logger.info(u'启动后首次扫描，启动了一次性的 %s 任务（ID: %s）', name, wid)
                     continue
                 if state == 'running':
-                    start_worker(wid, pipe=P2P_QUEUE)
+                    start_worker(wid)
                     logger.info(
                         u'启动后首次扫描，启动了上次退出时正在运行的 %s 任务（ID: %s）', name, wid
                     )
@@ -1155,7 +1151,7 @@ def worker_guardian():
                 continue
             # 保持运行的任务
             if is_residential and state != 'paused' and (state != 'running' or not work_process_running):
-                start_worker(wid, pipe=P2P_QUEUE)
+                start_worker(wid)
                 logger.info(u'启动了驻留任务 %s（ID: %s）', name, wid)
                 continue
             # 定时任务
@@ -1165,7 +1161,7 @@ def worker_guardian():
                 except:
                     interval = AUTO_START_INTERVAL
                 if now - last_start_time >= interval and not work_process_running:
-                    start_worker(wid, pipe=P2P_QUEUE)
+                    start_worker(wid)
                     logger.debug(
                         u'启动了定时运行的 %s 任务（ID: %s），距上次运行已过去 %s 秒',
                         name, wid, now - last_start_time
@@ -1176,7 +1172,7 @@ def worker_guardian():
                     and error_reason not in fatal_error_reasons\
                     and error_reason not in ignore_reasons\
                     and now - last_start_time >= RETRY_INTERVAL:
-                start_worker(wid, pipe=P2P_QUEUE)
+                start_worker(wid)
                 logger.debug(
                     u'启动了上次出错的 %s 任务（ID: %s），距上次运行已过去 %s 秒',
                     name, wid, now - last_start_time

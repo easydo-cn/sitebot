@@ -214,7 +214,6 @@ def remove_worker_db(worker_id):
     except:
         pass
 
-    refresh_worker_tab()
     close_logger(logger)
 
 
@@ -331,7 +330,6 @@ def new_worker(worker_name, **kw):
             worker_storage[key] = value
     worker_storage.sync()
     close_worker_logger(new_id)
-    refresh_worker_tab()
     return str(new_id)
 
 
@@ -497,7 +495,7 @@ def safe_run_worker(id, sync=False, pipe=None):
     '''
     # from workers import * 会 import 名为 sync 的模块，
     # 所以这里将 sync 的值保存到另一个变量里
-    from ui_client import refresh_webview, report_detail
+    from ui_client import report_detail
     sync_flag = sync
     if not HEADLESS:
         allowed_workers = WORKERS
@@ -518,8 +516,6 @@ def safe_run_worker(id, sync=False, pipe=None):
     retried = -1
     while 1:
         try:
-            if not sync_flag:
-                refresh_webview('workers')
             run_worker(id, sync=sync_flag, pipe=pipe)
         except Retry as e:
             if e.count != -1:
@@ -584,8 +580,6 @@ def safe_run_worker(id, sync=False, pipe=None):
 
     close_logger(logger)
 
-    # 刷新任务tab
-    refresh_webview('workers', sync=sync_flag)
 
 
 def run_worker(id, sync=False, pipe=None):
@@ -1016,7 +1010,6 @@ def pause_worker(id, turn_off_message=False):
     worker_db['state'] = 'paused'
 
     worker_db.sync()
-    refresh_worker_tab()
     logger = get_worker_logger(id)
     logger.debug(u'-------------------任务手动暂停-------------------')
     close_logger(logger)
@@ -1280,9 +1273,3 @@ def load_workers():
     DAEMON_THREAD.start()
 
 
-def refresh_worker_tab():
-    if HEADLESS:
-        return
-    else:
-        from qtui.ui_utils import emit_webview_refresh_signal
-        emit_webview_refresh_signal('workers')

@@ -15,11 +15,6 @@ from libs import messenger
 from config import APP_DATA, HEADLESS
 from ui_client import _request_api
 
-if HEADLESS:
-    def emit_webview_refresh_signal(*args, **kwargs):
-        pass
-else:
-    from qtui.ui_utils import emit_webview_refresh_signal
 
 """
 桌面助手主要是通过浏览器发起任务，发送给桌面助手去执行。
@@ -51,9 +46,6 @@ def refresh(func):
                 _request_api("/admin/connections", kw={"action": "reload"})
             except Exception:
                 logger.exception(u"发送刷新连接页面请求失败")
-        else:
-            # 是主进程，发送 Qt 信号
-            emit_webview_refresh_signal("connections")
         return result
     return decorator
 
@@ -321,8 +313,6 @@ class SiteManager(object):
                 old_site.login(new_site.token)
             for key, value in new_site.configs.items():
                 old_site.set_config(key, value)
-        # 3 刷新连接页面
-        emit_webview_refresh_signal("connections")
 
     @refresh
     def save(self):

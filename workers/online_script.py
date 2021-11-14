@@ -26,11 +26,6 @@ from errors import (
     LockAcquireTimeout, LockAcquireFailure, ScriptDownloadError,
     Retry, ScriptSecurityError,
 )
-if not HEADLESS:
-    from qtui.webview_window import show_webview_window
-else:
-    def show_webview_window(*args, **kw):
-        pass
 
 # Add ADDON_DIR to python path
 sys.path.insert(0, ADDON_DIR)
@@ -111,7 +106,6 @@ SCRIPT_ENV = {
     'Retry': Retry,
     'ScriptDownloadError': ScriptDownloadError,
     'UnexpectedExit': UnexpectedExit,
-    'show_webview_window': show_webview_window,
 }
 
 
@@ -210,7 +204,6 @@ def online_script(
     if not __sync:
         worker_db['title'] = script_obj['title']
         worker_db.sync()
-        ui_client.refresh_webview('workers')
 
     # 快速构造消息客户端
     if not __sync:

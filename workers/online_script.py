@@ -21,7 +21,6 @@ from utils import (
     translate as _, get_message_client,  # get_site_public_key,
     require, get_logger, detect_locale
 )
-from libs import desktop
 from config import FROZEN, ADDON_DIR, APP_KEY, APP_SECRET, HEADLESS
 from errors import (
     LockAcquireTimeout, LockAcquireFailure, ScriptDownloadError,
@@ -113,7 +112,6 @@ SCRIPT_ENV = {
     'ScriptDownloadError': ScriptDownloadError,
     'UnexpectedExit': UnexpectedExit,
     'show_webview_window': show_webview_window,
-    'desktop': desktop,
 }
 
 

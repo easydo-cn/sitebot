@@ -494,38 +494,6 @@ def is_valid_dir(folder):
 
 
 
-def should_push(fpath):
-    '''用于过滤本地文件路径，返回 False 表示给定路径不应上传到系统'''
-    patterns = [
-        r'[\/\\]\.[^\/\\]+$', r'^\..+$', r'^.*[\/\\]\..+$',  # .开头的文件
-        r'\~.+\.tmp$', r'\~\$.+\.\w+$',  # MSOffice 临时文件
-        r'[\/\\].+\.tmp$', r'^.+\.tmp$',  # .tmp 文件
-        r'\$recycle\.bin$',  # Windows 回收站目录
-        r'desktop\.ini$',  # Windows 桌面配置文件
-        r'autorun\.inf$',  # 驱动器自运行配置文件
-        r'folder\.jpg$', r'folder\.gif$',  # Windows 文件夹图标
-        r'autorun\.inf\..*?$',
-        r'IMM32\.DLL$', r'.+\.wbk$',
-    ]
-    if os.path.isfile(fpath):
-        valid = is_valid_file(fpath)
-    elif os.path.isdir(fpath):
-        valid = is_valid_dir(fpath)
-    elif not os.path.exists(fpath):
-        valid = True
-    else:
-        valid = False
-
-    # kwpsinidata: WPS编辑时使用的临时目录
-    if 'kwpsinidata' in fpath.split(os.path.sep):
-        return False
-
-    return valid and not any(
-        [re.compile(p, re.IGNORECASE).findall(fpath) for p in patterns]
-    )
-
-
-
 
 def utc_to_local(utc_dt):
     '''

@@ -549,77 +549,6 @@ def should_push(fpath):
     )
 
 
-def get_filestore_by_filename(db_file):
-    from filestore import FileStore
-
-    db_name_parts = os.path.splitext(db_file)[0].split('.')
-    scheme = db_name_parts.pop(0)
-    instance = db_name_parts.pop(-1)
-    account = db_name_parts.pop(-1)
-    port = db_name_parts.pop(-1)
-    oc_server = construct_server(
-        '.'.join(db_name_parts),
-        scheme=scheme, port=port
-    )
-    return FileStore(oc_server, account, instance, wo_server=None)
-
-
-def get_filestore_from_request(request=None, **kw):
-    if request is None:
-        from flask import request
-    from flask import current_app
-    from filestore import FileStore
-    no_context = True
-
-    try:
-        wo_server, oc_server, account, instance, upload_server, token = extract_data(
-            ('server', 'oc_server', 'account', 'instance', 'upload_server', 'token',),
-            request=request
-        )
-        no_context = False
-    except RuntimeError:  # not in Flask request context
-        oc_server = kw['oc_server']
-        account = kw['account']
-        instance = kw['instance']
-        wo_server = kw.get('wo_server')
-        upload_server = kw.get('upload_server')
-        token = kw.get('token')
-
-    if not oc_server or not account or not instance:
-        raise TypeError(u'No FileStore could be constructed from request')
-
-    return FileStore(
-        oc_server,
-        account, instance, wo_server=wo_server,
-        upload_server=upload_server,
-        logger=None if no_context else current_app.logger,
-        token=token
-    )
-
-
-def list_all_sync_folders(request=None):
-    if request is None:
-        from flask import request
-    try:
-        fs = get_filestore_from_request(request)
-        return {
-            'sync_folders': fs.list_all_syncfolders()
-        }
-    except Exception:
-        from config import FILE_STORE_DIR
-        sync_folders = []
-        for db_file in os.listdir(FILE_STORE_DIR):
-            if db_file.endswith('.db'):
-                fs = get_filestore_by_filename(db_file)
-                items = fs.list_all_syncfolders()
-                [i.update({
-                    'hostname': fs.hostname,
-                    'server': fs.server,
-                    'account': fs.account,
-                    'instance': fs.instance
-                }) for i in items]
-                sync_folders.extend(items)
-        return {'sync_folders': sync_folders}
 
 
 def utc_to_local(utc_dt):
@@ -714,36 +643,6 @@ def construct_server(hostname, port=None, scheme='http'):
     return '{}://{}:{}'.format(_scheme, _hostname, str(_port))
 
 
-def get_object_manage_url(fobj, filestore=None):
-    '''
-    根据本地路径，计算文件/文件夹在桌面助手管理中的地址
-    Args:
-        fobj <Dict|?> 包含三个 key ：
-            local_path <String> 本地路径
-            uid <String> uid
-            object_type <String> 值为 file 或 folder
-    '''
-    if not isinstance(fobj, dict) or 'object_type' not in fobj:
-        return fobj
-    if fobj['object_type'] == 'file':
-        _template = '{}/ui/open'
-        return _template.format(config.INTERNAL_URL)
-    elif fobj['object_type'] == 'folder':
-        root_path, root_uid = fobj['local_path'], fobj['uid']
-        if filestore is not None:
-            root_path, root_uid = filestore.get_syncfolder_root(
-                local_path=fobj['local_path']
-            )
-            if not root_uid:
-                root_uid = fobj['uid']
-
-        _template = ('{}/admin/sync_folder?'
-                     'root_path={}&local_path={}'
-                     '&root_uid={}')
-        return _template.format(
-            config.INTERNAL_URL,
-            root_path, fobj['local_path'], root_uid
-        )
 
 
 def fobj_from_md(md):
@@ -769,41 +668,6 @@ def clear_logs():
     '''
     pass
 
-
-def clear_old_files():
-    '''
-    清理一个月前的临时区文件（外部编辑、下载查看）
-    '''
-    from config import FILE_STORE_DIR
-
-    LIMIT = 1 * 60 * 60 * 24 * 30
-    try:
-        for db_file in os.listdir(FILE_STORE_DIR):
-            if not db_file.endswith('.db'):
-                continue
-            fs = get_filestore_by_filename(db_file)
-
-            sql_delete = ['BEGIN;', ]
-            [
-                sql_delete.append(
-                    'DELETE FROM `site_files` WHERE {};'.format(
-                        '`usage`="{}" AND `local_path`="{}"'.format(
-                            usage, fobj['local_path']
-                        )
-                    )
-                )
-                for usage in ('edit', 'view', )
-                for fobj in fs.query_items(usage=usage, object_type='file')
-                if time.time() - getmtime(fobj['local_path']) >= LIMIT
-            ]
-            sql_delete.append('COMMIT;')
-            sql_delete = '\n'.join(sql_delete)
-
-            connection = fs._get_site_db()
-            cursor = connection.cursor()
-            cursor.executescript(sql_delete)
-    except:
-        pass
 
 
 def get_oc_client(oc_server=None, account=None, instance=None, token=None):

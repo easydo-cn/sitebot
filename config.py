@@ -93,8 +93,6 @@ EDO_TEMP = os.path.join(MY_DOCUMENTS, 'edo_temp')
 
 # Folder that holds all database of workers
 WORKER_STORAGE_DIR = os.path.join(APP_DATA, 'workers')
-# Folder that holds all database of operated site files and folders
-FILE_STORE_DIR = os.path.join(APP_DATA, 'filestore')
 
 # Make sure all the above folders exist
 for folder in (
@@ -103,8 +101,6 @@ for folder in (
     if not os.path.exists(folder):
         os.makedirs(folder)
 
-# 同步区数据文件
-SYNC_JSON_FILE = os.path.join(APP_DATA, 'sync.json')
 # 主要配置文件
 CONFIG_FILE = os.path.join(APP_DATA, 'config.json')
 CONFIG = {}

@@ -26,11 +26,9 @@ from config import (
     HEADLESS, SINGLE_PROCESS, CONFIG
 )
 
-from filestore import get_file_store
 from utils import (
     addr_check, extract_data, get_object_manage_url,
-    utc_to_local, get_filestore_by_filename,
-    get_filestore_from_request, translate as _,
+    utc_to_local, translate as _,
     get_deal_time, filter_sensitive_fields,
     console_message, jsonp
 )
@@ -134,7 +132,7 @@ def view_worker_management():
                 _w['detail']['account'],
                 _w['detail']['instance']
             )
-            _w['detail']['local_url'] = get_object_manage_url(_i, filestore=fs)
+            _w['detail']['local_url'] = ''
         workers.append(_w)
     return {'workers': workers}
 
@@ -392,33 +390,7 @@ def message(title, body, type='none'):
         pass
 
 
-def count_all_files(req=None):
-    try:
-        file_store = get_filestore_from_request(req)
-        return len(file_store.list_all_files())
-    except Exception:
-        return sum([
-            len(get_filestore_by_filename(db).list_all_files())
-            for db in os.listdir(FILE_STORE_DIR) if db.endswith('.db')
-        ])
 
-
-def stat_all_files(req=None):
-    try:
-        file_store = get_filestore_from_request(req)
-        return file_store.stat_files()
-    except Exception:
-        stat_info = {}
-        for db in os.listdir(FILE_STORE_DIR):
-            if not db.endswith('.db'):
-                continue
-            stat = get_filestore_by_filename(db).stat_files()
-            for k in stat.keys():
-                if stat_info.get(k, None) is not None:
-                    stat_info[k] += stat[k]
-                else:
-                    stat_info[k] = stat[k]
-        return stat_info
 
 
 if not HEADLESS:
@@ -462,113 +434,6 @@ if not HEADLESS:
         )
         return workers
 
-
-    @render('sitefile_categories.html')
-    def render_all_file_categories():
-        stat_info = []
-        pre_stat = stat_all_files()
-        for usage in pre_stat.keys():
-            stat_info.append({
-                'count': pre_stat[usage],
-                # Dont translate here, translate in template engine instead
-                'name': usage,
-                'management_url': '?usage={}'.format(usage),
-            })
-        return {
-            'file_count': count_all_files(),
-            'categories': stat_info,
-        }
-
-
-    @render('site_file.html')
-    def render_file_category(category):
-        usage = category
-        usage = '' if usage == 'unknown' else usage
-        files = []
-        for db_file in os.listdir(FILE_STORE_DIR):
-            if db_file.endswith('.db'):
-                file_store = get_filestore_by_filename(db_file)
-                _files = file_store.query_items(
-                    root_uid='', usage=usage, object_type='file'
-                )
-                for i in _files:
-                    last_deal = get_deal_time((
-                        i['last_pull'],
-                        i['last_push'],
-                        i['modified']
-                    ))
-                    sort_time = datetime.strptime(last_deal, '%Y-%m-%d %H:%M:%S')
-                    sort_time = calendar.timegm(sort_time.timetuple())
-                    i.update({
-                        'server': file_store.server,
-                        'account': file_store.account,
-                        'instance': file_store.instance,
-                        'last_deal': last_deal,
-                        'sort_time': sort_time
-                    })
-                files.extend(_files)
-        return {'files': files, 'usage': usage or 'unknown'}
-
-
-    @blueprint.route('/site_file', methods=['GET', 'OPTIONS', ])
-    @addr_check
-    def view_sitefile_statics_management():
-        # gettext evals
-        _('download')
-        _('upload')
-        _('edit')
-        _('unknown')
-        _('3dpreview')
-        _('view')
-        _('p2pdownload')
-        _('conflict_backup')
-
-        usage = extract_data('usage', request=request)
-        if usage is None:
-            return render_all_file_categories()
-        else:
-            return render_file_category(usage)
-
-
-    @blueprint.route('/web_folder')
-    @addr_check
-    @render('web_folders.html')
-    def view_web_folders_management():
-        webfolders = []
-        if sys.platform != 'win32':
-            return {'workers': []}
-        import urllib
-        for wid in worker.list_worker_ids():
-            work = worker.get_worker_db(wid)
-            if not work or work.get('name', '') != 'new_webfolder':
-                continue
-            if not work.get('executed', False):
-                continue
-            work['worker_id'] = wid
-            if not work.get('folder_name', ''):
-                folder_url = urllib.unquote(
-                    str(work['folder_url'])
-                ).decode('utf-8')
-                work['folder_name'] = folder_url[-1]
-            if not work.get('uid_url', ''):
-                work['uid_url'] = '{url}/++intid++{uid}/view.html'.format(
-                    url=generate_uid_url(work),
-                    uid=work['uid'][0],
-                )
-            webfolders.append(work)
-        data = {
-            'workers': webfolders,
-            'supported_platform': sys.platform == "win32"
-        }
-        if sys.platform == 'win32':
-            from utils.win32_utils import is_dokan_installed, is_dot_net_installed, get_winver  # noqa E501
-            data.update({
-                'dokan_installed': is_dokan_installed(),
-                'dot_net_installed': is_dot_net_installed(),
-                # (6, 1, 1) ==> Windows7 SP 1
-                'supported_platform': get_winver() >= (6, 1, 1),
-            })
-        return data
 
 
 @blueprint.route('/locks', methods=['POST', 'GET', 'OPTIONS', ])

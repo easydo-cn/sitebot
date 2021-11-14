@@ -13,7 +13,6 @@
 * 程序入口文件是 `main.py`，在其中初始化服务器和托盘图标
 * `worker.py` 是任务管理模块
 * `qtui.py` 是负责系统界面交互的，主要是托盘图标相关
-* `filestore.py` 主管所有文件库相关操作，文件都会记录到站点的数据库中
 * `edoparser.py` 主管命令行状态下参数解析和相关调用
 * 实际执行具体工作的 worker 存放在 `workers` 目录中，模块名与主函数名相同
 * worker 模块最终都会被导入到顶层使用，所以可以直接在 worker 中导入顶层的模块
@@ -93,7 +92,6 @@ worker 的日志文件按 ID 存放在 `APP_DATA/logs/worker_{ID}.log` 文件中
 import os
 import sys
 
-from filestore import get_file_store
 import ui_client
 from utils import get_wo_client, is_valid_dir
 from worker import register_worker

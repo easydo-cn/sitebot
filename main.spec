@@ -27,8 +27,7 @@ hiddenimports = [
 ]
 hiddenimports.extend(['workers.{}'.format(i) for i in WORKERS])
 for b in [
-    'blueprint_admin', 'blueprint_worker', 'blueprint_ui', 'blueprint_sync',
-    'blueprint_desktop', 'blueprint_p2p', 'blueprint_filestore',
+    'blueprint_admin', 'blueprint_worker', 
 ]:
     hiddenimports.append('blueprints.{}'.format(b))
 

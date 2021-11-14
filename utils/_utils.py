@@ -139,17 +139,6 @@ def detect_locale(language_code=None):
     prefered_language = language_code or locale.getdefaultlocale(
         envvars=('LANGUAGE', 'LANG', 'LC_ALL', 'LC_CTYPE')
     )[0]
-    if sys.platform == 'darwin':
-        import objc
-        try:
-            NSUserDefaults = objc.lookUpClass('NSUserDefaults')
-            defaults = NSUserDefaults.standardUserDefaults()
-            prefered_language = defaults.objectForKey_('AppleLanguages').objectAtIndex_(0)
-            # Apple seems to be using locale code like `zh-Hans`
-            if '-' in prefered_language:
-                prefered_language = prefered_language.replace('-', '_')
-        except:
-            pass
     # Fallback to general English
     selected_language = 'en'
     logger.debug(

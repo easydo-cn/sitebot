@@ -371,6 +371,7 @@ def prepare_ports():
 def main():
     # PyInstaller 多进程支持
     freeze_support()
+    edoparser.parse_args(sys.argv[1:])
 
     load_logging_config()
     check_certificate()  # TODO 这个好像不应该在这里？

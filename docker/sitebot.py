@@ -57,5 +57,5 @@ if __name__ == '__main__':
     else:
         sitebot_token = sys.argv[1]
         os.system(
-            'python {} -q --ast-token "{}"'.format(entrance, sitebot_token),
+            'python {} --ast-token "{}"'.format(entrance, sitebot_token),
         )

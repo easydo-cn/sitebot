@@ -122,26 +122,3 @@ def patch_all(patch_ssl=True, load_certs=False):
     # 2. pyoauth2
     pyoauth2.libs.response.Response.__init__ = _pyoauth2_libs_response_response_init
 
-    # 3. Windows: 从 Windows证书存储中加载额外的可信证书
-    if sys.platform == 'win32':
-        import wincertstore
-
-        with open(_requests_certs_where()) as rf:
-            current_cert_content = rf.read()
-
-        missing_certs = set()
-        # 从 可信证书颁发机构（CA） 和 可信根证书（ROOT）两个分类中，读取不在 cacert.pem 中的证书
-        for storename in ('CA', 'ROOT'):
-            with wincertstore.CertSystemStore(storename) as store:
-                for cert in store.itercerts(usage=wincertstore.SERVER_AUTH):
-                    # I don't want to do this... but Windows left me with no choice
-                    cert_content = cert.get_pem().decode('ascii').encode('utf-8')
-                    if cert_content not in current_cert_content:
-                        missing_certs.add(cert_content)
-
-        # 把读取的额外的证书，连同已有的可信证书一起，写入到一个新的文件中
-        # 注意：因为安装目录可能没权限写入（例如：多用户安装模式），所以写入到临时文件中
-        if missing_certs:
-            with open(_requests_certs_where(), 'a') as wf:
-                for cert in missing_certs:
-                    wf.write(cert)

@@ -38,137 +38,27 @@ sys.path.insert(0, ADDON_DIR)
 
 # We'll patch `sys.moddules` on Windows platform to bypass a rare importer bug
 # Please ref to https://github.com/pyinstaller/pyinstaller/issues/1803
-if sys.platform == 'win32':
-    sys.modules['win32com.gen_py.os'] = None
-    sys.modules['win32com.gen_py.pywintypes'] = None
-    sys.modules['win32com.gen_py.pythoncom'] = None
 
 
 # 修补标准库的 Popen，使其支持 timeout
-if sys.platform != 'win32':
-    from subprocess32 import Popen, PIPE, TimeoutExpired
-    # 修改自Python3.shlex.quote
+from subprocess32 import Popen, PIPE, TimeoutExpired
+# 修改自Python3.shlex.quote
 
-    def quote(s):
-        """Return a shell-escaped version of the string *s*."""
-        # 防止参数不是字符串
-        s = str(s)
-        if not s:
-            return u"''"
-        # use single quotes, and put single quotes into double quotes
-        # the string $'b is then quoted as '$'"'"'b'
-        return u"'" + s.replace(u"'", u"'\"'\"'") + u"'"
+def quote(s):
+    """Return a shell-escaped version of the string *s*."""
+    # 防止参数不是字符串
+    s = str(s)
+    if not s:
+        return u"''"
+    # use single quotes, and put single quotes into double quotes
+    # the string $'b is then quoted as '$'"'"'b'
+    return u"'" + s.replace(u"'", u"'\"'\"'") + u"'"
 
-else:
-    from subprocess import PIPE, Popen as _Popen
-    import _subprocess
-    import errno
+PREEXEC_FN = os.setsid
 
-    # 修改自Python3.shlex.quote
-    def quote(s):
-        """Return a shell-escaped version of the string *s*."""
-        s = str(s)
-        if not s:
-            return u'""'
-        return u'"' + s.replace(u'"', ur'\"') + u'"'
-
-    class Popen(_Popen):
-
-        _communication_started = False
-
-        def communicate(self, input=None, timeout=None):
-
-            endtime = time.time() + timeout
-            try:
-                stdout, stderr = self._communicate(input, endtime, timeout)
-            finally:
-                self._communication_started = True
-            self.wait(timeout=endtime - time.time())
-            return (stdout, stderr)
-
-        def wait(self, timeout=None, endtime=None):
-            timeout_millis = int(timeout * 1000)
-            if self.returncode is None:
-                result = _subprocess.WaitForSingleObject(
-                    self._handle, timeout_millis
-                )
-                if result == 0x102:  # _winapi.WAIT_TIMEOUT:
-                    raise TimeoutExpired(self.pid, timeout)
-                self.returncode = _subprocess.GetExitCodeProcess(self._handle)
-            return self.returncode
-
-        def _communicate(self, input, endtime, orig_timeout):
-            if self.stdout and not hasattr(self, "_stdout_buff"):
-                self._stdout_buff = []
-                self.stdout_thread = \
-                    threading.Thread(target=self._readerthread,
-                                     args=(self.stdout, self._stdout_buff))
-                self.stdout_thread.daemon = True
-                self.stdout_thread.start()
-            if self.stderr and not hasattr(self, "_stderr_buff"):
-                self._stderr_buff = []
-                self.stderr_thread = \
-                    threading.Thread(target=self._readerthread,
-                                     args=(self.stderr, self._stderr_buff))
-                self.stderr_thread.daemon = True
-                self.stderr_thread.start()
-
-            if self.stdin:
-                if input is not None:
-                    try:
-                        self.stdin.write(input)
-                    except IOError as e:
-                        if e.errno == errno.EPIPE:
-                            pass
-                        elif e.errno == errno.EINVAL\
-                                and self.poll() is not None:
-                            pass
-                        else:
-                            raise
-                self.stdin.close()
-
-            if self.stdout is not None:
-                self.stdout_thread.join(endtime - time.time())
-                if self.stdout_thread.is_alive():
-                    raise TimeoutExpired()
-            if self.stderr is not None:
-                self.stderr_thread.join(endtime - time.time())
-                if self.stderr_thread.is_alive():
-                    raise TimeoutExpired()
-
-            stdout = None
-            stderr = None
-            if self.stdout:
-                stdout = self._stdout_buff
-                self.stdout.close()
-            if self.stderr:
-                stderr = self._stderr_buff
-                self.stderr.close()
-
-            if stdout is not None:
-                stdout = stdout[0]
-            if stderr is not None:
-                stderr = stderr[0]
-
-            return (stdout, stderr)
-
-    class TimeoutExpired(Exception):
-        pass
-
-
-if sys.platform == 'win32':
-    PREEXEC_FN = None
-
-    def kill_with_children(pid):
-        '''杀死指定进程及其所有子进程'''
-        # TODO os.system is not recommended, use something else
-        os.system('taskkill /F /T /pid {}'.format(pid))
-else:
-    PREEXEC_FN = os.setsid
-
-    def kill_with_children(pid):
-        '''杀死指定进程及其所有子进程'''
-        os.killpg(pid, signal.SIGKILL)
+def kill_with_children(pid):
+    '''杀死指定进程及其所有子进程'''
+    os.killpg(pid, signal.SIGKILL)
 
 
 def safe_call(cmd, shell=False, comment=None, timeout=10 * 60, **kw):
@@ -183,7 +73,7 @@ def safe_call(cmd, shell=False, comment=None, timeout=10 * 60, **kw):
             preexec_fn=PREEXEC_FN, **kw
         )
     else:
-        executable = None if sys.platform == 'win32' else '/bin/bash'
+        executable = '/bin/bash'
         popen = Popen(
             cmd, shell=shell, stdout=PIPE, stderr=PIPE,
             executable=executable, preexec_fn=PREEXEC_FN, **kw

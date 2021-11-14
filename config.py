@@ -9,84 +9,7 @@ BUILD_NUMBER = 2055
 GIT_INFO = "3fa2b2fe @ {2020-01-08 12:44:15 +0800} on heads/x-develop"
 USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/534.34 (KHTML, like Gecko) python Safari/534.34 Assistant"
 # Windows specifics
-if sys.platform != "win32":
-    MY_DOCUMENTS = USER_HOME = os.path.expanduser('~')
-else:
-    # See: http://stackoverflow.com/q/3858851
-    # Also ref to: https://gist.github.com/mkropat/7550097
-    import ctypes
-    from ctypes import windll, wintypes
-    from uuid import UUID
-
-    class GUID(ctypes.Structure):   # [1]
-        _fields_ = [
-            ("Data1", wintypes.DWORD),
-            ("Data2", wintypes.WORD),
-            ("Data3", wintypes.WORD),
-            ("Data4", wintypes.BYTE * 8)
-        ]
-
-        def __init__(self, uuid_):
-            ctypes.Structure.__init__(self)
-            self.Data1, self.Data2, self.Data3, self.Data4[0], self.Data4[1], rest = uuid_.fields
-            for i in range(2, 8):
-                self.Data4[i] = rest >> (8 - i - 1)*8 & 0xff
-
-    class FOLDERID:     # [2]
-        Documents = UUID('{FDD39AD0-238F-46AF-ADB4-6C85480369C7}')
-        Profile = UUID('{5E6C858F-0E22-4760-9AFE-EA3317B67173}')
-
-    _CoTaskMemFree = windll.ole32.CoTaskMemFree     # [4]
-    _CoTaskMemFree.restype = None
-    _CoTaskMemFree.argtypes = [ctypes.c_void_p]
-
-    class PathNotFoundException(Exception):
-        pass
-
-    def get_known_folder_path(folderid):
-        _SHGetKnownFolderPath = windll.shell32.SHGetKnownFolderPath     # [5] [3]
-        _SHGetKnownFolderPath.argtypes = [
-            ctypes.POINTER(GUID), wintypes.DWORD,
-            wintypes.HANDLE, ctypes.POINTER(ctypes.c_wchar_p)
-        ]
-
-        fid = GUID(folderid)
-        pPath = ctypes.c_wchar_p()
-        S_OK = 0
-        if _SHGetKnownFolderPath(ctypes.byref(fid), 0, wintypes.HANDLE(0), ctypes.byref(pPath)) != S_OK:
-            raise PathNotFoundException()
-        path = pPath.value
-        _CoTaskMemFree(pPath)
-        return path
-
-    try:
-        from win32com.shell import shellcon
-        CSIDL_PERSONAL = shellcon.CSIDL_PERSONAL
-        CSIDL_PROFILE = shellcon.CSIDL_PROFILE
-    except Exception as e:
-        CSIDL_PERSONAL = 5  # My Documents
-        CSIDL_PROFILE = 40  # User Home
-    SHGFP_TYPE_CURRENT = 0  # Want current, not default value
-
-    buf = ctypes.create_unicode_buffer(wintypes.MAX_PATH)
-
-    if windll.shell32.SHGetFolderPathW(
-        0, CSIDL_PROFILE, 0, SHGFP_TYPE_CURRENT, buf
-    ) == 0:
-        USER_HOME = buf.value
-    else:
-        try:
-            USER_HOME = get_known_folder_path(FOLDERID.Profile)
-        except:
-            USER_HOME = os.path.expanduser('~')
-
-    if windll.shell32.SHGetFolderPathW(
-        0, CSIDL_PERSONAL, 0, SHGFP_TYPE_CURRENT, buf
-    ) == 0:
-        MY_DOCUMENTS = buf.value
-    else:
-        MY_DOCUMENTS = get_known_folder_path(FOLDERID.Documents)
-
+MY_DOCUMENTS = USER_HOME = os.path.expanduser('~')
 APP_DATA = os.path.join(USER_HOME, 'edo_assistent')
 LOG_DATA = os.path.join(APP_DATA, 'logs')
 EDO_TEMP = os.path.join(MY_DOCUMENTS, 'edo_temp')
@@ -230,24 +153,6 @@ try:
 except:
     pass
 
-if sys.platform == 'win32':
-    try:
-        import win32api
-        import win32con
-        __hidden = False
-        try:
-            attribute = win32api.GetFileAttributes(APP_ID_FILE)
-            __hidden = attribute & (win32con.FILE_ATTRIBUTE_HIDDEN)
-        except:
-            pass
-
-        if not __hidden:
-            win32api.SetFileAttributes(
-                APP_ID_FILE,
-                win32con.FILE_ATTRIBUTE_HIDDEN
-            )
-    except:
-        pass
 
 NOUNCE_FIELD = '__nounce'
 LANGUAGE, __ = locale.getdefaultlocale()
@@ -294,15 +199,6 @@ else:
         if _w != 'threedpreview'
     ]
 
-if sys.platform == 'win32':
-    WORKERS.append('threedpreview')
-
-GLOBAL_INSTALL = sys.platform == "win32" and FROZEN and ('..' in os.path.relpath(CURRENT_DIR, USER_HOME))
-# 可以通过环境变量禁止自动升级；多用户模式安装的桌面助手也禁止升级
-if GLOBAL_INSTALL:
-    DISABLE_UPGRADE = True
-else:
-    DISABLE_UPGRADE = LazyEnvBool('AST_AUTO_UPGRADE', value='false')
 
 # 证书临近过期时间段
 NEAR_EXPIRE_DATE = 30 * 1  # 过期前一个月

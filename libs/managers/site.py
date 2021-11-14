@@ -17,12 +17,6 @@ from ui_client import _request_api
 
 
 """
-桌面助手主要是通过浏览器发起任务，发送给桌面助手去执行。
-
-但也有如下几种情况，是需要在桌面主动发起任务的：
-+ 桌面助手消息通知
-+ 映射盘：在桌面进行文件管理
-+ 同步盘：可以在桌面文件管理器中发起同步操作
 
 这时候要求桌面助手预先建立和站点的连接，包括站点的信息，当前用户等：
 + 每个站点只能建立一个链接
@@ -33,21 +27,6 @@ SiteManager 用于管理桌面助手与站点建立的所有连接
 Site 表示一个站点连接
 """
 logger = logging.getLogger(__name__)
-
-
-def refresh(func):
-    """刷新连接页面"""
-    @functools.wraps(func)
-    def decorator(*args, **kwargs):
-        result = func(*args, **kwargs)
-        if multiprocessing.current_process().name != "MainProcess":
-            # 不是主进程，发送 HTTP 请求
-            try:
-                _request_api("/admin/connections", kw={"action": "reload"})
-            except Exception:
-                logger.exception(u"发送刷新连接页面请求失败")
-        return result
-    return decorator
 
 
 class Site(object):
@@ -314,7 +293,6 @@ class SiteManager(object):
             for key, value in new_site.configs.items():
                 old_site.set_config(key, value)
 
-    @refresh
     def save(self):
         """保存现在的所有站点连接到存储文件"""
         if self.__storage is None:

@@ -454,20 +454,6 @@ def prepare_worker_args(name, id):
     return real_args
 
 
-def is_background_task(worker_id):
-    """
-    检测是否为后台自动运行的任务，比如映射盘、或者实时同步
-    Args:
-        worker_id <int> 任务 ID
-    Return:
-        <bool>
-    """
-    worker = get_worker_db(worker_id)
-    name = worker.get("name", "")
-    return name in ('new_webfolder', ) or (
-        name == 'sync' and worker.get("auto", False)
-    )
-
 
 def safe_run_worker(id, sync=False, pipe=None):
     '''

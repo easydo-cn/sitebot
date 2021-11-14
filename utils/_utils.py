@@ -1384,20 +1384,6 @@ def hide_path(path):
             win32api.SetFileAttributes(path, win32con.FILE_ATTRIBUTE_HIDDEN)
 
 
-def unmount_memoryfs():
-    """
-    Unmount MemoryFS
-    """
-    if sys.platform == 'win32':
-        mountpoint = os.path.join(EDO_TEMP, '.memory')
-        if not check_mountpoint(mountpoint):
-            return
-        from fs.expose import dokan
-        dokan.unmount(mountpoint)
-    elif sys.platform == 'darwin':
-        # FIXME Unmount MemoryFS on Mac
-        pass
-
 
 def check_mountpoint(mountpoint):
     """

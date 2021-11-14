@@ -15,7 +15,7 @@ from requests.adapters import HTTPAdapter
 
 import config
 from config import (
-    APP_ID, VERSION, BUILD_NUMBER, HEADLESS, SINGLE_PROCESS,
+    APP_ID, VERSION, BUILD_NUMBER
 )
 from utils.decorators import ui_api
 from errors import LockAcquireFailure, LockAcquireTimeout, LockReleaseFailure
@@ -37,7 +37,7 @@ def _request_api(api, kw=None, internal=False, timeout=2):
 
     api = api if api.startswith('/') else '/{}'.format(api)
     headers = {}
-    if SINGLE_PROCESS or (HEADLESS and api.startswith('/ui')):
+    if (api.startswith('/ui')):
         return
     api_url = '{}{}'.format(config.INTERNAL_URL, api)
     if internal:
@@ -163,19 +163,4 @@ def release_lock(name, worker_id=None):
             return True
     except:
         raise LockReleaseFailure(worker_id, name)
-
-
-def report_detail(log=None, worker_id=None, error=False):
-    if HEADLESS or SINGLE_PROCESS or not any([log, worker_id, ]):
-        return
-    try:
-        traceback_content = extract_traceback()
-        exception_message = str(log)
-        return _request_api(
-            '/ui/report_detail',
-            kw={'log': traceback_content, 'worker_id': worker_id, 'error': error},
-            internal=True, timeout=5
-        )
-    except:
-        pass
 

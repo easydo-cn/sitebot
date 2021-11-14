@@ -12,7 +12,7 @@ import os
 
 import edo_client
 from libs import messenger
-from config import APP_DATA, HEADLESS
+from config import APP_DATA
 from ui_client import _request_api
 
 

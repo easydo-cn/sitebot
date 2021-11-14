@@ -100,12 +100,6 @@ WAIT_BEFORE_DELETION = 60 * 10
 IGNORE_SSL = False
 
 # 从 os.environ 中获取当前是命令行状态，所使用的 key
-# TODO 仅为了兼容而存在，未来版本应当去除，改用 SINGLE_PROCESS 与 HEADLESS 变量
-SINGLE_PROCESS_KEY = 'SINGLE_PROCESS'
-# start the assistant in silent mode
-QUIET_MODE_KEY = 'QUIET_MODE'
-
-
 class LazyEnvBool(object):
     '''Evaluate environment variable existence as boolean'''
     def __init__(self, env_key, value=None):
@@ -131,9 +125,6 @@ class LazyEnvBool(object):
         else:
             return '<LazyEnvBool {}=={} (={})>'.format(self.__name, self.__value, bool(self))
 
-
-SINGLE_PROCESS = LazyEnvBool(SINGLE_PROCESS_KEY)
-HEADLESS = LazyEnvBool(QUIET_MODE_KEY)
 
 # 每个桌面助手安装都具有唯一的 ID
 APP_ID_FILE = os.path.join(APP_DATA, "APP_ID")

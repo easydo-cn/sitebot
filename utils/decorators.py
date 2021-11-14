@@ -6,7 +6,6 @@
 '''
 import json
 
-from config import HEADLESS
 from libs.funcutils import wraps
 from _utils import is_internal_call
 
@@ -17,10 +16,7 @@ def ui_api(func):
     '''
     @wraps(func)
     def wrapped_ui_api_func(*args, **kwargs):
-        if HEADLESS:
-            return json.dumps({'success': False, 'msg': 'UI not available'})
-        else:
-            return func(*args, **kwargs)
+        return json.dumps({'success': False, 'msg': 'UI not available'})
 
     return wrapped_ui_api_func
 

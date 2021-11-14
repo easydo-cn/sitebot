@@ -10,7 +10,7 @@ import sys
 import traceback
 
 from config import (
-    VERSION, BUILD_NUMBER, SINGLE_PROCESS_KEY, WORKERS,
+    VERSION, BUILD_NUMBER, WORKERS,
 )
 from utils import translate as _
 import worker
@@ -139,7 +139,6 @@ def parse_args(args, fake=False):
                 worker_name = worker_args.pop('subcommand')
                 print(u"单独运行 %s 任务" % worker_name)
                 worker_id = worker.new_worker(worker_name, **worker_args)
-                os.environ.update({SINGLE_PROCESS_KEY: '1'})
                 worker.start_worker(worker_id, sync=True)
                 return False, False
 

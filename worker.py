@@ -21,7 +21,7 @@ from errors import AssistantException, Retry, LogicError
 from config import (
     WORKER_STORAGE_DIR, LOG_DATA, VERSION,
     BUILD_NUMBER, RETRY_INTERVAL, AUTO_START_INTERVAL,
-    FROZEN, SINGLE_PROCESS, GIT_INFO, HEADLESS, WORKERS,
+    FROZEN, GIT_INFO, WORKERS,
 )
 from ui_client import _request_api
 from utils import (
@@ -495,12 +495,8 @@ def safe_run_worker(id, sync=False, pipe=None):
     '''
     # from workers import * 会 import 名为 sync 的模块，
     # 所以这里将 sync 的值保存到另一个变量里
-    from ui_client import report_detail
     sync_flag = sync
-    if not HEADLESS:
-        allowed_workers = WORKERS
-    else:
-        allowed_workers = ["online_script", "script"]
+    allowed_workers = ["online_script", "script"]
     exec('from workers import ({})'.format(','.join(allowed_workers)))
 
     load_logging_config(worker_id=id)
@@ -529,8 +525,6 @@ def safe_run_worker(id, sync=False, pipe=None):
                     last_state = worker_db.get('last_state', None)
                     worker_db['state'] = 'error'
                     worker_db.sync()
-                    if last_state != 'error':
-                        report_detail(e, worker_id=id, error=True)
                     break
 
             # 重试时延迟指定秒数
@@ -544,25 +538,8 @@ def safe_run_worker(id, sync=False, pipe=None):
             worker_db['state'] = 'error'
             worker_db.sync()
 
-            if HEADLESS or isinstance(e, LogicError):
-                # LogicError 不弹出错误窗口
-                logger.error(u'任务 %s 出错, traceback:\n%s', id, extract_traceback())
-            elif is_background_task(id):
-                name = {
-                    "new_webfolder": "Webfolder",
-                    "sync": "File Sync",
-                }.get(worker_db.get('name', id))
-                logger.error(u'后台任务 %s 运行异常', name)
-                if last_state != 'error':
-                    # 首次出错则冒泡提醒，其后出错则静默重试
-                    ui_client.message(
-                        title=_("Task running abnormaly"),
-                        body=_("{} running error and will retry soon").format(_(name)),
-                        type="warn"
-                    )
-            elif last_state != 'error':
-                # 重试以外的其他异常，直接显示错误报告界面
-                report_detail(e, worker_id=id, error=True)
+            # LogicError 不弹出错误窗口
+            logger.error(u'任务 %s 出错, traceback:\n%s', id, extract_traceback())
             break
         except SystemExit as e:
             # 针对 Fabric 经常主动退出解释器进程，做一个修补，让任务状态与进程状态一致
@@ -868,7 +845,7 @@ def start_worker(id, sync=False, pipe=None):
         print u"[worker.start_worker] Duplicate task"
         return
 
-    sync = sync or SINGLE_PROCESS
+    sync = sync
     if sync:
         return safe_run_worker(id, sync=True, pipe=pipe)
     else:

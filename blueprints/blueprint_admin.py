@@ -23,7 +23,7 @@ import config
 import ui_client
 from config import (
     BUILD_NUMBER, VERSION, LOG_DATA, GIT_INFO, FILE_STORE_DIR,
-    HEADLESS, SINGLE_PROCESS, CONFIG
+    CONFIG
 )
 
 from utils import (
@@ -53,10 +53,7 @@ CACHE = None
 
 def show_msg(title, body, type='none'):
     '''显示一个托盘图标消息，或者在静默模式下向终端打印这条消息'''
-    if HEADLESS or SINGLE_PROCESS:
-        console_message(unicode(title), unicode(body))
-    else:
-        current_app.trayIcon.message(unicode(title), unicode(body), type=type)
+    console_message(unicode(title), unicode(body))
 
 
 def get_common_template_data():
@@ -223,7 +220,7 @@ def view_settings():
     - 同时负责渲染主窗口的“设置” webview 页面
     '''
     return render_template(
-        'connections.html', sites=site_manager.list_sites(), headless=HEADLESS
+        'connections.html', sites=site_manager.list_sites(), headless=True
     )
 
 
@@ -390,48 +387,6 @@ def message(title, body, type='none'):
 
 
 
-if not HEADLESS:
-    @blueprint.route('/worker_list', methods=['GET', 'OPTIONS', ])
-    @addr_check
-    @render('worker_list.html')
-    def view_worker_list():
-        workers = {'workers': []}
-        for work in worker.list_workers():
-            if work.get('name', '') in ('new_webfolder', ):
-                # 不需要显示特定任务
-                continue
-
-            if work.get('name', '') == 'sync':
-                # 不需要显示自动同步任务
-                if work.get("detail", {}).get('auto', False):
-                    continue
-
-            if work.get('state', '') == 'finished':
-                # 不需要显示已经完成的任务
-                continue
-
-            # 任务结束时间超过一周的，不显示在任务页面
-            end_timestamp = work['detail'].get('end_timestamp', None)
-            if end_timestamp:
-                if (int(time.time()) - end_timestamp) > 60 * 60 * 24 * 7:
-                    continue
-
-            start_timestamp = work['detail'].get('start_timestamp', None)
-            if start_timestamp:
-                start_time = datetime.fromtimestamp(start_timestamp)
-                work['start_time'] = start_time.strftime("%m-%d %H:%M")
-            else:
-                work['detail']['start_timestamp'] = 0
-                work['start_time'] = ''
-            workers['workers'].append(work)
-        workers['workers'] = sorted(
-            workers['workers'],
-            key=lambda x: x['detail']['start_timestamp'],
-            reverse=True,
-        )
-        return workers
-
-
 
 @blueprint.route('/locks', methods=['POST', 'GET', 'OPTIONS', ])
 @addr_check
@@ -480,49 +435,3 @@ def view_linux_update():
         updates = [info[k] for k in info.keys()]
         return {'updates': updates}
 
-if not HEADLESS and sys.platform.startswith('win'):
-    from libs import (get_all_program, set_user_editor)
-
-    @blueprint.route('/default_progs', methods=['GET', 'POST'])
-    @addr_check
-    def view_default_progs():
-        '''Only available on Windows'''
-        global CACHE
-        if request.method == 'GET':
-            data = []
-            ext = extract_data('fileext', request=request)
-            if ext:
-                # add progid programs
-                programs = {'name': ext}
-                programs['data'] = get_all_program(ext)
-                CACHE = programs
-                data = [prog[0] for prog in programs['data']]
-                return json.dumps(data)
-            return render_template('default_progs.html', data={
-                'platform': sys.platform,
-                'build_number': BUILD_NUMBER,
-                'version': VERSION,
-                'LOG_DATA': LOG_DATA,
-                'git_info': GIT_INFO,
-            })
-        else:
-            programs = CACHE
-            progname = extract_data('progname', request=request)
-            ext = programs['name']
-            try:
-                for name, progid, command in programs['data']:
-                    if progname == name:
-                        set_user_editor(ext, progid, command)
-                        return json.dumps({
-                            'status': 0,
-                            'msg': 'set successfully'
-                        })
-                return json.dumps({
-                    'status': 1,
-                    'msg': 'fail to set editor'
-                })
-            except WindowsError:
-                return json.dumps({
-                    'status': 1,
-                    'msg': 'fail to set editor'
-                })

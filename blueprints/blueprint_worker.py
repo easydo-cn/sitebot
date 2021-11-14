@@ -10,12 +10,6 @@ from flask import (
 )
 from werkzeug.local import LocalProxy
 
-from config import (
-    HEADLESS, SINGLE_PROCESS,
-)
-if not HEADLESS:
-    from qtui.ui_utils import show_console_window_with_tab, activate_tab
-
 from utils import (
     addr_check, extract_data, extract_data_list,
     jsonp, translate as _, console_message, is_internal_call,
@@ -40,11 +34,7 @@ def update_progress(window):
 
 def show_msg(title, body, type='none'):
     '''显示一个托盘图标消息，或者在静默模式下向终端打印这条消息'''
-    if HEADLESS or SINGLE_PROCESS:
-        console_message(unicode(title), unicode(body))
-    else:
-        trayIcon.message(unicode(title), unicode(body), type=type)
-
+    console_message(unicode(title), unicode(body))
 
 def unlock_editing_file(wid):
     db = worker.get_worker_db(wid)
@@ -212,18 +202,10 @@ def api_worker_start():
             site_url = work.get('instance_url', None)
             if site_url is None:
                 logger.debug(u'消息提醒没有站点 URL: %s', work)
-                if HEADLESS:
-                    console_message(
-                        unicode(_('Assistant messaging')),
-                        unicode(_('You can visit that site to enable notification'))
-                    )
-                else:
-                    trayIcon.message(
-                        unicode(_('Assistant messaging')),
-                        unicode(_('You can visit that site to enable notification')),
-                        # u'消息提醒', u'您可以访问该站点开启桌面助手消息提醒',
-                        type='info'
-                    )
+                console_message(
+                    unicode(_('Assistant messaging')),
+                    unicode(_('You can visit that site to enable notification'))
+                )
             else:
                 ui_client.open_url(site_url)
             worker.terminate_worker(id)
@@ -367,19 +349,6 @@ def api_worker_progress_update():
             'extra': extra
         })
 
-        if not HEADLESS:
-            global UpdateProgressThread
-            if UpdateProgressThread is None:
-                # 初始化更新进度的线程
-                UpdateProgressThread = Thread(
-                    target=update_progress,
-                    args=(current_app.progress_window, )
-                )
-                UpdateProgressThread.daemon = True
-                UpdateProgressThread.start()
-
-        if not HEADLESS and status and status != _('Finished') and show_console:
-            show_console_window_with_tab('progress')
         return json.dumps({'success': True, 'msg': 'OK', })
 
 
@@ -387,13 +356,7 @@ def api_worker_progress_update():
 @addr_check
 @jsonp
 def api_worker_progress_show():
-    if HEADLESS:
-        return json.dumps({'success': False})
-
-    activate_tab('progress')
-    current_app.progress_window.show()
-    current_app.progress_window.activateWindow()
-    return json.dumps({'success': True, 'msg': 'OK', })
+    return json.dumps({'success': False})
 
 
 @blueprint.route('/progress/hide', methods=['POST', 'GET', ])

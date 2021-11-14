@@ -12,16 +12,12 @@
 
 * 程序入口文件是 `main.py`，在其中初始化服务器和托盘图标
 * `worker.py` 是任务管理模块
-* `qtui.py` 是负责系统界面交互的，主要是托盘图标相关
-* `edoparser.py` 主管命令行状态下参数解析和相关调用
 * 实际执行具体工作的 worker 存放在 `workers` 目录中，模块名与主函数名相同
 * worker 模块最终都会被导入到顶层使用，所以可以直接在 worker 中导入顶层的模块
 * worker 中用到的代码较多的类或者模块可以存放在顶层目录中，例如 `editor.py` 是外部编辑器。
-* `plugins` 目录中存放的是外部编辑器使用到的插件
 * `tests` 目录中存放的是单元测试代码，使用 `nosetests -w tests` 来运行测试
 
 ## 国际化 ##
-
 
 * 需要更新字符串时请使用
 ```python
@@ -147,79 +143,3 @@ monkey.patch_all()
 ```
 `monkey.patch_all` 接受唯一一个参数 patch_ssl=True，指示是否关闭 HTTPS 请求的 SSL 证书验证，默认为 True。
 
-## 搭建开发环境
-
-### macOS上的准备工作
-
-- 安装并更新 XCode 以及 XCode 命令行工具
-- 安装 Homebrew，并使用 Homebrew 安装 git / Python / Qt 4
-- 通过 [WhiteBox]( http://s.sudre.free.fr/Software/Packages/about.html ) 安装 `Packages` 打包工具
-
-### Windows上的准备工作
-
-- 手动安装 Git / Python 2 / PyQt4；
-- 手动安装 `InnoSetup` Unicode 版本（>=5.5.9）
-
-### 启动开发环境
-
-- pip 安装 `virtualenv`，并创建一个合适的虚拟环境
-- 选择一个位置存放代码，检出两个代码库（这两个代码库并列存放）：
-  - `git clone xxxxx/assistent.git`
-  - `git clone xxxxx/edo_client.git`
-- 激活虚拟环境
-  - 进入edo_client代码库，安装edo_client：`python setup.py install`
-  - 进入桌面助手的代码库
-    - 安装所有依赖：`pip install -r requirements.txt`。部分依赖可能需要手动安装
-    - 生成翻译文件：`pybabel compile -d translations`
-    - 启动运行：`python main.py`
-
-## 开发环境的已知问题
-
-macOS 下 osx_notify 模块的存在（其中的 Foundation python 库）会影响源码状态下的调试：非打包状态下获取不到 OS X 通知中心对象，因此无法调用桌面冒泡提醒相关功能。
-
-## 如何编译和打包 ##
-
-### macOS
-
-- 运行打包脚本 `python -m builder.mac --local`
-- 编译结果在 `dist/桌面助手.app`，打包结果在 `dist/桌面助手.pkg`
-
-说明：
-
-* `builder/mac.py` 接收一些额外参数，预期的值为
-  * `--local` 打包到本地
-  * `--test` 用于打包测试版本。测试版本安装包名字会带有日期和时间、分支名称，以及 test 字样
-* `--local` 和 `--test` 二选一
-
-### Windows
-
-- 从 http://192.168.1.115/docker/assistant_resources/ 下载 `external_resources` 目录的内容到桌面助手的代码库中
-- 在虚拟环境中运行 `python -m builder.win32 --local --no-sign`
-- 脚本会自动进行编译和打包，安装包存放在 `dist` 目录中
-- 打包同步插件时需要用到 Py2exe，而 Py2exe 官方的最新版本是 0.6.9，这个版本在 64 位 Python 下打包会有问题，导致打包后的同步插件无法激活。需要使用 patch 的版本。详细可参考 [链接](https://stackoverflow.com/questions/4619701/python-64-bit-dll-com-server-registration-problem-on-64-bit-windows-7)。patch 版本的下载[链接](https://www.lfd.uci.edu/~gohlke/pythonlibs/#py2exe)
-
-说明：
-
-* `builder/win32.py` 接收一些额外参数，预期的值为
-  * `--local` 打包到本地
-  * `--test` 用于打包测试版本。测试版本安装包名字会带有日期和时间、分支名称，以及 test 字样
-  * `--no-sign` 略过代码签名步骤
-* `--local` 和 `--test` 二选一，`--no-sign` 是可选的
-
-### Linux
-
-打包前，需要确保系统安装了`zip`工具。
-
-```bash
-./builder/linux.sh
-```
-
-可以使用机器人来进行打包。机器人将以上步骤都自动化了。
-
-### 映射盘调试 ###
-
-映射盘可能因为某些原因而工作不正常，如果从任务日志里得不到有用信息时，可以通过调整日志配置文件中的 `dokan_webfolder` 字段来启用映射盘使用的库 `Dokan` 的日志输出。
-
-日志配置文件的路径是 `APP_DATA/logging.json`。
-
-开启 Dokan 日志输出的方法是修改 `dokan_webfolder` 的 `level` 为 `DEBUG`，然后重启映射盘任务，Dokan 的日志就会输出到 `APP_DATA\logs\DokanLogs\Mountpoint-X.log` 文件，其中 `X` 为映射盘在本地挂载的盘符。

@@ -135,7 +135,6 @@ def api_worker_pause():
 
     if id is not None:
         result = worker.pause_worker(id, turn_off_message)
-        # report syncfolder state
         return json.dumps(result)
     return json.dumps({
         'is_alive': False,

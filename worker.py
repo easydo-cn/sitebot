@@ -21,7 +21,7 @@ from errors import AssistantException, Retry, LogicError
 from config import (
     WORKER_STORAGE_DIR, LOG_DATA, VERSION,
     BUILD_NUMBER, RETRY_INTERVAL, AUTO_START_INTERVAL,
-    FROZEN, SINGLE_PROCESS, GIT_INFO, HEADLESS, WORKERS,
+    GIT_INFO, WORKERS,
 )
 from ui_client import _request_api
 from utils import (
@@ -146,20 +146,6 @@ def get_worker_title(name=None, auto=False, id=None, title=None):
     return title or WORKER_REG.get(name, {}).get('title', name)
 
 
-def ready_to_quit():
-    '''
-    检查当前正在进行的任务是否允许桌面助手退出
-    有外部编辑等任务时不允许退出（外部进程会阻塞端口）。
-    Rerurns: (ready_to_quit, reason)
-    '''
-    forbidden_works = ('edit', )
-    for work in list_workers():
-        if work['state'] in ('running', )\
-                and work.get('name') in forbidden_works:
-            return False, get_worker_title(name=work['name'])
-    return True, None
-
-
 def get_messaging_status(wo_server, message_server, account, instance, pid):
     '''
     获取指定站点指定人员的消息提醒任务状态
@@ -214,7 +200,6 @@ def remove_worker_db(worker_id):
     except:
         pass
 
-    refresh_worker_tab()
     close_logger(logger)
 
 
@@ -331,7 +316,6 @@ def new_worker(worker_name, **kw):
             worker_storage[key] = value
     worker_storage.sync()
     close_worker_logger(new_id)
-    refresh_worker_tab()
     return str(new_id)
 
 
@@ -470,20 +454,6 @@ def prepare_worker_args(name, id):
     return real_args
 
 
-def is_background_task(worker_id):
-    """
-    检测是否为后台自动运行的任务，比如映射盘、或者实时同步
-    Args:
-        worker_id <int> 任务 ID
-    Return:
-        <bool>
-    """
-    worker = get_worker_db(worker_id)
-    name = worker.get("name", "")
-    return name in ('new_webfolder', ) or (
-        name == 'sync' and worker.get("auto", False)
-    )
-
 
 def safe_run_worker(id, sync=False, pipe=None):
     '''
@@ -497,12 +467,8 @@ def safe_run_worker(id, sync=False, pipe=None):
     '''
     # from workers import * 会 import 名为 sync 的模块，
     # 所以这里将 sync 的值保存到另一个变量里
-    from ui_client import refresh_webview, report_detail
     sync_flag = sync
-    if not HEADLESS:
-        allowed_workers = WORKERS
-    else:
-        allowed_workers = ["online_script", "script"]
+    allowed_workers = ["online_script", "script"]
     exec('from workers import ({})'.format(','.join(allowed_workers)))
 
     load_logging_config(worker_id=id)
@@ -518,8 +484,6 @@ def safe_run_worker(id, sync=False, pipe=None):
     retried = -1
     while 1:
         try:
-            if not sync_flag:
-                refresh_webview('workers')
             run_worker(id, sync=sync_flag, pipe=pipe)
         except Retry as e:
             if e.count != -1:
@@ -533,8 +497,6 @@ def safe_run_worker(id, sync=False, pipe=None):
                     last_state = worker_db.get('last_state', None)
                     worker_db['state'] = 'error'
                     worker_db.sync()
-                    if last_state != 'error':
-                        report_detail(e, worker_id=id, error=True)
                     break
 
             # 重试时延迟指定秒数
@@ -548,25 +510,8 @@ def safe_run_worker(id, sync=False, pipe=None):
             worker_db['state'] = 'error'
             worker_db.sync()
 
-            if HEADLESS or isinstance(e, LogicError):
-                # LogicError 不弹出错误窗口
-                logger.error(u'任务 %s 出错, traceback:\n%s', id, extract_traceback())
-            elif is_background_task(id):
-                name = {
-                    "new_webfolder": "Webfolder",
-                    "sync": "File Sync",
-                }.get(worker_db.get('name', id))
-                logger.error(u'后台任务 %s 运行异常', name)
-                if last_state != 'error':
-                    # 首次出错则冒泡提醒，其后出错则静默重试
-                    ui_client.message(
-                        title=_("Task running abnormaly"),
-                        body=_("{} running error and will retry soon").format(_(name)),
-                        type="warn"
-                    )
-            elif last_state != 'error':
-                # 重试以外的其他异常，直接显示错误报告界面
-                report_detail(e, worker_id=id, error=True)
+            # LogicError 不弹出错误窗口
+            logger.error(u'任务 %s 出错, traceback:\n%s', id, extract_traceback())
             break
         except SystemExit as e:
             # 针对 Fabric 经常主动退出解释器进程，做一个修补，让任务状态与进程状态一致
@@ -584,8 +529,6 @@ def safe_run_worker(id, sync=False, pipe=None):
 
     close_logger(logger)
 
-    # 刷新任务tab
-    refresh_webview('workers', sync=sync_flag)
 
 
 def run_worker(id, sync=False, pipe=None):
@@ -636,9 +579,6 @@ def run_worker(id, sync=False, pipe=None):
         real_args = prepare_worker_args(name, id)
         # 关闭日志处理器，防止日志文件移动等操作无法完成
         close_logger(logger)
-        # Monkey patch
-        from libs import monkey
-        monkey.patch_all()
         # 运行任务
         success = func(id, *real_args, pipe=pipe)
         # 重新获取日志处理器
@@ -827,12 +767,10 @@ def send_worker_notify(id=None):
         if worker.get('name') in self_managed_workers and not work_error:
             return
         else:
-            if not FROZEN:
-                print u'[debug notify] [to: {}] {}: {}, attachments: {}'.format(
-                    worker['detail']['pid'], title, data, uids
-                )
-                return
-            ui_client.message(title, data)
+            print u'[debug notify] [to: {}] {}: {}, attachments: {}'.format(
+                worker['detail']['pid'], title, data, uids
+            )
+            return
     except:
         raise
 
@@ -874,7 +812,7 @@ def start_worker(id, sync=False, pipe=None):
         print u"[worker.start_worker] Duplicate task"
         return
 
-    sync = sync or SINGLE_PROCESS
+    sync = sync
     if sync:
         return safe_run_worker(id, sync=True, pipe=pipe)
     else:
@@ -1016,7 +954,6 @@ def pause_worker(id, turn_off_message=False):
     worker_db['state'] = 'paused'
 
     worker_db.sync()
-    refresh_worker_tab()
     logger = get_worker_logger(id)
     logger.debug(u'-------------------任务手动暂停-------------------')
     close_logger(logger)
@@ -1042,10 +979,6 @@ def worker_guardian():
       - 成功和出错的任务，结束时间过去一周的，删除
       - 首次扫描先等待 2 秒，让服务器启动
     '''
-    if HEADLESS:
-        from headless_server import P2P_QUEUE
-    else:
-        from webserver import P2P_QUEUE
     AUTO_REMOVE_DELAY = 7 * 24 * 60 * 60
     logger = get_logger('DAEMON_THREAD', filename='daemon_thread.log', init_level=logging.INFO)
     logger.info(u'监视线程启动')
@@ -1141,11 +1074,11 @@ def worker_guardian():
                     logger.info(u'启动后首次扫描，删除了上次运行的 %s 任务（ID: %s）', name, wid)
                     continue
                 if name in one_time_workers:
-                    start_worker(wid, pipe=P2P_QUEUE)
+                    start_worker(wid)
                     logger.info(u'启动后首次扫描，启动了一次性的 %s 任务（ID: %s）', name, wid)
                     continue
                 if state == 'running':
-                    start_worker(wid, pipe=P2P_QUEUE)
+                    start_worker(wid)
                     logger.info(
                         u'启动后首次扫描，启动了上次退出时正在运行的 %s 任务（ID: %s）', name, wid
                     )
@@ -1155,7 +1088,7 @@ def worker_guardian():
                 continue
             # 保持运行的任务
             if is_residential and state != 'paused' and (state != 'running' or not work_process_running):
-                start_worker(wid, pipe=P2P_QUEUE)
+                start_worker(wid)
                 logger.info(u'启动了驻留任务 %s（ID: %s）', name, wid)
                 continue
             # 定时任务
@@ -1165,7 +1098,7 @@ def worker_guardian():
                 except:
                     interval = AUTO_START_INTERVAL
                 if now - last_start_time >= interval and not work_process_running:
-                    start_worker(wid, pipe=P2P_QUEUE)
+                    start_worker(wid)
                     logger.debug(
                         u'启动了定时运行的 %s 任务（ID: %s），距上次运行已过去 %s 秒',
                         name, wid, now - last_start_time
@@ -1176,7 +1109,7 @@ def worker_guardian():
                     and error_reason not in fatal_error_reasons\
                     and error_reason not in ignore_reasons\
                     and now - last_start_time >= RETRY_INTERVAL:
-                start_worker(wid, pipe=P2P_QUEUE)
+                start_worker(wid)
                 logger.debug(
                     u'启动了上次出错的 %s 任务（ID: %s），距上次运行已过去 %s 秒',
                     name, wid, now - last_start_time
@@ -1275,9 +1208,6 @@ def load_workers():
 
     [remove_worker_db(i) for i in set(pending_removal_workers)]
     # 尝试清理一下旧版本的shell扩展
-    if sys.platform == 'win32' and not HEADLESS:
-        from utils.win32_utils import cleanup_old_syncplugins
-        cleanup_old_syncplugins()
 
     # 启动监视线程
     global DAEMON_THREAD, DAEMON_THREAD_STOP_EVENT
@@ -1287,9 +1217,3 @@ def load_workers():
     DAEMON_THREAD.start()
 
 
-def refresh_worker_tab():
-    if HEADLESS:
-        return
-    else:
-        from qtui.ui_utils import emit_webview_refresh_signal
-        emit_webview_refresh_signal('workers')

@@ -10,12 +10,6 @@ from flask import (
 )
 from werkzeug.local import LocalProxy
 
-from config import (
-    HEADLESS, SINGLE_PROCESS,
-)
-if not HEADLESS:
-    from qtui.ui_utils import show_console_window_with_tab, activate_tab
-
 from utils import (
     addr_check, extract_data, extract_data_list,
     jsonp, translate as _, console_message, is_internal_call,
@@ -40,11 +34,7 @@ def update_progress(window):
 
 def show_msg(title, body, type='none'):
     '''显示一个托盘图标消息，或者在静默模式下向终端打印这条消息'''
-    if HEADLESS or SINGLE_PROCESS:
-        console_message(unicode(title), unicode(body))
-    else:
-        trayIcon.message(unicode(title), unicode(body), type=type)
-
+    console_message(unicode(title), unicode(body))
 
 def unlock_editing_file(wid):
     db = worker.get_worker_db(wid)
@@ -135,7 +125,6 @@ def api_worker_pause():
 
     if id is not None:
         result = worker.pause_worker(id, turn_off_message)
-        # report syncfolder state
         return json.dumps(result)
     return json.dumps({
         'is_alive': False,
@@ -172,7 +161,7 @@ def api_worker_restart():
         worker_db.sync()
 
         # restart the worker
-        return json.dumps(worker.start_worker(id, pipe=current_app.P2P_QUEUE))
+        return json.dumps(worker.start_worker(id))
 
     else:
         # the task has stopped
@@ -213,18 +202,10 @@ def api_worker_start():
             site_url = work.get('instance_url', None)
             if site_url is None:
                 logger.debug(u'消息提醒没有站点 URL: %s', work)
-                if HEADLESS:
-                    console_message(
-                        unicode(_('Assistant messaging')),
-                        unicode(_('You can visit that site to enable notification'))
-                    )
-                else:
-                    trayIcon.message(
-                        unicode(_('Assistant messaging')),
-                        unicode(_('You can visit that site to enable notification')),
-                        # u'消息提醒', u'您可以访问该站点开启桌面助手消息提醒',
-                        type='info'
-                    )
+                console_message(
+                    unicode(_('Assistant messaging')),
+                    unicode(_('You can visit that site to enable notification'))
+                )
             else:
                 ui_client.open_url(site_url)
             worker.terminate_worker(id)
@@ -233,7 +214,7 @@ def api_worker_start():
                 'msg': _('You can now enable Assistant messaging')
             })
 
-        return json.dumps(worker.start_worker(id, pipe=current_app.P2P_QUEUE))
+        return json.dumps(worker.start_worker(id))
     return json.dumps({
         'is_alive': False,
         'msg': _('Task ID not specified')
@@ -251,13 +232,6 @@ def api_worker_new(worker_name):
       - warn 去重，提示重复任务；
       - ignore 去重，并且不做提示；
     '''
-    # 这是非常旧版本的脚本任务，只能从消息任务创建，现在已经基本不用
-    if worker_name == 'script' and not is_internal_call(request):
-        return json.dumps({
-            'is_alive': False,
-            'msg': _('Not allowed to create script task'),
-        })
-
     # 不支持请求创建的任务
     if worker_name not in worker.WORKER_REG:
         logger.warn(u'没有找到可用的 worker: %s', worker_name)
@@ -273,8 +247,7 @@ def api_worker_new(worker_name):
 
     # 默认先提示用户「收到新任务」，但是这些任务不要提示
     silent_workers = (
-        'upload', 'upload_v2',
-        'script', 'online_script', 'process_duplicate'
+        'online_script', 
     )
     silent = extract_data('silent', request=request)
     if not silent and worker_name not in silent_workers:
@@ -308,116 +281,9 @@ def api_worker_new(worker_name):
         worker_id = 0
 
     # 开始任务
-    result = worker.start_worker(worker_id, pipe=current_app.P2P_QUEUE)
+    result = worker.start_worker(worker_id)
     return json.dumps(result)
 
-
-@blueprint.route('/progress/', methods=['GET', 'POST', ])
-@addr_check
-def view_worker_progress_table():
-    '''渲染进度表格'''
-    return render_template('progress_view.html')
-
-
-@blueprint.route('/progress/update', methods=['POST', 'GET', ])
-@addr_check
-def api_worker_progress_update():
-    (wid, direction, fpath, filename, size,
-     progress, status, uid,
-     error_code, error_msg, error_detail, extra, show_console) = extract_data(
-        ('worker_id', 'direction', 'fpath', 'filename', 'size',
-         'progress', 'status', 'uid',
-         'error_code', 'error_msg', 'error_detail', 'extra', 'show_console'),
-        request=request
-    )
-    show_console = to_bool(show_console)
-    try:
-        wid = int(wid)
-    except:
-        return json.dumps({'success': False, 'msg': 'Invalid worker_id', })
-    else:
-        if not current_app.progress_window:
-            return json.dumps({'success': False, 'msg': 'No UI available', })
-        wdb = worker.get_worker_db(wid)
-        worker_name = wdb.get('name', None)
-        if not worker_name:
-            return json.dumps({'success': False, 'msg': 'Invalid workerdb',})
-        worker_title = _(
-            worker.get_worker_title(worker_name, title=wdb.get('title'))
-        )
-        # Error detail might be very long, truncate first 500 chars
-        if error_detail:
-            error_detail = cgi.escape(error_detail)[:500]
-        # 每一行可以存储一些额外数据
-        if extra:
-            extra = json.loads(extra)
-        # 将接收到的进度更新请求放入队列中，异步去更新
-        UpdateItemsQueue.put({
-            'wid': wid,
-            'name': worker_title,
-            'direction': direction,
-            'fpath': fpath,
-            'filename': filename,
-            'size': size,
-            'progress': progress,
-            'status': status,
-            'uid': uid,
-            'error_code': error_code,
-            'error_msg': error_msg,
-            'error_detail': error_detail,
-            'extra': extra
-        })
-
-        if not HEADLESS:
-            global UpdateProgressThread
-            if UpdateProgressThread is None:
-                # 初始化更新进度的线程
-                UpdateProgressThread = Thread(
-                    target=update_progress,
-                    args=(current_app.progress_window, )
-                )
-                UpdateProgressThread.daemon = True
-                UpdateProgressThread.start()
-
-        if not HEADLESS and status and status != _('Finished') and show_console:
-            show_console_window_with_tab('progress')
-        return json.dumps({'success': True, 'msg': 'OK', })
-
-
-@blueprint.route('/progress/show', methods=['POST', 'GET', ])
-@addr_check
-@jsonp
-def api_worker_progress_show():
-    if HEADLESS:
-        return json.dumps({'success': False})
-
-    activate_tab('progress')
-    current_app.progress_window.show()
-    current_app.progress_window.activateWindow()
-    return json.dumps({'success': True, 'msg': 'OK', })
-
-
-@blueprint.route('/progress/hide', methods=['POST', 'GET', ])
-@addr_check
-@jsonp
-def api_worker_progress_hide():
-    current_app.progress_window.hide()
-    return json.dumps({'success': True, 'msg': 'OK', })
-
-
-@blueprint.route('/progress/remove', methods=['POST', 'GET', ])
-@addr_check
-@jsonp
-def api_worker_progress_remove():
-    worker_id, status = extract_data(('worker_id', 'status'), request=request)
-    if not (worker_id or status):
-        return json.dumps({
-            'success': False,
-            'msg': 'Not enough arguments to remove the progress rows'
-        })
-    logger.debug("Worker ID: %r(%s), Status: %r(%s)", worker_id, type(worker_id), status, type(status))
-    current_app.progress_window.remove_progress_row(worker_id, status)
-    return json.dumps({'success': True, 'msg': 'OK'})
 
 
 @blueprint.route('/lock/acquire', methods=['POST', ])

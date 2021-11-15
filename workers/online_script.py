@@ -14,7 +14,7 @@ from requests import post
 import edo_client
 import ui_client
 from libs.progress_log_handler import ProgressLogHandler
-from libs.remote_host import get_remote_host
+from edo_client.remote_host import get_remote_host
 from worker import register_worker, get_worker_db
 import utils
 from utils import (

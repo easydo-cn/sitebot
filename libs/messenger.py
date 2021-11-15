@@ -236,7 +236,6 @@ class Messaging(threading.Thread):
     @unread_count.setter
     def unread_count(self, count):
         self.__unread_count = count
-        ui_client.refresh_webview("connections")
 
     def toggle_notify(self, enable):
         """切换提醒"""
@@ -487,8 +486,6 @@ class Messaging(threading.Thread):
     @online.setter
     def online(self, online):
         self._online, online = online, self._online
-        if self._online is not online:
-            ui_client.refresh_webview('connections')
 
     def stop(self):
         self.online = False

@@ -21,7 +21,7 @@ from functools import wraps
 from datetime import datetime, timedelta
 
 import config
-from config import EDO_TEMP, CURRENT_DIR, APP_DATA, LOG_DATA, RUNTIME_DIR, INTERNAL_URL
+from config import CURRENT_DIR, APP_DATA, LOG_DATA, RUNTIME_DIR, INTERNAL_URL
 from edo_client import (
     WoClient, OcClient, MessageClient, UploadClient, OrgClient,
 )
@@ -41,9 +41,6 @@ import jinja2
 import getpass
 import psutil
 
-if sys.platform == 'win32':
-    import win32api
-    import win32con
 PUBLIC_KEY_CACHE = None
 
 log = logging.getLogger(__name__)
@@ -142,17 +139,6 @@ def detect_locale(language_code=None):
     prefered_language = language_code or locale.getdefaultlocale(
         envvars=('LANGUAGE', 'LANG', 'LC_ALL', 'LC_CTYPE')
     )[0]
-    if sys.platform == 'darwin':
-        import objc
-        try:
-            NSUserDefaults = objc.lookUpClass('NSUserDefaults')
-            defaults = NSUserDefaults.standardUserDefaults()
-            prefered_language = defaults.objectForKey_('AppleLanguages').objectAtIndex_(0)
-            # Apple seems to be using locale code like `zh-Hans`
-            if '-' in prefered_language:
-                prefered_language = prefered_language.replace('-', '_')
-        except:
-            pass
     # Fallback to general English
     selected_language = 'en'
     logger.debug(
@@ -496,130 +482,6 @@ def is_valid_dir(folder):
         os.access(folder, os.R_OK | os.W_OK | os.X_OK)
 
 
-def is_valid_file(filepath):
-    '''
-    检查指定文件是否合法
-    合法的定义是满足以下所有条件:
-    - 路径存在
-    - 可读
-    - （Windows平台下）不是隐藏文件
-    Args:
-        filepath <String> 文件路径
-    Returns:
-        <Boolean> 合法返回 True 否则返回 False
-    '''
-    if os.path.isfile(filepath) and os.access(filepath, os.R_OK):
-        if sys.platform == 'win32':
-            return not (
-                win32api.GetFileAttributes(filepath) &
-                win32con.FILE_ATTRIBUTE_HIDDEN
-            )
-        return True
-    return False
-
-
-def should_push(fpath):
-    '''用于过滤本地文件路径，返回 False 表示给定路径不应上传到系统'''
-    patterns = [
-        r'[\/\\]\.[^\/\\]+$', r'^\..+$', r'^.*[\/\\]\..+$',  # .开头的文件
-        r'\~.+\.tmp$', r'\~\$.+\.\w+$',  # MSOffice 临时文件
-        r'[\/\\].+\.tmp$', r'^.+\.tmp$',  # .tmp 文件
-        r'\$recycle\.bin$',  # Windows 回收站目录
-        r'desktop\.ini$',  # Windows 桌面配置文件
-        r'autorun\.inf$',  # 驱动器自运行配置文件
-        r'folder\.jpg$', r'folder\.gif$',  # Windows 文件夹图标
-        r'autorun\.inf\..*?$',
-        r'IMM32\.DLL$', r'.+\.wbk$',
-    ]
-    if os.path.isfile(fpath):
-        valid = is_valid_file(fpath)
-    elif os.path.isdir(fpath):
-        valid = is_valid_dir(fpath)
-    elif not os.path.exists(fpath):
-        valid = True
-    else:
-        valid = False
-
-    # kwpsinidata: WPS编辑时使用的临时目录
-    if 'kwpsinidata' in fpath.split(os.path.sep):
-        return False
-
-    return valid and not any(
-        [re.compile(p, re.IGNORECASE).findall(fpath) for p in patterns]
-    )
-
-
-def get_filestore_by_filename(db_file):
-    from filestore import FileStore
-
-    db_name_parts = os.path.splitext(db_file)[0].split('.')
-    scheme = db_name_parts.pop(0)
-    instance = db_name_parts.pop(-1)
-    account = db_name_parts.pop(-1)
-    port = db_name_parts.pop(-1)
-    oc_server = construct_server(
-        '.'.join(db_name_parts),
-        scheme=scheme, port=port
-    )
-    return FileStore(oc_server, account, instance, wo_server=None)
-
-
-def get_filestore_from_request(request=None, **kw):
-    if request is None:
-        from flask import request
-    from flask import current_app
-    from filestore import FileStore
-    no_context = True
-
-    try:
-        wo_server, oc_server, account, instance, upload_server, token = extract_data(
-            ('server', 'oc_server', 'account', 'instance', 'upload_server', 'token',),
-            request=request
-        )
-        no_context = False
-    except RuntimeError:  # not in Flask request context
-        oc_server = kw['oc_server']
-        account = kw['account']
-        instance = kw['instance']
-        wo_server = kw.get('wo_server')
-        upload_server = kw.get('upload_server')
-        token = kw.get('token')
-
-    if not oc_server or not account or not instance:
-        raise TypeError(u'No FileStore could be constructed from request')
-
-    return FileStore(
-        oc_server,
-        account, instance, wo_server=wo_server,
-        upload_server=upload_server,
-        logger=None if no_context else current_app.logger,
-        token=token
-    )
-
-
-def list_all_sync_folders(request=None):
-    if request is None:
-        from flask import request
-    try:
-        fs = get_filestore_from_request(request)
-        return {
-            'sync_folders': fs.list_all_syncfolders()
-        }
-    except Exception:
-        from config import FILE_STORE_DIR
-        sync_folders = []
-        for db_file in os.listdir(FILE_STORE_DIR):
-            if db_file.endswith('.db'):
-                fs = get_filestore_by_filename(db_file)
-                items = fs.list_all_syncfolders()
-                [i.update({
-                    'hostname': fs.hostname,
-                    'server': fs.server,
-                    'account': fs.account,
-                    'instance': fs.instance
-                }) for i in items]
-                sync_folders.extend(items)
-        return {'sync_folders': sync_folders}
 
 
 def utc_to_local(utc_dt):
@@ -714,36 +576,6 @@ def construct_server(hostname, port=None, scheme='http'):
     return '{}://{}:{}'.format(_scheme, _hostname, str(_port))
 
 
-def get_object_manage_url(fobj, filestore=None):
-    '''
-    根据本地路径，计算文件/文件夹在桌面助手管理中的地址
-    Args:
-        fobj <Dict|?> 包含三个 key ：
-            local_path <String> 本地路径
-            uid <String> uid
-            object_type <String> 值为 file 或 folder
-    '''
-    if not isinstance(fobj, dict) or 'object_type' not in fobj:
-        return fobj
-    if fobj['object_type'] == 'file':
-        _template = '{}/ui/open'
-        return _template.format(config.INTERNAL_URL)
-    elif fobj['object_type'] == 'folder':
-        root_path, root_uid = fobj['local_path'], fobj['uid']
-        if filestore is not None:
-            root_path, root_uid = filestore.get_syncfolder_root(
-                local_path=fobj['local_path']
-            )
-            if not root_uid:
-                root_uid = fobj['uid']
-
-        _template = ('{}/admin/sync_folder?'
-                     'root_path={}&local_path={}'
-                     '&root_uid={}')
-        return _template.format(
-            config.INTERNAL_URL,
-            root_path, fobj['local_path'], root_uid
-        )
 
 
 def fobj_from_md(md):
@@ -769,41 +601,6 @@ def clear_logs():
     '''
     pass
 
-
-def clear_old_files():
-    '''
-    清理一个月前的临时区文件（外部编辑、下载查看）
-    '''
-    from config import FILE_STORE_DIR
-
-    LIMIT = 1 * 60 * 60 * 24 * 30
-    try:
-        for db_file in os.listdir(FILE_STORE_DIR):
-            if not db_file.endswith('.db'):
-                continue
-            fs = get_filestore_by_filename(db_file)
-
-            sql_delete = ['BEGIN;', ]
-            [
-                sql_delete.append(
-                    'DELETE FROM `site_files` WHERE {};'.format(
-                        '`usage`="{}" AND `local_path`="{}"'.format(
-                            usage, fobj['local_path']
-                        )
-                    )
-                )
-                for usage in ('edit', 'view', )
-                for fobj in fs.query_items(usage=usage, object_type='file')
-                if time.time() - getmtime(fobj['local_path']) >= LIMIT
-            ]
-            sql_delete.append('COMMIT;')
-            sql_delete = '\n'.join(sql_delete)
-
-            connection = fs._get_site_db()
-            cursor = connection.cursor()
-            cursor.executescript(sql_delete)
-    except:
-        pass
 
 
 def get_oc_client(oc_server=None, account=None, instance=None, token=None):
@@ -1097,7 +894,7 @@ def get_site_public_key(wo_server, account, instance, token=None):
     '''
     Get public key of given site, cache enabled
     '''
-    from config import APP_DATA, FROZEN
+    from config import APP_DATA
 
     # Prepare cache_key for cache searching
     key_cache_file = os.path.join(APP_DATA, '.know_keys')
@@ -1107,11 +904,7 @@ def get_site_public_key(wo_server, account, instance, token=None):
     global PUBLIC_KEY_CACHE
     if PUBLIC_KEY_CACHE is None:
         # Only use cache in release bundle, not for source code mode
-        if FROZEN and os.path.isfile(key_cache_file):
-            with open(key_cache_file, 'r') as rf:
-                PUBLIC_KEY_CACHE = json.load(rf)
-        else:
-            PUBLIC_KEY_CACHE = {}
+        PUBLIC_KEY_CACHE = {}
     public_key = PUBLIC_KEY_CACHE.get(cache_key, None)
 
     # Cache missed, grab public key via API, and update cache
@@ -1148,25 +941,6 @@ def get_human_size(size):
         size /= 1024.0
     return "{:.1f} {}{}".format(size, 'Y', suffix)
 
-
-def get_office_error_msg(error):
-    '''
-    Get human readable message text out of an Office COM error
-    Notice: might return None if no message could be extracted.
-    '''
-    try:
-        import win32api
-        from pythoncom import com_error
-        if not isinstance(error, com_error):
-            return None
-        # ref: https://stackoverflow.com/questions/521759/is-there-a-way-to-decode-numerical-com-error-codes-in-pywin32  # noqa E501
-        # ref: http://timgolden.me.uk/pywin32-docs/com_error.html
-        # error.hresult 是 com_error 对象的错误码，而 win32pai.FormatMessage 可以将
-        # 错误码格式化为错误码相关的描述文本
-        return win32api.FormatMessage(error.hresult).decode(sys.getfilesystemencoding())  # noqa E501
-    # Chances are we're on non-Windows platform, or not an Office COM error
-    except Exception:
-        return None
 
 
 def get_editing_worker(uid=None):
@@ -1253,89 +1027,6 @@ def get_time_range(rtype, use_timestamp=False):
     return (start, end)
 
 
-def add_syncfolder(oc_server, instance, account, uid, local_path, type_='down', policy='manual'):
-    api_url = '{}{}'.format(config.INTERNAL_URL, '/sync/add')
-
-    server_info = urlparse.urlparse(oc_server)
-    oc_server_host = getattr(server_info, 'hostname')
-
-    data = {
-        'oc_server_host': oc_server_host, 'oc_server': oc_server,
-        'instance': instance, 'account': account,
-        'uid': uid, 'path': local_path, 'type': type_, 'policy': policy
-    }
-
-    return requests.post(api_url, data=data)
-
-
-def list_syncfolders(oc_server, instance, account, uid, server_path):
-    # TODO This does not belong here
-    # should refactor SyncManager to handle multiprocess reading
-    return requests.post(
-        '{}/sync/list'.format(INTERNAL_URL),
-        data=dict(
-            uid=uid, server_path=server_path,
-            account=account, instance=instance,
-            oc_server=oc_server,
-        )
-    ).json()
-
-
-def list_supported_settings():
-    '''列出当前平台支持的所有设置项'''
-    if sys.platform == 'win32':
-        return ['autostart', 'syncplugin']
-    return []
-
-
-def is_syncplugin_installed():
-    '''
-    Return True if SyncPlugin installed, otherwise False
-    '''
-    if platform.system() == 'Windows':
-        from .win32_utils import get_installed_syncplugin_dll
-        dll_path = get_installed_syncplugin_dll()
-        return dll_path and os.path.isfile(dll_path)
-    else:
-        return False
-
-
-def get_sync_assistant_build_number():
-    '''
-    返回同步助手的 build 号
-    - 0 表示没有安装
-    - * 表示当前操作系统暂时不支持同步助手功能
-    - 其他整数表示对应的 build 号
-    '''
-    if platform.system() == 'Windows':
-        # 新版本的同步助手 dll 在桌面助手的安装目录里
-        from .win32_utils import get_syncplugin_path
-        syncplugin_filepath = get_syncplugin_path()
-
-        if not syncplugin_filepath or not os.path.isfile(syncplugin_filepath):
-            syncplugin_filepath = os.path.join(
-                os.getenv('APPDATA'), 'EdoSync', 'main.dll'
-            )
-
-        # 已经安装了同步助手，读取同步助手的版本号
-        if os.path.isfile(syncplugin_filepath):
-            import win32api
-            info = win32api.GetFileVersionInfo(syncplugin_filepath, u'\\')
-            return win32api.LOWORD(info['FileVersionMS'])
-
-        # 并没有安装，，返回 0
-        return 0
-    else:
-        # 非 Windows 平台目前没有同步助手，不需要安装
-        return '*'
-
-
-def get_sync_system_info():
-    if platform.system() == 'Windows':
-        if platform.machine() == 'AMD64':
-            return 'sync_win_x64'
-        else:
-            return 'sync_win_x32'
 
 
 def classify_exception(e):
@@ -1397,108 +1088,8 @@ def classify_exception(e):
             'msg': default_msg,
             'detail': str(e),
         }
-        if sys.platform == 'win32':
-            from pythoncom import com_error
-            if isinstance(e, com_error):
-                formatted = {
-                    'msg': get_office_error_msg(e) or default_msg,
-                    'code': e.args[0],
-                    'detail': str(e),
-                }
 
     return formatted
-
-
-def read_auto_start():
-    '''
-    读取当前开机自启设置
-    '''
-    if sys.platform == 'win32':
-        # 打开注册表
-        import _winreg
-        regkey = _winreg.OpenKey(
-            _winreg.HKEY_CURRENT_USER,
-            r'Software\Microsoft\Windows\CurrentVersion\Run',
-            0,
-            _winreg.KEY_ALL_ACCESS
-        )
-        # 注册表实际上是一个文件，这里需要使用文件系统编码
-        name = u'桌面助手'.encode(sys.getfilesystemencoding())
-
-        try:
-            _winreg.QueryValueEx(regkey, name)[0]
-            return True
-        except WindowsError:
-            return False
-        finally:
-            _winreg.CloseKey(regkey)
-
-    return False
-
-
-def toggle_auto_start(enabled):
-    '''
-    切换开机自启
-    Notice:
-    - 暂时只支持 Windows 平台, HKCU 下的 Software\Microsoft\Windows\CurrentVersion\Run 中添加子键
-    '''
-    from config import FROZEN
-    # 源代码模式下不能设置启动项
-    if not FROZEN:
-        return
-
-    if sys.platform == 'win32':
-        # 打开注册表
-        import _winreg
-        autostart_regkey = _winreg.OpenKey(
-            _winreg.HKEY_CURRENT_USER,
-            r'Software\Microsoft\Windows\CurrentVersion\Run',
-            0,
-            _winreg.KEY_ALL_ACCESS
-        )
-        innosetup_task_regkey = _winreg.OpenKey(
-            _winreg.HKEY_CURRENT_USER,
-            r'Software\Microsoft\Windows\CurrentVersion\Uninstall\{F3B1AF46-F065-49AA-B6ED-3FE4D98CA09F}_is1',  # noqa
-            0,
-            _winreg.KEY_ALL_ACCESS
-        )
-        # 注册表实际上是一个文件，这里需要使用文件系统编码
-        name = u'桌面助手'.encode(sys.getfilesystemencoding())
-
-        if enabled:
-            try:
-                _winreg.QueryValueEx(autostart_regkey, name)[0]
-            except WindowsError as e:
-                if e[0] == 2:
-                    # 没有启动项，写入一个
-                    _winreg.SetValueEx(
-                        autostart_regkey, name, 0, _winreg.REG_SZ, sys.executable
-                    )
-                    # 修改 InnoSetup 的安装 Task 记录，让下次安装时默认勾选「开机自启动」
-                    _winreg.SetValueEx(innosetup_task_regkey, 'Inno Setup: Deselected Tasks', 0, _winreg.REG_SZ, '')  # noqa
-                else:
-                    raise e
-            finally:
-                _winreg.CloseKey(autostart_regkey)
-                _winreg.CloseKey(innosetup_task_regkey)
-
-        else:
-            try:
-                _winreg.QueryValueEx(autostart_regkey, name)[0]
-            except WindowsError as e:
-                if e[0] == 2:
-                    # 没有启动项，OK
-                    pass
-                else:
-                    raise e
-            else:
-                # 有启动项，删除
-                _winreg.DeleteValue(autostart_regkey, name)
-                # 修改 InnoSetup 的安装 Task 记录，让下次安装时默认不勾选「开机自启动」
-                _winreg.SetValueEx(innosetup_task_regkey, 'Inno Setup: Deselected Tasks', 0, _winreg.REG_SZ, 'autorunregistry')  # noqa
-            finally:
-                _winreg.CloseKey(autostart_regkey)
-                _winreg.CloseKey(innosetup_task_regkey)
 
 
 def is_network_error(e):
@@ -1508,59 +1099,6 @@ def is_network_error(e):
     return classify_exception(e)['msg'] == '网络错误'
 
 
-def hide_path(path):
-    '''
-    Set given path to be hidden on Windows platform.
-    '''
-    if platform.system() == 'Windows' and os.path.exists(path):
-        import win32api
-        import win32con
-
-        if win32api.GetFileAttributes(path) != win32con.FILE_ATTRIBUTE_HIDDEN:
-            win32api.SetFileAttributes(path, win32con.FILE_ATTRIBUTE_HIDDEN)
-
-
-def unmount_memoryfs():
-    """
-    Unmount MemoryFS
-    """
-    if sys.platform == 'win32':
-        mountpoint = os.path.join(EDO_TEMP, '.memory')
-        if not check_mountpoint(mountpoint):
-            return
-        from fs.expose import dokan
-        dokan.unmount(mountpoint)
-    elif sys.platform == 'darwin':
-        # FIXME Unmount MemoryFS on Mac
-        pass
-
-
-def check_mountpoint(mountpoint):
-    """
-    检测挂载是否完成
-    """
-    if not os.path.isdir(mountpoint):
-        return False
-
-    is_error_point = False
-    try:
-        os.listdir(mountpoint)
-    except WindowsError as e:
-        # listdir 对于出现挂载错误的目录会抛出 WindowsError [Error 3]
-        if e.winerror == 3:
-            is_error_point = True
-    finally:
-        if is_error_point:
-            os.rmdir(mountpoint)
-            return False
-
-    if sys.platform == 'win32':
-        import win32file
-        # GetVolumePathName 返回的结果在末尾多了一个路径分隔符，所以要将其去除后再比较
-        return win32file.GetVolumePathName(mountpoint)[:-1] == mountpoint
-    elif sys.platform == 'darwin':
-        # FIXME Check mountpoint on Mac
-        return False
 
 
 def to_bool(value):
@@ -1575,23 +1113,6 @@ def to_bool(value):
         if value in ('true', 'false'):
             return json.loads(value)
     return value
-
-
-def files_statistics(path):
-    """统计 path 下的文件总数和所有文件的总大小"""
-    total = 0
-    size = 0
-    path = os.path.abspath(path)
-    for root, _, files in os.walk(path):
-        total += len(files)
-        for f in files:
-            file_path = os.path.abspath(os.path.join(root, f))
-            if sys.platform == 'win32' and len(file_path) > 256:
-                # Windows 环境下路径长度超过 256 个字符，则转换为 Windows UNC path
-                file_path = u'\\\\?\\' + file_path
-            size += os.path.getsize(file_path)
-
-    return total, size
 
 
 def enable_debug_output(logger):
@@ -1724,13 +1245,6 @@ def process_exists(name):
         result <bool> 进程是否存在
     """
     username = getpass.getuser().decode(sys.getfilesystemencoding())
-    if sys.platform == "win32":
-        import win32api
-        # Windows上psutil拿到的进程信息中的username是 MachineName\UserName
-        # 如 {'username': u'machine\\root', 'pid': 26532, 'name': 'chrome.exe'}
-        # 但如果Windows机器处于域控中，用户名是 DomainName\UserName
-        # 这里统一使用win32api获取
-        username = win32api.GetUserNameEx(win32api.NameSamCompatible)
     for process in psutil.process_iter():
         try:
             info = process.as_dict(attrs=["pid", "name", "username"])

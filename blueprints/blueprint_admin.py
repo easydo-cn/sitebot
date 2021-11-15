@@ -23,14 +23,12 @@ import config
 import ui_client
 from config import (
     BUILD_NUMBER, VERSION, LOG_DATA, GIT_INFO, FILE_STORE_DIR,
-    HEADLESS, SINGLE_PROCESS, CONFIG
+    CONFIG
 )
 
-from filestore import get_file_store
 from utils import (
     addr_check, extract_data, get_object_manage_url,
-    utc_to_local, get_filestore_by_filename,
-    get_filestore_from_request, translate as _,
+    utc_to_local, translate as _,
     get_deal_time, filter_sensitive_fields,
     console_message, jsonp
 )
@@ -55,10 +53,7 @@ CACHE = None
 
 def show_msg(title, body, type='none'):
     '''显示一个托盘图标消息，或者在静默模式下向终端打印这条消息'''
-    if HEADLESS or SINGLE_PROCESS:
-        console_message(unicode(title), unicode(body))
-    else:
-        current_app.trayIcon.message(unicode(title), unicode(body), type=type)
+    console_message(unicode(title), unicode(body))
 
 
 def get_common_template_data():
@@ -134,7 +129,7 @@ def view_worker_management():
                 _w['detail']['account'],
                 _w['detail']['instance']
             )
-            _w['detail']['local_url'] = get_object_manage_url(_i, filestore=fs)
+            _w['detail']['local_url'] = ''
         workers.append(_w)
     return {'workers': workers}
 
@@ -196,9 +191,6 @@ def view_manage_config():
     if request.method == 'POST':
         # 点击【重启资源管理器】按钮
         action = extract_data('action', request)
-        if action == 'restart_explorer' and sys.platform == 'win32':
-            from utils.win32_utils import restart_explorer
-            restart_explorer()
         if action == 'reset_ports_on_next_start':
             if os.path.exists(config.CONFIG_FILE):
                 with open(config.CONFIG_FILE, 'r+b') as f:
@@ -228,7 +220,7 @@ def view_settings():
     - 同时负责渲染主窗口的“设置” webview 页面
     '''
     return render_template(
-        'connections.html', sites=site_manager.list_sites(), headless=HEADLESS
+        'connections.html', sites=site_manager.list_sites(), headless=True
     )
 
 
@@ -392,183 +384,8 @@ def message(title, body, type='none'):
         pass
 
 
-def count_all_files(req=None):
-    try:
-        file_store = get_filestore_from_request(req)
-        return len(file_store.list_all_files())
-    except Exception:
-        return sum([
-            len(get_filestore_by_filename(db).list_all_files())
-            for db in os.listdir(FILE_STORE_DIR) if db.endswith('.db')
-        ])
 
 
-def stat_all_files(req=None):
-    try:
-        file_store = get_filestore_from_request(req)
-        return file_store.stat_files()
-    except Exception:
-        stat_info = {}
-        for db in os.listdir(FILE_STORE_DIR):
-            if not db.endswith('.db'):
-                continue
-            stat = get_filestore_by_filename(db).stat_files()
-            for k in stat.keys():
-                if stat_info.get(k, None) is not None:
-                    stat_info[k] += stat[k]
-                else:
-                    stat_info[k] = stat[k]
-        return stat_info
-
-
-if not HEADLESS:
-    @blueprint.route('/worker_list', methods=['GET', 'OPTIONS', ])
-    @addr_check
-    @render('worker_list.html')
-    def view_worker_list():
-        workers = {'workers': []}
-        for work in worker.list_workers():
-            if work.get('name', '') in ('new_webfolder', ):
-                # 不需要显示特定任务
-                continue
-
-            if work.get('name', '') == 'sync':
-                # 不需要显示自动同步任务
-                if work.get("detail", {}).get('auto', False):
-                    continue
-
-            if work.get('state', '') == 'finished':
-                # 不需要显示已经完成的任务
-                continue
-
-            # 任务结束时间超过一周的，不显示在任务页面
-            end_timestamp = work['detail'].get('end_timestamp', None)
-            if end_timestamp:
-                if (int(time.time()) - end_timestamp) > 60 * 60 * 24 * 7:
-                    continue
-
-            start_timestamp = work['detail'].get('start_timestamp', None)
-            if start_timestamp:
-                start_time = datetime.fromtimestamp(start_timestamp)
-                work['start_time'] = start_time.strftime("%m-%d %H:%M")
-            else:
-                work['detail']['start_timestamp'] = 0
-                work['start_time'] = ''
-            workers['workers'].append(work)
-        workers['workers'] = sorted(
-            workers['workers'],
-            key=lambda x: x['detail']['start_timestamp'],
-            reverse=True,
-        )
-        return workers
-
-
-    @render('sitefile_categories.html')
-    def render_all_file_categories():
-        stat_info = []
-        pre_stat = stat_all_files()
-        for usage in pre_stat.keys():
-            stat_info.append({
-                'count': pre_stat[usage],
-                # Dont translate here, translate in template engine instead
-                'name': usage,
-                'management_url': '?usage={}'.format(usage),
-            })
-        return {
-            'file_count': count_all_files(),
-            'categories': stat_info,
-        }
-
-
-    @render('site_file.html')
-    def render_file_category(category):
-        usage = category
-        usage = '' if usage == 'unknown' else usage
-        files = []
-        for db_file in os.listdir(FILE_STORE_DIR):
-            if db_file.endswith('.db'):
-                file_store = get_filestore_by_filename(db_file)
-                _files = file_store.query_items(
-                    root_uid='', usage=usage, object_type='file'
-                )
-                for i in _files:
-                    last_deal = get_deal_time((
-                        i['last_pull'],
-                        i['last_push'],
-                        i['modified']
-                    ))
-                    sort_time = datetime.strptime(last_deal, '%Y-%m-%d %H:%M:%S')
-                    sort_time = calendar.timegm(sort_time.timetuple())
-                    i.update({
-                        'server': file_store.server,
-                        'account': file_store.account,
-                        'instance': file_store.instance,
-                        'last_deal': last_deal,
-                        'sort_time': sort_time
-                    })
-                files.extend(_files)
-        return {'files': files, 'usage': usage or 'unknown'}
-
-
-    @blueprint.route('/site_file', methods=['GET', 'OPTIONS', ])
-    @addr_check
-    def view_sitefile_statics_management():
-        # gettext evals
-        _('download')
-        _('upload')
-        _('edit')
-        _('unknown')
-        _('3dpreview')
-        _('view')
-        _('p2pdownload')
-        _('conflict_backup')
-
-        usage = extract_data('usage', request=request)
-        if usage is None:
-            return render_all_file_categories()
-        else:
-            return render_file_category(usage)
-
-
-    @blueprint.route('/web_folder')
-    @addr_check
-    @render('web_folders.html')
-    def view_web_folders_management():
-        webfolders = []
-        if sys.platform != 'win32':
-            return {'workers': []}
-        import urllib
-        for wid in worker.list_worker_ids():
-            work = worker.get_worker_db(wid)
-            if not work or work.get('name', '') != 'new_webfolder':
-                continue
-            if not work.get('executed', False):
-                continue
-            work['worker_id'] = wid
-            if not work.get('folder_name', ''):
-                folder_url = urllib.unquote(
-                    str(work['folder_url'])
-                ).decode('utf-8')
-                work['folder_name'] = folder_url[-1]
-            if not work.get('uid_url', ''):
-                work['uid_url'] = '{url}/++intid++{uid}/view.html'.format(
-                    url=generate_uid_url(work),
-                    uid=work['uid'][0],
-                )
-            webfolders.append(work)
-        data = {
-            'workers': webfolders,
-            'supported_platform': sys.platform == "win32"
-        }
-        if sys.platform == 'win32':
-            from utils.win32_utils import is_dokan_installed, is_dot_net_installed, get_winver  # noqa E501
-            data.update({
-                'dokan_installed': is_dokan_installed(),
-                'dot_net_installed': is_dot_net_installed(),
-                # (6, 1, 1) ==> Windows7 SP 1
-                'supported_platform': get_winver() >= (6, 1, 1),
-            })
-        return data
 
 
 @blueprint.route('/locks', methods=['POST', 'GET', 'OPTIONS', ])
@@ -618,49 +435,3 @@ def view_linux_update():
         updates = [info[k] for k in info.keys()]
         return {'updates': updates}
 
-if not HEADLESS and sys.platform.startswith('win'):
-    from libs import (get_all_program, set_user_editor)
-
-    @blueprint.route('/default_progs', methods=['GET', 'POST'])
-    @addr_check
-    def view_default_progs():
-        '''Only available on Windows'''
-        global CACHE
-        if request.method == 'GET':
-            data = []
-            ext = extract_data('fileext', request=request)
-            if ext:
-                # add progid programs
-                programs = {'name': ext}
-                programs['data'] = get_all_program(ext)
-                CACHE = programs
-                data = [prog[0] for prog in programs['data']]
-                return json.dumps(data)
-            return render_template('default_progs.html', data={
-                'platform': sys.platform,
-                'build_number': BUILD_NUMBER,
-                'version': VERSION,
-                'LOG_DATA': LOG_DATA,
-                'git_info': GIT_INFO,
-            })
-        else:
-            programs = CACHE
-            progname = extract_data('progname', request=request)
-            ext = programs['name']
-            try:
-                for name, progid, command in programs['data']:
-                    if progname == name:
-                        set_user_editor(ext, progid, command)
-                        return json.dumps({
-                            'status': 0,
-                            'msg': 'set successfully'
-                        })
-                return json.dumps({
-                    'status': 1,
-                    'msg': 'fail to set editor'
-                })
-            except WindowsError:
-                return json.dumps({
-                    'status': 1,
-                    'msg': 'fail to set editor'
-                })

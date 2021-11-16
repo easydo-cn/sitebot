@@ -193,6 +193,49 @@ def api_quit():
         https_greenlet.kill(block=False)
     return json.dumps({'success': True})
 
+@fapp.route('/call_script_sync', methods=['POST', 'GET', 'OPTIONS'])
+@addr_check
+@jsonp
+def api_call_script_sync():
+    '''同步调用本地脚本或联机脚本，将结果以 HTTP 响应方式返回'''
+    # Extract parameters
+    local_script = extract_data('local', request=request)
+    if local_script:
+        if not is_internal_call(request):
+            # 调用本地脚本只允许内部调用
+            return json.dumps({
+                'success': False,
+                'result': "This is not an internal request."
+            })
+        script_name, args, kw = extract_data(
+            ('script_name', 'args', 'kw'), request=request
+        )
+        call_script = call_local_script
+        parameters = {'name': script_name, 'args': args, 'kwargs': kw}
+    else:
+        from workers.online_script import online_script as call_script
+        parameters = {}
+        keywords = (
+            'oc_server', 'account', 'instance', 'token',  # 启动任务相关参数
+            'script_name', 'args', 'kw'  # 脚本运行相关参数
+        )
+        values = list(extract_data(keywords, request=request))
+        for key, value in zip(keywords, values):
+            parameters.update({key: value})
+        parameters.update({'worker_id': None, '__sync': True})
+
+    try:
+        return json.dumps({
+            'success': True,
+            'result': json.dumps(call_script(**parameters)),
+        })
+    except:
+        logger.exception("Call failed")
+        return json.dumps({
+            'success': False,
+            'traceback': traceback.format_exc(),
+        })
+
 
 def start_server():
     reload(sys)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''桌面助手入口文件'''
+'''站点机器人入口文件'''
 import base64
 import urllib
 import urlparse
@@ -71,10 +71,10 @@ def main():
 
     try:
         logger.debug(
-            u'桌面助手以静默模式启动',
+            u'站点机器人以静默模式启动',
         )
         from libs.managers import get_site_manager
-        # 无界面模式启动桌面助手，所有连接的消息线程都要启动
+        # 无界面模式启动机器人，所有连接的消息线程都要启动
         for site in get_site_manager().list_sites():
             site.get_message_thread().connect()
         from headless_server import start_server

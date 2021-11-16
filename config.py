@@ -18,7 +18,7 @@ WORKER_STORAGE_DIR = os.path.join(APP_DATA, 'workers')
 
 # Make sure all the above folders exist
 for folder in (
-    APP_DATA, LOG_DATA, WORKER_STORAGE_DIR, FILE_STORE_DIR,
+    APP_DATA, LOG_DATA, WORKER_STORAGE_DIR,
 ):
     if not os.path.exists(folder):
         os.makedirs(folder)

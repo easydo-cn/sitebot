@@ -27,7 +27,7 @@ from utils import (
     get_certificate_expire_date_by_file, update_certificate, process_exists
 )
 from config import (
-    FILE_STORE_DIR, DATA_VERSION, DATA_VERSION_FILE, APP_DATA,
+    DATA_VERSION, DATA_VERSION_FILE, APP_DATA,
     INTERNAL_URL,
 )
 import ui_client
@@ -57,6 +57,7 @@ def check_certificate():
 def main():
     # PyInstaller 多进程支持
     freeze_support()
+    logger.debug("参数 ：%s", sys.argv)
     if len(sys.argv) == 1:
         print('请通过参数指定机器人的访问 token')
         sys.exit(1)
@@ -70,8 +71,7 @@ def main():
 
     try:
         logger.debug(
-            u'桌面助手以 %s 模式启动',
-            u'静默' if headless else u'cmdline',
+            u'桌面助手以静默模式启动',
         )
         from libs.managers import get_site_manager
         # 无界面模式启动桌面助手，所有连接的消息线程都要启动

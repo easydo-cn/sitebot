@@ -18,8 +18,7 @@ from utils import (
 import config
 from config import (
     BUILD_NUMBER, VERSION, ALLOW_DOMAIN, HTTP_PORT,
-    HTTPS_PORT, BIND_ADDRESS, CURRENT_DIR, DISABLE_UPGRADE,
-    LOG_DATA, APP_DATA
+    HTTPS_PORT, BIND_ADDRESS, CURRENT_DIR, LOG_DATA, APP_DATA
 )
 
 try:
@@ -43,7 +42,7 @@ except ImportError:
     pass
 
 # 注册所有可用的内置 worker
-allow_workers = ["online_script", "script"]
+allow_workers = ["online_script"]
 for module_name in allow_workers:
     importlib.import_module('workers.{}'.format(module_name))
 
@@ -201,7 +200,7 @@ def start_server():
     config.WORKERS = allow_workers
 
     if os.getenv('APP_TOKEN'):
-        fapp.logger.debug(u'设置了远程访问 token')
+        fapp.logger.debug(u'设置了远程访问 token %s', os.getenv('APP_TOKEN'))
 
     http_server = gevent.wsgi.WSGIServer(
         (BIND_ADDRESS, HTTP_PORT),

@@ -22,12 +22,11 @@ from werkzeug.local import LocalProxy
 import config
 import ui_client
 from config import (
-    BUILD_NUMBER, VERSION, LOG_DATA, GIT_INFO, FILE_STORE_DIR,
-    CONFIG
+    BUILD_NUMBER, VERSION, LOG_DATA, GIT_INFO, CONFIG
 )
 
 from utils import (
-    addr_check, extract_data, get_object_manage_url,
+    addr_check, extract_data,
     utc_to_local, translate as _,
     get_deal_time, filter_sensitive_fields,
     console_message, jsonp
@@ -111,7 +110,6 @@ def view_worker_management():
         if isinstance(_w['detail'].get('_result', None), list):
             _w['detail']['_result'] = [
                 {
-                    'url': get_object_manage_url(_i),
                     'text': os.path.basename(_i.get('local_path', '')),
                     'object_type': _i.get('object_type', None),
                     'local_path': _i.get('local_path', None)

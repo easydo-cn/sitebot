@@ -19,9 +19,9 @@ from worker import register_worker, get_worker_db
 import utils
 from utils import (
     translate as _, get_message_client,  # get_site_public_key,
-    require, get_logger, detect_locale
+    get_logger, detect_locale
 )
-from config import ADDON_DIR, APP_KEY, APP_SECRET, HEADLESS
+from config import ADDON_DIR, APP_KEY, APP_SECRET
 from errors import (
     LockAcquireTimeout, LockAcquireFailure, ScriptDownloadError,
     Retry, ScriptSecurityError,
@@ -94,7 +94,6 @@ def safe_call(cmd, shell=False, comment=None, timeout=10 * 60, **kw):
 SCRIPT_ENV = {
     'ui_client': ui_client,
     'utils': utils,
-    'require': require,
     'edo_client': edo_client,
     'Popen': Popen,
     'PIPE': PIPE,

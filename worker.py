@@ -468,7 +468,7 @@ def safe_run_worker(id, sync=False, pipe=None):
     # from workers import * 会 import 名为 sync 的模块，
     # 所以这里将 sync 的值保存到另一个变量里
     sync_flag = sync
-    allowed_workers = ["online_script", "script"]
+    allowed_workers = ["online_script"]
     exec('from workers import ({})'.format(','.join(allowed_workers)))
 
     load_logging_config(worker_id=id)

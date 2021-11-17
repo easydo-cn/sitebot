@@ -154,11 +154,11 @@ def set_cookies(response):
 @jsonp
 def api_about():
     '''
-    获取桌面助手和用户计算机的一些信息
+    获取站点机器人和用户计算机的一些信息
     '''
     from libs.managers import get_site_manager
     info = {
-        'app_name': _('Assistant'),
+        'app_name': _('Sitebot'),
         'app_version': VERSION,  # 大版本号（大版本不同则有重要接口不兼容）
         'app_build': BUILD_NUMBER,  # 小版本号（自增数字，用于升级条件的判断）
         'os_platform': sys.platform,  # 平台信息
@@ -166,7 +166,7 @@ def api_about():
         # None: 没有消息提醒相关信息, False: 用户关闭了消息提醒, True: 消息提醒已经打开
         'messaging': False,
         'disable_upgrade': bool(DISABLE_UPGRADE),  # 用户是否禁用升级
-        'local_user': getpass.getuser().decode(sys.getfilesystemencoding()),  # 当前桌面助手运行的本地用户
+        'local_user': getpass.getuser().decode(sys.getfilesystemencoding()),  # 当前站点机器人运行的本地用户
         # 'local_user': 'test',  # debugging
     }
     # 获取站点连接相关参数，判断站点连接是否存在
@@ -184,7 +184,7 @@ def api_about():
 @addr_check
 def api_quit():
     '''
-    （因升级等原因）退出桌面助手
+    （因升级等原因）退出站点机器人
     '''
     global http_greenlet, https_greenlet
     if http_greenlet:

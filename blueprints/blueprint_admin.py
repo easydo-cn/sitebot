@@ -1,6 +1,6 @@
 # coding: utf-8
 '''
-桌面助手 Blueprint
+站点机器人 Blueprint
 /admin 路由
 '''
 from io import open
@@ -179,7 +179,7 @@ def view_view_log():
                 start = size - size_limit
             rf.seek(start)
             data['content'] = rf.read(size_limit)
-    return render_template('log.html', data=data)
+    return render_template('log.html', data=data, **get_common_template_data())
 
 
 @blueprint.route('/config', methods=['GET', 'POST', 'OPTIONS'])
@@ -218,7 +218,7 @@ def view_settings():
     - 同时负责渲染主窗口的“设置” webview 页面
     '''
     return render_template(
-        'connections.html', sites=site_manager.list_sites(), headless=True
+        'connections.html', sites=site_manager.list_sites(), headless=True, **get_common_template_data()
     )
 
 
@@ -297,7 +297,7 @@ def view_connection_management():
 @jsonp
 def api_site_connections():
     """
-    从站点向桌面助手建立连接，或者切换已有连接的通知状态，通过 action 来指定
+    从站点向站点机器人建立连接，或者切换已有连接的通知状态，通过 action 来指定
     - action: "create"/"allow_notify"/"disallow_notify"
     """
     # 1. 获取新建连接或查询连接的必须参数

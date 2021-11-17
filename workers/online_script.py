@@ -126,7 +126,7 @@ def online_script(
     # 同步联机脚本调用有更严格的限制：
     # - 不能存取 worker_db
     # - 调用 ui_client 接口将会卡死（目前实现的限制，之后可能会开放）
-    # - 调用桌面助手 HTTP API 将会卡死（目前实现的限制，之后可能会开放）
+    # - 调用站点机器人 HTTP API 将会卡死（目前实现的限制，之后可能会开放）
 
     wo_client = edo_client.get_client(
         'workonline', oc_server, account, instance,

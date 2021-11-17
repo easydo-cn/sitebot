@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    {% block styles %}
+	<link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+	{% block styles %}
     <style type="text/css">
       .footer{
         text-align: center;
@@ -77,10 +78,10 @@
     <div class="container">
       {% block page_header %}
         <div class="page-header">
-          <h2>{{_('Assistant')}}</h2>
+          <h2>{{_('Sitebot Console')}}</h2>
           <p>
-            {{_('Assistant can offer more powerful upload, download, folder synchronization and other functions, is used to strengthen web browser')}}
-          </p>
+            {{_('Sitebot Used to perform tasks distributed by the site')}}
+		  </p>
         </div><!-- div.page-header -->
       {% endblock %}
 
@@ -91,15 +92,12 @@
       <div class="tab-content">
         {% block main_content %}{% endblock %}
       </div><!-- div.tab-content -->
-      {% block toolbar %}
-        {% include "toolbar.html" %}
-      {% endblock %}
     </div><!-- div.container -->
 
 {% block page_footer %}
     <div class="footer">
       <p>
-        {{_('Assistant')}}
+        {{_('Sitebot')}}
         {{_('version')}}
         {{version}}.{{build_number}}
       </p>

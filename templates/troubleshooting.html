@@ -50,13 +50,13 @@
                     </ol>
                 {% else %}
                     {% if diagnose.ports %}
-                        {{ _('Assistant has automatically changed to use the following ports instead.') }}<br>
+                        {{ _('Sitebot has automatically changed to use the following ports instead.') }}<br>
                         <span style="padding-left: 20px;">
                             {{ _('HTTP Port') }} <input disabled value="{{ diagnose.ports.http }}">
                             {{ _('HTTPS Port') }} <input disabled value="{{ diagnose.ports.https }}">
                         </span>
                         <ol>
-                            <li>{{ _('You need to set above ports at personal menu > Assistant at the the top right corner in sites you use.') }}</li>
+                            <li>{{ _('You need to set above ports at personal menu > Sitebot at the the top right corner in sites you use.') }}</li>
                             <li>{{ _('If sync status icon does not work, you need to') }} <a href="#" onclick="restartExplorer();">{{ _('Restart explorer') }}</a></li>
                             <li><a href="#" onclick="resetPortsOnNextStart();">{{ _('Try reset ports on next assistant start.') }}</a></li>
                         </ol>

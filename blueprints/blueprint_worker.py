@@ -104,7 +104,7 @@ def api_worker_cancel():
     if id is not None:
         unlock_editing_file(id)
         result = worker.terminate_worker(id)
-        show_msg(unicode(_('Assistant')), unicode(_('Task deleted')), 'info')
+        show_msg(unicode(_('Sitebot')), unicode(_('Task deleted')), 'info')
         return json.dumps(result)
     return json.dumps({
         'is_alive': False,
@@ -203,7 +203,7 @@ def api_worker_start():
             if site_url is None:
                 logger.debug(u'消息提醒没有站点 URL: %s', work)
                 console_message(
-                    unicode(_('Assistant messaging')),
+                    unicode(_('Sitebot messaging')),
                     unicode(_('You can visit that site to enable notification'))
                 )
             else:
@@ -211,7 +211,7 @@ def api_worker_start():
             worker.terminate_worker(id)
             return json.dumps({
                 'is_alive': False,
-                'msg': _('You can now enable Assistant messaging')
+                'msg': _('You can now enable Sitebot messaging')
             })
 
         return json.dumps(worker.start_worker(id))
@@ -236,7 +236,7 @@ def api_worker_new(worker_name):
     if worker_name not in worker.WORKER_REG:
         logger.warn(u'没有找到可用的 worker: %s', worker_name)
         show_msg(
-            _('Assistant'),
+            _('Sitebot'),
             _('This feature is not supported in current version'),
         )
         return json.dumps({

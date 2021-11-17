@@ -27,7 +27,7 @@
   <div class="tab-content">
 
     <form class="form-horizontal">
-      <p>{{_('Concurrent ports conflicted, Assistant has automatically changed to use the following ports instead.')}}</p>
+      <p>{{_('Concurrent ports conflicted, Sitebot has automatically changed to use the following ports instead.')}}</p>
       <div class="control-group">
         <label for="http_port" class="control-label">{{_('HTTP Port')}}</label>
         <div class="controls">
@@ -40,7 +40,7 @@
           <input type="number" max="65535" mmin="0" step="1" id="https_port" disabled readonly value="{{config['https_port']}}">
         </div>
       </div>
-      <p>{{_('You need to set above ports at personal menu > Assistant at the the top right corner in sites you use.')}}</p>
+      <p>{{_('You need to set above ports at personal menu > Sitebot at the the top right corner in sites you use.')}}</p>
       <p class="auto_changed hidden">{{_('Sync status icon and webfolders won\'t work properly until you restart explorer.')}}</p>
       <div class="control-group auto_changed hidden">
         <div class="controls">
@@ -55,7 +55,7 @@
   <script type="text/javascript" src="/static/jquery-1.11.1.min.js"></script>
   <script type="text/javascript" src="/static/jquery.jsonp.min.js"></script>
   <script type="text/javascript">
-    // 桌面助手启动时自动切换了可用端口，在加载这个页面时会带上 ?auto_changed
+    // 站点机器人启动时自动切换了可用端口，在加载这个页面时会带上 ?auto_changed
     if (/auto_changed/.test(window.location.search)) {
       window.native && native.resizeWindow(window.innerWidth, 360);
       $('.auto_changed').removeClass('hidden');

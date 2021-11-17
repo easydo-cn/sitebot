@@ -321,7 +321,7 @@ def jsonp(func):
 
 def domain_check(func):
     '''
-    检测域名是否允许访问桌面助手
+    检测域名是否允许访问站点机器人
     '''
     from config import ALLOW_DOMAIN
 
@@ -1038,7 +1038,7 @@ def classify_exception(e):
         - msg <str | unicode>: 简略错误信息
         - detail <str | unicode>: 完整的信息
     '''
-    from errors import AssistantException
+    from errors import SitebotException
     from edo_client import ApiError
     from socket import error as socket_error
     from requests.exceptions import (
@@ -1076,7 +1076,7 @@ def classify_exception(e):
             'msg': msg,
             'detail': str(e),
         }
-    elif isinstance(e, AssistantException):
+    elif isinstance(e, SitebotException):
         formatted = {
             'code': e.code,
             'msg': e.message,

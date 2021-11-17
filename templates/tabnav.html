@@ -10,6 +10,12 @@
   <li class="{% if request.path == '/admin/locks' %}active{% endif %}">
     <a href="/admin/locks">{{_('Locks')}}</a>
   </li>
+  <li class="{% if request.path == '/admin/manage_connections' %}active{% endif %}">
+    <a href="/admin/manage_connections">{{_('Site Connection')}}</a>
+  </li>
+  <li class="{% if request.path == '/admin/viewlog' %}active{% endif %}">
+	<a href="/admin/viewlog?name=webserver">{{_('Web server log')}}</a>
+  </li>
   {% if request.path == '/admin/linux_update' %}
     <li class="active">
       <a href="/admin/linux_update">{{_('Update (Linux)')}}</a>

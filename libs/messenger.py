@@ -882,7 +882,7 @@ class Messaging(threading.Thread):
                 'status': 'online' if online else 'offline',
                 'instances': userdata['topics'].keys(),
                 'timestamp': time.time(),
-                'appname': 'Assistant',
+                'appname': 'Sitebot',
             }
         }
 

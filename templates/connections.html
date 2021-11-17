@@ -1,4 +1,4 @@
-{% extends "manager_base.html" %}
+{% extends "base.html" %}
 {% block styles %}
 {{ super() }}
 
@@ -37,10 +37,10 @@
     </style>
 {% endblock %}
 
-{% block content %}
+{% block main_content %}
     <div class="tab-content">
         <p id="assistant-description">
-            {{_('Assistant is connected to the following sites, you can open notification.')}}
+            {{_('Sitebot is connected to the following sites, you can open notification.')}}
         </p>
 
         {% if sites %}

@@ -20,18 +20,10 @@ RUN pip install --ignore-installed --no-index --find-links=/root/wheels -r /site
 RUN pip install --trusted-host $PIP_TRUSTED_HOST --index-url $PIP_INDEX_URL pyOpenSSL
 
 COPY gitlab/edo_client /edo_client
-COPY gitlab/mdfs /mdfs
-COPY gitlab/ztq/ztq_core /ztq_core
 
 RUN cd /edo_client && \
     python setup.py install && \
     rm -rf /edo_client
-RUN cd /ztq_core && \
-    python setup.py install && \
-    cd /mdfs && \
-    python setup.py install && \
-    rm -rf /mdfs && \
-    rm -rf /ztq_core
 
 COPY gitlab/sitebot /sitebot
 RUN mv /sitebot/docker/sitebot.py /sitebot.py && \

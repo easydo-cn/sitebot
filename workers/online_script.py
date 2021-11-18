@@ -13,7 +13,7 @@ from invoke.exceptions import UnexpectedExit
 from requests import post
 import edo_client
 import ui_client
-from edo_client.remote_host import get_remote_host
+from edo_client.remote_host import get_host
 from libs.progress_log_handler import ProgressLogHandler
 from worker import register_worker, get_worker_db
 import utils
@@ -295,13 +295,14 @@ def online_script(
     	'RSE_NAME': 'bot',
         'logger': logger,
         'wo_client': wo_client,
-        'get_remote_host': partial(get_remote_host,
+        'get_host': partial(get_host,
                                    __worker_db=worker_db,
                                    __logger=remote_log,
                                    __package_versions=kw['package_versions_']),
         'load_i18n': load_i18n,
         '_': custom_translate,
     })
+    rse.script_exec_env['get_remote_host'] = rse.script_exec_env['get_host']
 
     try:
         result = rse.call(script_name, *args, **kw)

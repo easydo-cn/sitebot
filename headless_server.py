@@ -165,7 +165,7 @@ def api_about():
         # 是否有这个站点的消息提醒任务
         # None: 没有消息提醒相关信息, False: 用户关闭了消息提醒, True: 消息提醒已经打开
         'messaging': False,
-        'disable_upgrade': bool(DISABLE_UPGRADE),  # 用户是否禁用升级
+        'disable_upgrade': True,  # 用户是否禁用升级
         'local_user': getpass.getuser().decode(sys.getfilesystemencoding()),  # 当前站点机器人运行的本地用户
         # 'local_user': 'test',  # debugging
     }

@@ -17,7 +17,7 @@ import threading
 import psutil
 from flask import current_app, has_app_context
 
-from errors import AssistantException, Retry, LogicError
+from errors import SitebotException, Retry, LogicError
 from config import (
     WORKER_STORAGE_DIR, LOG_DATA, VERSION,
     BUILD_NUMBER, RETRY_INTERVAL, AUTO_START_INTERVAL,
@@ -420,7 +420,7 @@ def get_worker_signature(worker_db):
     # 组合函数的参数列表和 worker 数据库中参数值列表
     for arg in args:
         if arg not in worker_db:
-            raise AssistantException(2, u'获取 worker 标识时发现缺少 {} 参数'.format(arg))
+            raise SitebotException(2, u'获取 worker 标识时发现缺少 {} 参数'.format(arg))
         signature_parts.append('{}={}'.format(arg, worker_db[arg]))
     # 组合这个函数可选参数列表和默认值
     for kwarg in kwargs:
@@ -560,7 +560,7 @@ def run_worker(id, sync=False, pipe=None):
     try:
         logger.debug(u'开始任务')
         logger.debug(
-            u'桌面助手版本 %s.%s (%s)，任务ID %s，任务名 %s',
+            u'站点机器人版本 %s.%s (%s)，任务ID %s，任务名 %s',
             VERSION, BUILD_NUMBER, GIT_INFO or u'Unknown', id, name
         )
         logger.debug(
@@ -725,7 +725,7 @@ def send_worker_notify(id=None):
             title = _('Task Error')
             data = _(
                 'Task "{}" failed.'
-                'You can view this task in "Task" page in Assistant.'
+                'You can view this task in "Task" page in Sitebot.'
             ).format(
                 _(get_worker_title(
                     worker.get('name'),
@@ -735,7 +735,7 @@ def send_worker_notify(id=None):
             )
     elif worker['state'] == 'finished':
         title = _('Task finished')
-        data = _('Assistant: task "{}" finished').format(
+        data = _('Sitebot: task "{}" finished').format(
             _(get_worker_title(
                 worker.get('name'),
                 id=worker['worker_id'],
@@ -793,7 +793,7 @@ def stop_all_workers():
         # 非常罕见的情况下 workerdb 可能被破坏，缺少一些信息
         _db = get_worker_db(worker_id)
 
-        # 任务可以通过在 workerdb 中指定 dontkillme 这个 key 来避免在桌面助手退出时被杀死
+        # 任务可以通过在 workerdb 中指定 dontkillme 这个 key 来避免在站点机器人退出时被杀死
         if _db.get('dontkillme', False):
             continue
         if process is not None:
@@ -988,12 +988,12 @@ def worker_guardian():
     fatal_error_reasons = ('internal', 'error', )
     # 这些任务需要确保一直运行，除非没有 token
     keep_running_workers = ('new_webfolder', )
-    # 这些任务在桌面助手启动时启动一次就可以，之后不需要理会
+    # 这些任务在站点机器人启动时启动一次就可以，之后不需要理会
     one_time_workers = ('', )
     require_executed = ('new_webfolder', )
-    # 这些任务在桌面助手启动时清理掉，除非处于出错状态
+    # 这些任务在站点机器人启动时清理掉，除非处于出错状态
     remove_upon_start_workers = tuple()
-    # 是否是首次扫描（桌面助手启动后第一次扫描）
+    # 是否是首次扫描（站点机器人启动后第一次扫描）
     first_loop = True
     self_destructed_workers = set()
     while 1:
@@ -1083,7 +1083,7 @@ def worker_guardian():
                         u'启动后首次扫描，启动了上次退出时正在运行的 %s 任务（ID: %s）', name, wid
                     )
                     continue
-            # 只需要桌面助手启动时启动一次就好了，之后不理会
+            # 只需要站点机器人启动时启动一次就好了，之后不理会
             if name in one_time_workers:
                 continue
             # 保持运行的任务
@@ -1137,7 +1137,7 @@ def worker_guardian():
 
 
 def load_workers():
-    '''桌面助手启动时，加载上次的任务
+    '''站点机器人启动时，加载上次的任务
     处理逻辑：
     - 驻留任务：由监视线程启动；
     - 定时任务：由监视线程处理；

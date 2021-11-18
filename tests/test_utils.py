@@ -24,7 +24,7 @@ class UtilsTestClass(unittest.TestCase):
             msg='_ is a reference of utils.translate'
         )
         self.assertIsInstance(
-            utils.translate('Assistant'),
+            utils.translate('Sitebot'),
             unicode,
             msg='Translated result should be instances of unicode'
         )
@@ -34,8 +34,8 @@ class UtilsTestClass(unittest.TestCase):
             msg='Untranslated result should be instances of unicode'
         )
         self.assertEqual(
-            utils.translate('Assistant'),
-            u'桌面助手',
+            utils.translate('Sitebot'),
+            u'站点机器人',
             msg='App name should be translated'
         )
 

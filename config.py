@@ -7,7 +7,7 @@ import sys
 VERSION = 5
 BUILD_NUMBER = 2055
 GIT_INFO = "3fa2b2fe @ {2020-01-08 12:44:15 +0800} on heads/x-develop"
-USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/534.34 (KHTML, like Gecko) python Safari/534.34 Assistant"
+USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/534.34 (KHTML, like Gecko) python Safari/534.34 Sitebot"
 # Windows specifics
 MY_DOCUMENTS = USER_HOME = os.path.expanduser('~')
 APP_DATA = os.path.join(USER_HOME, 'edo_assistent')
@@ -42,7 +42,7 @@ HTTPS_PORT = CONFIG['https_port']
 # 现在修改访问端口后，不支持使用局域网加速下载
 P2P_ENABLED = HTTP_PORT == 4999
 
-# 桌面助手监听地址和端口
+# 站点机器人监听地址和端口
 # TODO Remove ADDRESS & PROTOCOL
 PROTOCOL = 'https'
 # 外部访问地址
@@ -70,7 +70,7 @@ SCHEME = 'edo-ast://'
 APP_KEY = 'assistent'
 APP_SECRET = '022117e982a933dea7d69110697685c2'
 
-# 允许访问桌面助手的域名
+# 允许访问站点机器人的域名
 ALLOW_DOMAIN = ["*"]
 # 允许从这些远端访问（域名/IP）
 ALLOW_REMOTE = ('everydo.tk', 'localhost.easydo.cn', '127.0.0.1', )
@@ -79,7 +79,7 @@ ALLOW_REMOTE = ('everydo.tk', 'localhost.easydo.cn', '127.0.0.1', )
 MSG_KEEPALIVE = 60
 MSG_QOS = 1
 
-# 桌面助手指令 topic
+# 站点机器人指令 topic
 COMMAND_CATEGORY = 'command'
 
 GIT_INFO += ' (source code mode)'
@@ -123,7 +123,7 @@ class LazyEnvBool(object):
             return '<LazyEnvBool {}=={} (={})>'.format(self.__name, self.__value, bool(self))
 
 
-# 每个桌面助手安装都具有唯一的 ID
+# 每个站点机器人安装都具有唯一的 ID
 APP_ID_FILE = os.path.join(APP_DATA, "APP_ID")
 if os.path.isfile(APP_ID_FILE):
     with open(APP_ID_FILE) as appidf:

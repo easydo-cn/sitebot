@@ -60,70 +60,70 @@ msgstr ""
 msgid "Already deleted"
 msgstr ""
 
-msgid "Assistant"
+msgid "Sitebot"
 msgstr ""
 
 msgid ""
-"Assistant\n"
+"Sitebot\n"
 "Version {}.{}"
 msgstr ""
 
 msgid ""
-"Assistant\n"
+"Sitebot\n"
 "Version {}.{}{}"
 msgstr ""
 
-msgid "Assistant Error Report"
+msgid "Sitebot Error Report"
 msgstr ""
 
-msgid "Assistant Task detail"
+msgid "Sitebot Task detail"
 msgstr ""
 
 msgid ""
-"Assistant can offer more powerful upload, download, folder "
+"Sitebot can offer more powerful upload, download, folder "
 "synchronization and other functions, is used to strengthen web browser"
 msgstr ""
 
 msgid ""
-"Assistant cannot detect editing of \"{0}\", have you finished editing "
+"Sitebot cannot detect editing of \"{0}\", have you finished editing "
 "this file?\n"
 "Please leave this message until you've finished editing. (Modification "
 "made to this file during this period will be uploaded)"
 msgstr ""
 
 msgid ""
-"Assistant cannot sync files with this site. You can either downgrade "
-"Assistant or contact system administrator to upgrade this site."
+"Sitebot cannot sync files with this site. You can either downgrade "
+"Sitebot or contact system administrator to upgrade this site."
 msgstr ""
 
-msgid "Assistant commandline mode"
+msgid "Sitebot commandline mode"
 msgstr ""
 
-msgid "Assistant has automatically changed to use the following ports instead."
+msgid "Sitebot has automatically changed to use the following ports instead."
 msgstr ""
 
-msgid "Assistant has started"
+msgid "Sitebot has started"
 msgstr ""
 
-msgid "Assistant is connected to the following sites, you can open notification."
+msgid "Sitebot is connected to the following sites, you can open notification."
 msgstr ""
 
-msgid "Assistant is unabel to exit now"
+msgid "Sitebot is unabel to exit now"
 msgstr ""
 
-msgid "Assistant launched"
+msgid "Sitebot launched"
 msgstr ""
 
-msgid "Assistant messaging"
+msgid "Sitebot messaging"
 msgstr ""
 
-msgid "Assistant port conflict"
+msgid "Sitebot port conflict"
 msgstr ""
 
-msgid "Assistant troubleshooting"
+msgid "Sitebot troubleshooting"
 msgstr ""
 
-msgid "Assistant: task \"{}\" finished"
+msgid "Sitebot: task \"{}\" finished"
 msgstr ""
 
 msgid "Authentication failed"
@@ -179,7 +179,7 @@ msgstr ""
 msgid ""
 "Cannot sync with this site. You can either <a href=\"#\" "
 "onclick=\"get_assistant()._fail_callback(); return false;\">downgrade "
-"your Assistant</a> or contact your system administrator to upgrade this "
+"your Sitebot</a> or contact your system administrator to upgrade this "
 "site."
 msgstr ""
 
@@ -205,7 +205,7 @@ msgid "Concurrent ports conflicted"
 msgstr ""
 
 msgid ""
-"Concurrent ports conflicted, Assistant has automatically changed to use "
+"Concurrent ports conflicted, Sitebot has automatically changed to use "
 "the following ports instead."
 msgstr ""
 
@@ -495,10 +495,10 @@ msgstr ""
 msgid "Handling file conflicts"
 msgstr ""
 
-msgid "Have you finished editing? (Assistant)"
+msgid "Have you finished editing? (Sitebot)"
 msgstr ""
 
-msgid "Here are all the tasks of Assistant:"
+msgid "Here are all the tasks of Sitebot:"
 msgstr ""
 
 msgid "I've finished editing"
@@ -773,7 +773,7 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-msgid "Open Assistant"
+msgid "Open Sitebot"
 msgstr ""
 
 msgid "Open error"
@@ -844,7 +844,7 @@ msgid ""
 "installed, just ignore this prompt."
 msgstr ""
 
-msgid "Please replace the certificate files and relaunch the Assistant"
+msgid "Please replace the certificate files and relaunch the Sitebot"
 msgstr ""
 
 msgid "Please select a file"
@@ -1122,7 +1122,7 @@ msgstr ""
 msgid "Task"
 msgstr ""
 
-msgid "Task \"{}\" failed.You can view this task in \"Task\" page in Assistant."
+msgid "Task \"{}\" failed.You can view this task in \"Task\" page in Sitebot."
 msgstr ""
 
 msgid "Task Error"
@@ -1276,7 +1276,7 @@ msgstr ""
 msgid "Try reset ports on next assistant start."
 msgstr ""
 
-msgid "Try to reinstall Assistant"
+msgid "Try to reinstall Sitebot"
 msgstr ""
 
 msgid "Unable to download target file"
@@ -1418,7 +1418,7 @@ msgid "You are already editing {}"
 msgstr ""
 
 msgid ""
-"You are editing one or more files so Assistant is unable to quit.\n"
+"You are editing one or more files so Sitebot is unable to quit.\n"
 "Please finish editing first before trying to quit."
 msgstr ""
 
@@ -1427,7 +1427,7 @@ msgid ""
 "local file."
 msgstr ""
 
-msgid "You can now enable Assistant messaging"
+msgid "You can now enable Sitebot messaging"
 msgstr ""
 
 msgid "You can visit that site to enable notification"
@@ -1447,10 +1447,10 @@ msgstr ""
 msgid "You have not selected a folder. Please try again"
 msgstr ""
 
-msgid "You need to downgrade to an old version to use Assistant on this site."
+msgid "You need to downgrade to an old version to use Sitebot on this site."
 msgstr ""
 
-msgid "You need to downgrade to use Assistant on this site."
+msgid "You need to downgrade to use Sitebot on this site."
 msgstr ""
 
 msgid ""
@@ -1459,7 +1459,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You need to set above ports at personal menu > Assistant at the the top "
+"You need to set above ports at personal menu > Sitebot at the the top "
 "right corner in sites you use."
 msgstr ""
 
@@ -1555,7 +1555,7 @@ msgstr ""
 msgid "help.text.log_debug"
 msgstr ""
 "<p><strong>Attention: adjusting logging output is an advanced operation "
-"and it might slow down Assistant. Only perform this action if you "
+"and it might slow down Sitebot. Only perform this action if you "
 "encounter issue, or if you are asked to do so by customer service / "
 "developers.</strong></p>\n"
 "<p>Logging config is stored in the file <code>logging.json</code> located"
@@ -1763,7 +1763,7 @@ msgstr ""
 #~ msgid "{} processed"
 #~ msgstr ""
 
-#~ msgid "Assistant Configuration"
+#~ msgid "Sitebot Configuration"
 #~ msgstr ""
 
 #~ msgid "Settings"
@@ -1868,7 +1868,7 @@ msgstr ""
 #~ msgid "File Not Found"
 #~ msgstr ""
 
-#~ msgid "Have you finished editing? (Assistant)"
+#~ msgid "Have you finished editing? (Sitebot)"
 #~ msgstr ""
 
 #~ msgid "I've finished editing"

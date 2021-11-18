@@ -4,9 +4,9 @@ Contains all custom exception definitions
 '''
 
 
-class AssistantException(Exception):
+class SitebotException(Exception):
     '''
-    桌面助手内部错误
+    站点机器人内部错误
     无法处理的严重错误（可能导致任务 / 程序 异常退出的错误）才使用这个类，
     如果可以处理或忽略，请使用 logger.error 或 logger.critical 记录详细日志。
     '''
@@ -16,7 +16,7 @@ class AssistantException(Exception):
         self.message = message
 
     def __repr__(self):
-        return u'<AssistantException {}: {}>'.format(self.code, self.message)
+        return u'<SitebotException {}: {}>'.format(self.code, self.message)
 
     __str__ = __repr__
 
@@ -128,7 +128,7 @@ class Retry(Exception):
 
 class LogicError(Exception):
     """
-    有些错误是服务端出错，使得桌面助手无法正常完成任务，如果这种时候抛出错误，会触发桌面助手的
+    有些错误是服务端出错，使得站点机器人无法正常完成任务，如果这种时候抛出错误，会触发站点机器人的
     错误报告，但是用户也无法做任何处理。因此，在服务端出错的时候，比如外部编辑上传新版本时站点
     文件被删除了，就可以抛出 LogicError，让任务状态标记为出错，同时不弹出错误窗口。
     """

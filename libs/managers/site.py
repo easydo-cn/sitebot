@@ -18,12 +18,12 @@ from ui_client import _request_api
 
 """
 
-这时候要求桌面助手预先建立和站点的连接，包括站点的信息，当前用户等：
+这时候要求站点机器人预先建立和站点的连接，包括站点的信息，当前用户等：
 + 每个站点只能建立一个链接
 + 在首次发起任务的时候建立连接
 + 如果需要切换用户，需要登出现有连接，再重新建立连接
 
-SiteManager 用于管理桌面助手与站点建立的所有连接
+SiteManager 用于管理站点机器人与站点建立的所有连接
 Site 表示一个站点连接
 """
 logger = logging.getLogger(__name__)
@@ -227,7 +227,7 @@ class Site(object):
 
 
 class SiteManager(object):
-    """桌面助手的站点连接管理"""
+    """站点机器人的站点连接管理"""
     def __init__(self, storage=None):
         """
         初始化站点连接管理器

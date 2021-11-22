@@ -539,7 +539,7 @@ def safe_run_worker(id, sync=False, pipe=None):
             worker_db['state'] = 'error'
             worker_db.sync()
             break
-        finally:
+        else:
             worker_db = get_worker_db(id)
             worker_db['state'] = 'finished'
             worker_db.sync()

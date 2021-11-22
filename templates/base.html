@@ -136,29 +136,29 @@
       });
 </script>
 {% endmacro %}
+<script type="text/javascript" src="/static/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="/static/jquery.jsonp.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/stupidtable.min.js"></script>
+<script type="text/javascript">
+  $('[data-toggle="tooltip"]').tooltip();
+  $(document.body).on('click', 'a.localpath-control-open', function(e){
+	var local_path = $.trim($(this).data('path')) || $.trim($(this).text());
+	window.console && console.log(local_path);
+	$.ajax({
+	  etarget: $(this),
+	  url: $(this).attr('href'),
+	  cache: false,
+	  dataType: 'JSON',
+	  data: {
+		local_path: local_path
+	  },
+	  type: 'POST'
+	});
+	return false;
+  });
+</script>
 {% block scripts %}
-    <script type="text/javascript" src="/static/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="/static/jquery.jsonp.min.js"></script>
-    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/static/stupidtable.min.js"></script>
-    <script type="text/javascript">
-      $('[data-toggle="tooltip"]').tooltip();
-      $(document.body).on('click', 'a.localpath-control-open', function(e){
-        var local_path = $.trim($(this).data('path')) || $.trim($(this).text());
-        window.console && console.log(local_path);
-        $.ajax({
-          etarget: $(this),
-          url: $(this).attr('href'),
-          cache: false,
-          dataType: 'JSON',
-          data: {
-            local_path: local_path
-          },
-          type: 'POST'
-        });
-        return false;
-      });
-    </script>
 {% endblock %}
   </body>
 </html>

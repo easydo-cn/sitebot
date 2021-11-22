@@ -214,7 +214,7 @@ def api_call_script_sync():
         call_script = call_local_script
         parameters = {'name': script_name, 'args': args, 'kwargs': kw}
     else:
-        from workers.online_script import online_script as call_script
+        #from workers.online_script import online_script as call_script
         parameters = {}
         keywords = (
             'oc_server', 'account', 'instance', 'token',  # 启动任务相关参数
@@ -223,12 +223,13 @@ def api_call_script_sync():
         values = list(extract_data(keywords, request=request))
         for key, value in zip(keywords, values):
             parameters.update({key: value})
-        parameters.update({'worker_id': None, '__sync': True})
-
+        parameters.update({'__sync': True})
+        from worker import start_sync_worker
+        result = start_sync_worker('online_script', **parameters)
     try:
         return json.dumps({
             'success': True,
-            'result': json.dumps(call_script(**parameters)),
+            'result': result,
         })
     except:
         logger.exception("Call failed")

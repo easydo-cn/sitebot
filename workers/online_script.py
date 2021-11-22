@@ -138,7 +138,10 @@ def online_script(
         logger = get_logger('callscript_sync', 'callscript_sync.log')
         callback_url = error_callback_url = worker_id = None
     else:
-        logger = utils.get_worker_logger(worker_id)
+        pass
+
+    logger = utils.get_worker_logger(worker_id)
+    logger.debug(worker_id)
 
     args = json.loads(args) if args else []
     kw = json.loads(kw) if kw else {}
@@ -173,7 +176,8 @@ def online_script(
         logger.addHandler(progress_log_handler)
 
     if not __sync:
-        worker_db = get_worker_db(worker_id)
+        pass
+    worker_db = get_worker_db(worker_id)
 
     # 为了避免污染公用的脚本执行环境，为每一任务提供一继承于SCRIPT_ENV的环境
     script_env = SCRIPT_ENV.copy()
@@ -183,8 +187,10 @@ def online_script(
     script_obj = rse.load_script(script_name)
 
     if not __sync:
-        worker_db['title'] = script_obj['title']
-        worker_db.sync()
+        pass
+    worker_db['title'] = script_obj['title'] 
+    logger.debug(worker_db['title'])
+    worker_db.sync()
 
     # 快速构造消息客户端
     if not __sync:

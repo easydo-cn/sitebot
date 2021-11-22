@@ -4,7 +4,6 @@
 {% block main_content %}
 {% if data.content %}
 <strong>{{data.path}}</strong>
-<a href="/admin/help">{{_('Adjust logging output')}}</a>
 <pre>{{data.content}}</pre>
 {% else %}
 <div class="alert alert-warning">

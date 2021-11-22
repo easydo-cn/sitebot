@@ -1,5 +1,6 @@
 <ul class="nav nav-tabs" id="tabcontrol">
-  <li class="{% if request.path.startswith('/admin/worker') %}active{% endif %}">
+  <li class="{% if request.path.startswith('/admin/worker') or
+  			(request.path.startswith('/admin/viewlog') and '/admin/viewlog?name=webserver' not in request.url) %}active{% endif %}">
     <a href="/admin/worker">{{_('Tasks')}}</a>
   </li>
   {% if not g.get('headless') %}
@@ -13,7 +14,7 @@
   <li class="{% if request.path == '/admin/manage_connections' %}active{% endif %}">
     <a href="/admin/manage_connections">{{_('Site Connection')}}</a>
   </li>
-  <li class="{% if request.path == '/admin/viewlog' %}active{% endif %}">
+  <li class="{% if '/admin/viewlog?name=webserver' in request.url %}active{% endif %}">
 	<a href="/admin/viewlog?name=webserver">{{_('Web server log')}}</a>
   </li>
   {% if request.path == '/admin/linux_update' %}

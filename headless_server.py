@@ -198,7 +198,7 @@ def api_quit():
 @fapp.route('/call_script_async', methods=['POST', 'GET', 'OPTIONS', ])
 @addr_check
 @jsonp
-def api_call_script_async(worker_name):
+def api_call_script_async(worker_name='online_script'):
     '''新建一个任务
     worker_name <String> 任务名称，同时也是要调用的任务处理模块的名称
     请求参数 onduplicate=warn[, run, ignore] 改变任务重复时的行为

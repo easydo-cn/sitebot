@@ -5,6 +5,7 @@ action=$1
 case $action in
     start)
         cd /sitebot && pybabel compile -d translations
+		mkdir -p /var/sitebot/ssh && ln -s /var/sitebot/ssh /root/.ssh
         python /sitebot.py $2
         ;;
     shell)

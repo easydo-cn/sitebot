@@ -30,8 +30,6 @@ RUN mv /sitebot/docker/sitebot.py /sitebot.py && \
     mv /sitebot/docker/run /usr/local/bin/run && \
     chmod +x /usr/local/bin/run
 
-RUN mkdir -p /var/sitebot/ssh && ln -s /var/sitebot/ssh /root/.ssh
-
 WORKDIR /sitebot
 ENTRYPOINT ["/usr/local/bin/run"]
 CMD ["start"]

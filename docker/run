@@ -1,6 +1,6 @@
 #!/bin/bash
 export LANG=en_US.UTF-8
-action=${1:-start}
+action=$1
 
 case $action in
     start)

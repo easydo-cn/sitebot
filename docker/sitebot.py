@@ -51,11 +51,11 @@ if __name__ == '__main__':
     else:
         entrance = '/sitebot/main.pyc'
 
-    if len(sys.argv) == 1:
-        print('请通过参数指定机器人的访问 token')
+    if os.environ.get('token') is None:
+        print('请配置机器人的访问 token')
         sys.exit(1)
     else:
-        sitebot_token = sys.argv[1]
+        sitebot_token = os.environ.get('token')
         os.system(
             'python {} "{}"'.format(entrance, sitebot_token),
         )

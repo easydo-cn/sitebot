@@ -5,7 +5,7 @@ action=$1
 case $action in
     start)
         cd /sitebot && pybabel compile -d translations
-        python /sitebot.py $2
+        python /sitebot.py
         ;;
     shell)
         exec /bin/bash

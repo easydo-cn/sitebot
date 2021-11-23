@@ -253,7 +253,7 @@ def extract_data_list(arg_names, request=None):
     - 名字以 [] 结尾的参数
     '''
     # 避免取出远程访问 token
-    skip_args = ('token', )
+    skip_args = ('manager_token', )
     kw = {}
     if request is None:
         from flask import request

@@ -36,7 +36,6 @@ from flask import (
     redirect, g as flask_g,
 )
 from werkzeug.datastructures import MultiDict
-import requests
 import jinja2
 import getpass
 import psutil
@@ -317,23 +316,6 @@ def jsonp(func):
         ])
         return resp
     return decorated_function
-
-
-def domain_check(func):
-    '''
-    检测域名是否允许访问站点机器人
-    '''
-    from config import ALLOW_DOMAIN
-
-    @wraps(func)
-    def check(*args, **kwargs):
-        if "*" not in ALLOW_DOMAIN:
-            if 'Referer' not in request.headers:
-                return redirect('/admin/worker', code=302)
-            if request.headers['Referer'] not in ALLOW_DOMAIN:
-                return redirect('/admin/worker', code=302)
-        return func(*args, **kwargs)
-    return check
 
 
 def kwargs_check(keys=None):
@@ -635,20 +617,15 @@ def addr_check(func):
     '''
     检查请求的来源地址，只允许以下情况的访问:
     - 静默模式，允许任何来源带有 APP_TOKEN 的请求
-    - 只允许列表中的来源请求（目前列表中只包含本地回环地址）
     '''
-    from config import ALLOW_REMOTE
 
     @wraps(func)
     def check(*args, **kwargs):
-        # 两种情况下允许请求通行：
-        # 1. 请求来源位于白名单中
-        remote_allowed = request.remote_addr in ALLOW_REMOTE
-        # 2. 请求携带有效的远程访问 token
+        # 1. 请求携带有效的远程访问 token
         request_verified = verify_request_token(request)
         flask_g.request_verified = request_verified
 
-        if remote_allowed or request_verified:
+        if request_verified:
             # OPTIONS 一般是浏览器执行跨域请求时做的预先检查，只要返回空响应即可
             if request.method == 'OPTIONS':
                 return jsonp(lambda: '')()

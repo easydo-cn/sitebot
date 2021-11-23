@@ -1,35 +1,12 @@
 # -*- coding: utf-8 -*-
 '''站点机器人入口文件'''
-import base64
-import urllib
-import urlparse
-
 import config
-
-from contextlib import closing
-import getpass
 import os
 import sys
-import json
-import shutil
-import socket
-import sqlite3
-import threading
-import time
-from copy import deepcopy
-from datetime import datetime
 from multiprocessing import freeze_support
-
-from werkzeug.urls import url_decode
-
 from utils import (
-    translate as _, get_logger, load_logging_config, process_exists
+    get_logger, load_logging_config, process_exists
 )
-from config import (
-    DATA_VERSION, DATA_VERSION_FILE, APP_DATA,
-    INTERNAL_URL,
-)
-import ui_client
 
 logger = get_logger('webserver', filename='webserver.log')
 

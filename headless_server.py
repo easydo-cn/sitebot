@@ -4,7 +4,6 @@ import importlib
 import os
 import sys
 import json
-import logging
 import logging.handlers
 import time
 import traceback
@@ -27,7 +26,6 @@ try:
 except ImportError:
     GIT_INFO = None
 
-import flask_babel
 import flask_babel._compat  # noqa
 from flask.ext.babel import Babel
 
@@ -133,7 +131,7 @@ def crossdomain():
         <allow-access-from domain="{domain}" secure="false"/>
         <allow-http-request-headers-from domain="{domain}" headers="*" secure="false"/>
         """.format(domain=domain)
-        ), ALLOW_DOMAIN)
+        ), ["*"])
     ))
 
 @fapp.before_request

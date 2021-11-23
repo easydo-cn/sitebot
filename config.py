@@ -70,11 +70,6 @@ SCHEME = 'edo-ast://'
 APP_KEY = 'assistent'
 APP_SECRET = '022117e982a933dea7d69110697685c2'
 
-# 允许访问站点机器人的域名
-ALLOW_DOMAIN = ["*"]
-# 允许从这些远端访问（域名/IP）
-ALLOW_REMOTE = ('everydo.tk', 'localhost.easydo.cn', '127.0.0.1', )
-
 # 消息相关设置
 MSG_KEEPALIVE = 60
 MSG_QOS = 1
@@ -83,18 +78,6 @@ MSG_QOS = 1
 COMMAND_CATEGORY = 'command'
 
 GIT_INFO += ' (source code mode)'
-
-# 数据库接口变更了一次
-DATA_VERSION = 3
-DATA_VERSION_FILE = os.path.join(APP_DATA, '.VERSIONS')
-
-# 缓存控制
-# 缓存文件，连续 3 次删除失败后就不理会
-MAX_DELETION_RETRY = 3
-# 文件查看的缓存文件保留 10 分钟，之后就删除
-WAIT_BEFORE_DELETION = 60 * 10
-# 是否跳过 SSL 验证
-IGNORE_SSL = False
 
 # 从 os.environ 中获取当前是命令行状态，所使用的 key
 class LazyEnvBool(object):
@@ -173,8 +156,3 @@ WORKERS = [
     _w for _a, _w, _c in pkgutil.iter_modules(['workers'])
     if _w != 'threedpreview'
 ]
-
-
-# 证书临近过期时间段
-NEAR_EXPIRE_DATE = 30 * 1  # 过期前一个月
-DEFAULT_CERTIFI_URL = "https://easydo.cn/help/download/setups/ast_cert.zip"

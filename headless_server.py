@@ -14,7 +14,7 @@ import gevent.wsgi
 
 import worker
 from utils import (
-    translate, addr_check, jsonp, extract_data
+    translate, addr_check, jsonp, extract_data, extract_data_list
 )
 import config
 from config import (
@@ -194,6 +194,56 @@ def api_quit():
         https_greenlet.kill(block=False)
     return json.dumps({'success': True})
 
+
+@fapp.route('/call_script_async', methods=['POST', 'GET', 'OPTIONS', ])
+@addr_check
+@jsonp
+def api_call_script_async(worker_name='online_script'):
+    '''新建一个任务
+    worker_name <String> 任务名称，同时也是要调用的任务处理模块的名称
+    请求参数 onduplicate=warn[, run, ignore] 改变任务重复时的行为
+      - run 不去重，可以创建并运行重复任务；
+      - warn 去重，提示重复任务；
+      - ignore 去重，并且不做提示；
+    '''
+    # 不支持请求创建的任务
+    if worker_name not in worker.WORKER_REG:
+        logger.warn(u'没有找到可用的 worker: %s', worker_name)
+        return json.dumps({
+            'is_alive': False,
+            'type': 'warn',
+            'msg': _('This feature is not supported in current version'),
+        })
+
+
+    # 从请求中取出任务的所有参数；其中这些参数的类型是 list
+    kw = extract_data_list(
+        ('uid', 'path', 'server_path', 'revisions', ),
+        request=request,
+    )
+
+    # 旧版本的 script 任务，将脚本参数提升为任务参数
+    if worker_name == 'script':
+        script_kw = {}
+        for k in ('script_vars', 'args', 'kw',):
+            script_kw[k] = json.loads(request.form.get(k))
+        kw.update(script_kw)
+    # 此参数不能通过 HTTP 请求控制，只能在这里设置，并且在脚本任务中会被预先移除
+    # 用途是：通过 HTTP 请求创建脚本任务，如果请求中 ast_token 验证通过，将可以不验证站点信任和脚本签名有效性
+    kw['_request_verified'] = flask_g.request_verified
+
+    # 新建任务
+    try:
+        worker_id = worker.new_worker(worker_name, **kw)
+    except:  # noqa E722
+        logger.error(u'新建任务出错', exc_info=True)
+        worker_id = 0
+
+    # 开始任务
+    result = worker.start_worker(worker_id)
+    return json.dumps(result)
+
+
 @fapp.route('/call_script_sync', methods=['POST', 'GET', 'OPTIONS'])
 @addr_check
 @jsonp
@@ -214,7 +264,7 @@ def api_call_script_sync():
         call_script = call_local_script
         parameters = {'name': script_name, 'args': args, 'kwargs': kw}
     else:
-        from workers.online_script import online_script as call_script
+        #from workers.online_script import online_script as call_script
         parameters = {}
         keywords = (
             'oc_server', 'account', 'instance', 'token',  # 启动任务相关参数
@@ -223,12 +273,13 @@ def api_call_script_sync():
         values = list(extract_data(keywords, request=request))
         for key, value in zip(keywords, values):
             parameters.update({key: value})
-        parameters.update({'worker_id': None, '__sync': True})
-
+        parameters.update({'__sync': True})
+        from worker import start_sync_worker
+        result = start_sync_worker('online_script', **parameters)
     try:
         return json.dumps({
             'success': True,
-            'result': json.dumps(call_script(**parameters)),
+            'result': result,
         })
     except:
         logger.exception("Call failed")

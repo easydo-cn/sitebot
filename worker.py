@@ -453,6 +453,24 @@ def prepare_worker_args(name, id):
         real_args.append(db.get(kwarg, default))
     return real_args
 
+def start_sync_worker(worker_name, **kw):
+    # 新建任务
+    try:
+        worker_id = new_worker(worker_name, **kw)
+    except:  # noqa E722
+        worker_id = 0
+
+    # 0 表示任务重复，实际没有创建
+    if worker_id == 0:
+        return json.dumps({
+            'msg': _('This task is already running, please wait...'),
+            'is_alive': False,
+            'worker_id': 0,
+            'type': 'info'
+        })
+    else:
+        # 开始任务
+        return json.dumps(start_worker(worker_id, sync=True))
 
 
 def safe_run_worker(id, sync=False, pipe=None):
@@ -473,7 +491,7 @@ def safe_run_worker(id, sync=False, pipe=None):
 
     load_logging_config(worker_id=id)
     logger = get_worker_logger(id)
-
+        
     worker_db = get_worker_db(id)
     if worker_db.get('last_state', None) is not None:
         logger.debug(u'任务上次状态: %s', worker_db['last_state'])
@@ -484,7 +502,7 @@ def safe_run_worker(id, sync=False, pipe=None):
     retried = -1
     while 1:
         try:
-            run_worker(id, sync=sync_flag, pipe=pipe)
+            result = run_worker(id, sync=sync_flag, pipe=pipe)
         except Retry as e:
             if e.count != -1:
                 retried += 1
@@ -525,7 +543,7 @@ def safe_run_worker(id, sync=False, pipe=None):
             worker_db = get_worker_db(id)
             worker_db['state'] = 'finished'
             worker_db.sync()
-            break
+            return result
 
     close_logger(logger)
 

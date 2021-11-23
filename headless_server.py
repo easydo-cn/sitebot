@@ -229,7 +229,7 @@ def api_call_script_async(worker_name='online_script'):
             script_kw[k] = json.loads(request.form.get(k))
         kw.update(script_kw)
     # 此参数不能通过 HTTP 请求控制，只能在这里设置，并且在脚本任务中会被预先移除
-    # 用途是：通过 HTTP 请求创建脚本任务，如果请求中 ast_token 验证通过，将可以不验证站点信任和脚本签名有效性
+    # 用途是：通过 HTTP 请求创建脚本任务，如果请求中 token 验证通过，将可以不验证站点信任和脚本签名有效性
     kw['_request_verified'] = flask_g.request_verified
 
     # 新建任务
@@ -294,8 +294,8 @@ def start_server():
     sys.setdefaultencoding("utf-8")
     config.WORKERS = allow_workers
 
-    if os.getenv('APP_TOKEN'):
-        fapp.logger.debug(u'设置了远程访问 token %s', os.getenv('APP_TOKEN'))
+    if os.getenv('TOKEN'):
+        fapp.logger.debug(u'设置了远程访问 token %s', os.getenv('TOKEN'))
 
     http_server = gevent.wsgi.WSGIServer(
         (BIND_ADDRESS, HTTP_PORT),

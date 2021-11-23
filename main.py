@@ -37,12 +37,9 @@ logger = get_logger('webserver', filename='webserver.log')
 def main():
     # PyInstaller 多进程支持
     freeze_support()
-    logger.debug("参数 ：%s", sys.argv)
-    if len(sys.argv) == 1:
-        print('请通过参数指定机器人的访问 token')
+    if os.getenv('TOKEN') is None:
+        print('请配置机器人的访问 token')
         sys.exit(1)
-    else:
-        os.environ['APP_TOKEN'] = sys.argv[1]
 
     load_logging_config()
 

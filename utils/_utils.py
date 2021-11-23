@@ -253,7 +253,7 @@ def extract_data_list(arg_names, request=None):
     - 名字以 [] 结尾的参数
     '''
     # 避免取出远程访问 token
-    skip_args = ('ast_token', )
+    skip_args = ('token', )
     kw = {}
     if request is None:
         from flask import request
@@ -616,17 +616,17 @@ def get_oc_client(oc_server=None, account=None, instance=None, token=None):
 
 def verify_request_token(request):
     '''检查请求是否有 token 授权'''
-    APP_TOKEN = os.getenv('APP_TOKEN')
-    request_token = extract_data('ast_token', request=request)
-    cookie_token = request.cookies.get('ast_token', None)
-    request_verified = APP_TOKEN is not None \
-        and (request_token or cookie_token) == APP_TOKEN
+    TOKEN = os.getenv('TOKEN')
+    request_token = extract_data('token', request=request)
+    cookie_token = request.cookies.get('token', None)
+    request_verified = TOKEN is not None \
+        and (request_token or cookie_token) == TOKEN
 
     # cookie 中没有 token 信息，但本次通过了 token 验证；可能的情况是
     # 「用户通过带 token 的链接首次访问」，写入一个 token cookie，让用户下次可以使用 cookie 验证
     if request_verified and cookie_token is None:
         flask_g.cookies = {
-            'ast_token': (APP_TOKEN, 604800),  # 1 week
+            'token': (TOKEN, 604800),  # 1 week
         }
     return request_verified
 
@@ -634,7 +634,7 @@ def verify_request_token(request):
 def addr_check(func):
     '''
     检查请求的来源地址，只允许以下情况的访问:
-    - 静默模式，允许任何来源带有 APP_TOKEN 的请求
+    - 静默模式，允许任何来源带有 TOKEN 的请求
     - 只允许列表中的来源请求（目前列表中只包含本地回环地址）
     '''
     from config import ALLOW_REMOTE

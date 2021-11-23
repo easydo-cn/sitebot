@@ -10,7 +10,7 @@ GIT_INFO = "3fa2b2fe @ {2020-01-08 12:44:15 +0800} on heads/x-develop"
 USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/534.34 (KHTML, like Gecko) python Safari/534.34 Sitebot"
 # Windows specifics
 MY_DOCUMENTS = USER_HOME = os.path.expanduser('~')
-APP_DATA = os.path.join(USER_HOME, 'edo_assistent')
+APP_DATA = os.path.join('/var', 'sitebot')
 LOG_DATA = os.path.join(APP_DATA, 'logs')
 
 # Folder that holds all database of workers

@@ -75,7 +75,7 @@
                                 {% if site.is_token_invalid() %}
                                     <i class="fa fa-circle expired" title="{{_('Expired')}}"></i> {{_('Expired')}}
                                 {% elif site.get_message_thread() %}
-									{% if site.get_message_thread().state == "online" %}
+                                    {% if site.get_message_thread().state == "online" %}
                                         <i class="fa fa-circle online" title="{{_('Online')}}"></i> {{_('Online')}}
                                     {% else %}
                                         <i class="fa fa-circle offline" title="{{_('Offline')}}"></i> {{_('Offline')}}

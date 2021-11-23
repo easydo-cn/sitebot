@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block styles %}
 {{ super() }}
-
     <style type="text/css">
         #assistant-description {
             padding: .4em .6em;
@@ -49,8 +48,7 @@
                 <tr>
                     <th>{{_('Site')}}</th>
                     <th>{{_('Login user')}}</th>
-                    <th>{{_('Notification')}}</th>
-                    <th>{{_('New message')}}</th>
+                    <th>{{_('Status')}}</th>
                     <th>{{_('Operation')}}</th>
                 </tr>
                 </thead>
@@ -72,30 +70,13 @@
                                 {{site.pid.replace('users.', '')}}
                             {% endif %}
                         </td>
-                        <td class="checkbox-toggle">
-                            {% if not headless %}
-                                <input class="connection-control" type="checkbox"
-                                       data-action="{% if site.get_config('notification') %}disable{% else %}enable{% endif %}_notification"
-                                       data-href="/admin/connections"
-                                       data-connection_id={{site.id}}
-                                    {% if site.get_config("notification") %}
-                                        checked title="{{_('Notification on')}}"
-                                    {% else %}
-                                       title="{{_('Notification off')}}"
-                                    {% endif %}
-                                />
-                            {% endif %}
-                        </td>
                         <td>
                             {% if headless or site.get_config('notification') %}
                                 {% if site.is_token_invalid() %}
                                     <i class="fa fa-circle expired" title="{{_('Expired')}}"></i> {{_('Expired')}}
                                 {% elif site.get_message_thread() %}
-                                    {% if site.get_message_thread().state == "online" %}   
-                                        {% if site.get_config("notification") %}
-                                            <div class="unread-count{% if site.get_message_thread().unread_count > 0 %} unread{% endif %}" 
-                                                data-link="{{ site.instance_url }}/@zopen.message:index">{{ site.get_message_thread().unread_count }}</div>
-                                        {% endif %}
+									{% if site.get_message_thread().state == "online" %}
+                                        <i class="fa fa-circle online" title="{{_('Online')}}"></i> {{_('Online')}}
                                     {% else %}
                                         <i class="fa fa-circle offline" title="{{_('Offline')}}"></i> {{_('Offline')}}
                                     {% endif %}

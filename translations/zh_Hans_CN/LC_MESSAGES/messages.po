@@ -1834,8 +1834,8 @@ msgstr "{}关联: {}"
 #~ msgid "Download completed"
 #~ msgstr "下载完成"
 
-#~ msgid "Online"
-#~ msgstr "在线"
+msgid "Online"
+msgstr "在线"
 
 #~ msgid "Upload completed"
 #~ msgstr "上传完成"

@@ -37,7 +37,7 @@ logger = get_logger('webserver', filename='webserver.log')
 def main():
     # PyInstaller 多进程支持
     freeze_support()
-    if os.getenv('TOKEN') is None:
+    if os.getenv('MANAGER_TOKEN') is None:
         print('请配置机器人的访问 token')
         sys.exit(1)
 

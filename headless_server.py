@@ -294,8 +294,8 @@ def start_server():
     sys.setdefaultencoding("utf-8")
     config.WORKERS = allow_workers
 
-    if os.getenv('TOKEN'):
-        fapp.logger.debug(u'设置了远程访问 token %s', os.getenv('TOKEN'))
+    if os.getenv('MANAGER_TOKEN'):
+        fapp.logger.debug(u'设置了远程访问 token %s', os.getenv('MANAGER_TOKEN'))
 
     http_server = gevent.wsgi.WSGIServer(
         (BIND_ADDRESS, HTTP_PORT),

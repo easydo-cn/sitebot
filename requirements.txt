@@ -9,7 +9,6 @@ chardet==4.0.0
 click==7.1.2
 crcmod==1.7
 cryptography==3.3.2
-edo-client==6.3.3
 enum34==1.1.10
 Fabric==1.14.1
 fabric2==2.6.0

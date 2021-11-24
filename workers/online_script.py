@@ -13,7 +13,7 @@ from invoke.exceptions import UnexpectedExit
 from requests import post
 import edo_client
 import ui_client
-from edo_client.remote_host import get_host
+from easy_engine import RemoteScriptingEngine
 from libs.progress_log_handler import ProgressLogHandler
 from worker import register_worker, get_worker_db
 import utils
@@ -173,7 +173,7 @@ def online_script(
     # 为了避免污染公用的脚本执行环境，为每一任务提供一继承于SCRIPT_ENV的环境
     script_env = SCRIPT_ENV.copy()
     # 获取远端脚本执行引擎。
-    rse = wo_client.get_rse(script_env, False) # 站点机器人不需要对脚本签名校验
+    rse = RemoteScriptingEngine(wo_client, script_env, False) # 站点机器人不需要对脚本签名校验
     # 手动加载脚本以便在脚本执行前获取脚本信息。
     script_obj = rse.load_script(script_name)
 

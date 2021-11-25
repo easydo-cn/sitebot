@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -16,7 +17,6 @@
  */
 """
 '''Sitebot 服务启动脚本'''
-from __future__ import print_function
 import os
 import sys
 from Crypto.PublicKey import RSA

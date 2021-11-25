@@ -15,7 +15,7 @@ fabric2==2.6.0
 Flask==0.12.2
 Flask-Babel==0.9
 future==0.18.2
-gevent==1.1b6
+gevent==1.2.0
 greenlet==1.1.1
 idna==2.10
 invoke==1.6.0

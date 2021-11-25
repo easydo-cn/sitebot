@@ -285,8 +285,8 @@ def start_server():
     https_server = gevent.wsgi.WSGIServer(
         (BIND_ADDRESS, HTTPS_PORT),
         fapp,
-        keyfile=os.path.join(APP_DATA, 'certifi', 'assistant.key'),
-        certfile=os.path.join(APP_DATA, 'certifi', 'assistant.crt'),
+        keyfile=os.path.join(APP_DATA, 'certifi', 'sitebot.key'),
+        certfile=os.path.join(APP_DATA, 'certifi', 'sitebot.crt'),
     )
     fapp.LOCKS = {}
 

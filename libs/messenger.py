@@ -17,6 +17,7 @@ from utils import (
     translate as _, get_editing_worker, get_logger,
 )
 from config import MSG_QOS, MSG_KEEPALIVE, COMMAND_CATEGORY
+from worker import run_online_script
 # from worker import get_worker_logger, get_worker_db
 
 RECONNECT_DELAY = 10
@@ -688,8 +689,7 @@ class Messaging(threading.Thread):
             'args': json.dumps(event_data.pop('args', [])),
             'kw': json.dumps(event_data.pop('kw', {})),
         }
-        response = ui_client.new_worker(worker_info).json()
-        return response
+        return run_online_script(**worker_info)
 
     def handle_notification(self, msg):
         '''处理通知'''

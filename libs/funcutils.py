@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -14,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 """
-# -*- coding: utf-8 -*-
+
 # 此文件来自 bolton 包 (https://github.com/mahmoud/boltons)
 """Python's built-in :mod:`functools` module builds several useful
 utilities on top of Python's first-class function

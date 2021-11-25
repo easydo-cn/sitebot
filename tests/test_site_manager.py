@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# _*_ coding:utf-8 _*_
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -14,8 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 """
-#!/usr/bin/env python
-# _*_ coding:utf-8 _*_
+
 
 import hashlib
 import os

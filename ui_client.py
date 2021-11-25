@@ -1,3 +1,4 @@
+# encoding: utf-8
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -14,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 """
-# encoding: utf-8
+
 '''桌面助手 UI 客户端'''
 
 import json

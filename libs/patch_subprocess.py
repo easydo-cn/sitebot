@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -14,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 """
-# coding: utf-8
+
 # the following code is excerpted from
 # https://gist.github.com/vaab/2ad7051fc193167f15f85ef573e54eb9
 # This patched `Popen` class

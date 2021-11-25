@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -14,5 +15,5 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 """
-# coding: utf-8
+
 from _utils import *  # noqa TODO Fix this star importing

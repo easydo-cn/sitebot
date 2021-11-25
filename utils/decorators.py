@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -14,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 """
-# coding: utf-8
+
 '''
 所有的装饰器放在这个模块中
 注意：

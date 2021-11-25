@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 /*
  * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
@@ -14,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 """
-# -*- coding: utf-8 -*-
 '''Sitebot 服务启动脚本'''
 from __future__ import print_function
 import os

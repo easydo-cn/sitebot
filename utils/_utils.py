@@ -253,7 +253,7 @@ def extract_data_list(arg_names, request=None):
     - 名字以 [] 结尾的参数
     '''
     # 避免取出远程访问 token
-    skip_args = ('token', )
+    skip_args = ('bot_token', )
     kw = {}
     if request is None:
         from flask import request
@@ -617,8 +617,8 @@ def get_oc_client(oc_server=None, account=None, instance=None, token=None):
 def verify_request_token(request):
     '''检查请求是否有 token 授权'''
     TOKEN = os.getenv('MANAGER_TOKEN')
-    request_token = extract_data('token', request=request)
-    cookie_token = request.cookies.get('token', None)
+    request_token = extract_data('bot_token', request=request)
+    cookie_token = request.cookies.get('bot_token', None)
     request_verified = TOKEN is not None \
         and (request_token or cookie_token) == TOKEN
 
@@ -626,7 +626,7 @@ def verify_request_token(request):
     # 「用户通过带 token 的链接首次访问」，写入一个 token cookie，让用户下次可以使用 cookie 验证
     if request_verified and cookie_token is None:
         flask_g.cookies = {
-            'token': (TOKEN, 604800),  # 1 week
+            'bot_token': (TOKEN, 604800),  # 1 week
         }
     return request_verified
 

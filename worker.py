@@ -547,6 +547,25 @@ def safe_run_worker(id, sync=False, pipe=None):
 
     close_logger(logger)
 
+def run_online_script(**worker_info):
+    try:
+        worker_id = new_worker('online_script', **worker_info)
+    except:  # noqa E722
+        worker_id = 0
+
+        # 0 表示任务重复，实际没有创建
+    if worker_id == 0:
+        return json.dumps({
+            'msg': _('This task is already running, please wait...'),
+            'is_alive': False,
+            'worker_id': 0,
+            'type': 'info'
+        })
+    else:
+        # 开始任务
+        result = start_worker(worker_id)
+        return json.dumps(result)
+
 
 
 def run_worker(id, sync=False, pipe=None):

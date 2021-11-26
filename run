@@ -25,7 +25,7 @@ case $action in
         # 统一挂载ssh 目录到/var/sitebot
         if [ ! -d "/var/sitebot/ssh" ];then mkdir -p /var/sitebot/ssh; fi        
         ln -s /var/sitebot/ssh /root/.ssh
-        python /sitebot.py
+        python /sitebot/main.py
         ;;
     shell)
         exec /bin/bash

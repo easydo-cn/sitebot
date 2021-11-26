@@ -19,8 +19,7 @@ RUN pip2 install -r /sitebot/requirements.txt -i $PIP_INDEX_URL &&\
     cd /easy_engine && python setup.py install &&\
     rm -rf /edo_client && rm -rf /easy_engine
 
-RUN ln -s /sitebot/docker/sitebot.py /sitebot.py && \
-    ln -s /sitebot/docker/run /usr/local/bin/run && \
+RUN ln -s /sitebot/run /usr/local/bin/run && \
     chmod +x /usr/local/bin/run
 
 WORKDIR /sitebot

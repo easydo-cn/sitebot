@@ -10,8 +10,8 @@ ARG GIT_PWD
 
 # 复制代码
 WORKDIR /
-RUN git clone --depth 1 --branch $TAG https://$GIT_USER:$GIT_PWD@github.com/easydo-cn/sitebot.git &&\
-    git clone --depth 1 --branch $TAG https://$GIT_USER:$GIT_PWD@github.com/edo_client.git
+RUN git clone https://$GIT_USER:$GIT_PWD@github.com/easydo-cn/sitebot.git &&\
+    git clone https://$GIT_USER:$GIT_PWD@github.com/edo_client.git
 
 # 安装sitebot依赖、edo_client
 RUN pip2 install -r /sitebot/requirements.txt -i $PIP_INDEX_URL &&\

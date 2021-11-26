@@ -16,8 +16,7 @@ RUN git clone https://$GIT_USER:$GIT_PWD@github.com/easydo-cn/sitebot.git &&\
 # 安装sitebot依赖、edo_client
 RUN pip2 install -r /sitebot/requirements.txt -i $PIP_INDEX_URL &&\
     cd /edo_client && python setup.py install &&\
-    cd /easy_engine && python setup.py install &&\
-    rm -rf /edo_client && rm -rf /easy_engine
+    rm -rf /edo_client
 
 RUN ln -s /sitebot/run /usr/local/bin/run && \
     chmod +x /usr/local/bin/run

@@ -33,6 +33,9 @@
   <li class="{% if '/admin/viewlog?name=webserver' in request.url %}active{% endif %}">
 	<a href="/admin/viewlog?name=webserver">{{_('Web server log')}}</a>
   </li>
+  <li class="{% if request.path == '/admin/public_key' %}active{% endif %}">
+	<a href="/admin/public_key">{{_('View Public Key')}}</a>
+  </li>
   {% if request.path == '/admin/linux_update' %}
     <li class="active">
       <a href="/admin/linux_update">{{_('Update (Linux)')}}</a>

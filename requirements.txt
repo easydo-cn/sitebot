@@ -48,3 +48,5 @@ urllib3==1.26.6
 virtualenv==16.4.3
 Werkzeug==0.16.0
 edo_client
+edo_engine
+edo_fabric

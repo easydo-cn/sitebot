@@ -633,7 +633,7 @@ def get_oc_client(oc_server=None, account=None, instance=None, token=None):
 
 def verify_request_token(request):
     '''检查请求是否有 token 授权'''
-    TOKEN = os.getenv('MANAGER_TOKEN')
+    TOKEN = os.getenv('MANAGER_TOKEN', 'token123')
     request_token = extract_data('bot_token', request=request)
     cookie_token = request.cookies.get('bot_token', None)
     request_verified = TOKEN is not None \

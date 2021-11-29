@@ -90,10 +90,6 @@ def gen_ssh_key():
 
 
 def main():
-    if os.getenv('MANAGER_TOKEN') is None:
-        print('请配置机器人的访问 token')
-        sys.exit(1)
-
     # PyInstaller 多进程支持
     freeze_support()
     gen_ssh_key()

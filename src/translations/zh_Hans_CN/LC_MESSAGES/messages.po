@@ -27,6 +27,9 @@ msgstr "站点机器人用于执行站点下发的任务"
 msgid "* Every 5 minutes pull site files to local"
 msgstr "* 每 5 分钟更新站点文件到本地"
 
+msgid "View Public Key"
+msgstr "查看公钥"
+
 msgid "Site Connection"
 msgstr "站点连接"
 

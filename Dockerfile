@@ -9,7 +9,6 @@ ARG PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
 WORKDIR /
 ADD src /sitebot
 ADD run run
-ADD main.py /sitebot/main.py
 
 # 安装sitebot依赖、edo_client
 RUN pip2 install -r /sitebot/requirements.txt -i $PIP_INDEX_URL

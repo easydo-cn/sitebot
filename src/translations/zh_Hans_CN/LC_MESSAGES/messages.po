@@ -30,6 +30,9 @@ msgstr "* 每 5 分钟更新站点文件到本地"
 msgid "View Public Key"
 msgstr "查看公钥"
 
+msgid "You can set the robot's public key to the authorized_keys file in the .SSH folder of the host so that the robot can log in to the host without secret."
+msgstr "可将机器人公钥设置到主机的.ssh文件夹的authorized_keys文件中，这样机器人可以免密登录到该主机。"
+
 msgid "Site Connection"
 msgstr "站点连接"
 

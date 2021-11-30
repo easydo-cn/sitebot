@@ -19,6 +19,7 @@
 
 {% block main_content %}
 {% if key %}
+<p>{{_("You can set the robot's public key to the authorized_keys file in the .SSH folder of the host so that the robot can log in to the host without secret.")}}<p>
 <pre>{{key}}</pre>
 {% else %}
 <div class="alert alert-warning">

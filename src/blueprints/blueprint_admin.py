@@ -167,6 +167,14 @@ def view_worker_detail():
     }
 
 
+@blueprint.route('/public_key', methods=('GET', ))
+@addr_check
+def view_public_key():
+    with open(os.path.join(os.path.expanduser('~'), '.ssh', 'id_rsa.pub'), 'r') as f:
+        key = f.read()
+    return render_template('public_key.html', key=key, **get_common_template_data())
+
+
 @blueprint.route('/viewlog', methods=('GET', ))
 @addr_check
 def view_view_log():

@@ -1,0 +1,1902 @@
+# Chinese (Simplified, China) translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-11-19 12:13+0800\n"
+"PO-Revision-Date: 2016-05-20 16:27+0800\n"
+"Last-Translator: \n"
+"Language: zh_Hans_CN\n"
+"Language-Team: zh_Hans_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.1.1\n"
+
+msgid "Sitebot Console"
+msgstr "站点机器人控制后台"
+
+msgid "Sitebot Used to perform tasks distributed by the site"
+msgstr "站点机器人用于执行站点下发的任务"
+
+msgid "* Every 5 minutes pull site files to local"
+msgstr "* 每 5 分钟更新站点文件到本地"
+
+msgid "View Public Key"
+msgstr "查看公钥"
+
+msgid "You can set the robot's public key to the authorized_keys file in the .SSH folder of the host so that the robot can log in to the host without secret."
+msgstr "可将机器人公钥设置到主机的.ssh文件夹的authorized_keys文件中，这样机器人可以免密登录到该主机。"
+
+msgid "Site Connection"
+msgstr "站点连接"
+
+msgid "3D Preview"
+msgstr "3D 预览"
+
+msgid "3D document viewer is only supported on Windows"
+msgstr "3D 文档查看只支持 Windows 平台"
+
+msgid "3dpreview"
+msgstr "3D 预览"
+
+msgid "A file with the same name was found when uploading the file"
+msgstr "文件上传过程中发现已有重名文件"
+
+msgid "Abnormal domain name resolution"
+msgstr "域名解析异常"
+
+msgid "Activate SyncPlugin"
+msgstr "激活同步插件"
+
+msgid "Activation fails"
+msgstr "激活失败"
+
+msgid "Adjust logging output"
+msgstr "调整日志输出"
+
+msgid "All downloaded files"
+msgstr "下载的所有文件"
+
+msgid "All files of category"
+msgstr "当前显示的类别"
+
+msgid "All status"
+msgstr "全部"
+
+msgid "All {0} files processed"
+msgstr "共{0}个文件全部处理完成"
+
+msgid "Already deleted"
+msgstr "被删除"
+
+msgid "Sitebot"
+msgstr "站点机器人"
+
+msgid ""
+"Sitebot\n"
+"Version {}.{}"
+msgstr ""
+"站点机器人\n"
+"版本 {}.{}"
+
+msgid ""
+"Sitebot\n"
+"Version {}.{}{}"
+msgstr ""
+"站点机器人\n"
+"版本 {}.{}{}"
+
+msgid "Sitebot Error Report"
+msgstr "站点机器人错误报告"
+
+msgid "Sitebot Task detail"
+msgstr "站点机器人任务详情"
+
+msgid ""
+"Sitebot can offer more powerful upload, download, folder "
+"synchronization and other functions, is used to strengthen web browser"
+msgstr "站点机器人提供更强的文件上传、下载、文件夹同步等功能，用来弥补浏览器功能的不足。"
+
+msgid ""
+"Sitebot cannot detect editing of \"{0}\", have you finished editing "
+"this file?\n"
+"Please leave this message until you've finished editing. (Modification "
+"made to this file during this period will be uploaded)"
+msgstr "助手无法检测到\\“{0}\\”的编辑，编辑完成这个文件了吗?请在完成编辑之前留言。(修改在此期间制作的此文件将被上传)"
+
+msgid ""
+"Sitebot cannot sync files with this site. You can either downgrade "
+"Sitebot or contact system administrator to upgrade this site."
+msgstr "站点机器人不能与此站点进行同步。您可以安装旧版站点机器人或联系系统管理员升级此站点。"
+
+msgid "Sitebot commandline mode"
+msgstr "站点机器人命令行模式"
+
+msgid "Sitebot has automatically changed to use the following ports instead."
+msgstr "已自动切换为以下端口"
+
+msgid "Sitebot has started"
+msgstr "站点机器人已经启动"
+
+msgid "Sitebot is connected to the following sites, you can open notification."
+msgstr "站点机器人已经连接到以下站点，可开启新消息提醒"
+
+msgid "Sitebot is unabel to exit now"
+msgstr "站点机器人暂时不能退出"
+
+msgid "Sitebot launched"
+msgstr "站点机器人已启动"
+
+msgid "Sitebot messaging"
+msgstr "站点机器人消息提醒"
+
+msgid "Sitebot port conflict"
+msgstr "站点机器人端口冲突"
+
+msgid "Sitebot troubleshooting"
+msgstr "站点机器人疑难解答"
+
+msgid "Sitebot: task \"{}\" finished"
+msgstr "站点机器人: {} 任务完成"
+
+msgid "Authentication failed"
+msgstr "激活失败"
+
+msgid "Auto"
+msgstr "自动"
+
+msgid "Auto run at startup"
+msgstr "开机自动启动"
+
+msgid "AutoVue (v20 and newer) is not supported"
+msgstr "不支持 AutoVue v20 及以上版本"
+
+msgid "Batch download"
+msgstr "下载"
+
+msgid "Batch upload"
+msgstr "批量上传"
+
+msgid "Both created"
+msgstr "新建冲突"
+
+msgid "Both modified"
+msgstr "修改冲突"
+
+msgid "Broken connection"
+msgstr "断线"
+
+msgid "Build"
+msgstr "Build"
+
+msgid "Build on"
+msgstr "构建于"
+
+msgid ""
+"Can not use explorer to open the webfolder, but you can open explorer "
+"manually"
+msgstr "无法通过资源管理器打开映射盘，你可以手动打开"
+
+msgid "Can't auto-upgrading"
+msgstr "无法自动升级"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Cancel upload"
+msgstr "取消上传"
+
+msgid "Cancelled"
+msgstr "已取消"
+
+msgid ""
+"Cannot sync with this site. You can either <a href=\"#\" "
+"onclick=\"get_assistant()._fail_callback(); return false;\">downgrade "
+"your Sitebot</a> or contact your system administrator to upgrade this "
+"site."
+msgstr ""
+"无法与此站点同步文件。您可以<a href=\"#\" onclick=\"get_assistant()._fail_callback(); "
+"return false;\">安装旧版本站点机器人</a>或联系系统管理员升级此站点。"
+
+msgid "Category"
+msgstr "分类"
+
+msgid "Click to download"
+msgstr "点击下载"
+
+msgid "Click to visit"
+msgstr "点击访问"
+
+msgid "Click to {}"
+msgstr "点击 {}"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Completed"
+msgstr "已经完成"
+
+msgid "Concurrent ports conflicted"
+msgstr "站点机器人并发端口冲突"
+
+msgid ""
+"Concurrent ports conflicted, Sitebot has automatically changed to use "
+"the following ports instead."
+msgstr "站点机器人并发端口冲突，已自动切换为以下端口："
+
+msgid "Conflict"
+msgstr "冲突"
+
+msgid "Conflict not resolved"
+msgstr "冲突未解决"
+
+msgid "Conflict resolved"
+msgstr "冲突已解决"
+
+msgid ""
+"Connections will be created during folder uploading and "
+"downloading,Operate files in desktop, sync to the site easily."
+msgstr "建立站点和本地文件之间的关联，在桌面操作文件，轻松同步到站点。"
+
+msgid "Content Duplicated"
+msgstr "文件重复"
+
+msgid "Content duplication process"
+msgstr "文件内容重复处理"
+
+msgid "Continue"
+msgstr "继续"
+
+msgid "Continuous upload"
+msgstr "断点上传"
+
+msgid "Copy all logs"
+msgstr "复制全部日志"
+
+msgid "Count"
+msgstr "数量"
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Create Syncfolder"
+msgstr "创建同步区"
+
+msgid "Create shortcut"
+msgstr "创建快捷方式"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Deleted items"
+msgstr "已删除"
+
+msgid "Desktop assistant connection"
+msgstr "站点机器人连接"
+
+msgid "Desktop assistant connection is existed"
+msgstr "站点机器人与站点连接已存在"
+
+msgid "Desktop assistant connection is failed"
+msgstr "站点机器人与站点连接失败"
+
+msgid "Desktop assistant connection success"
+msgstr "站点机器人与站点连接成功"
+
+msgid "Detail"
+msgstr "详情"
+
+msgid "Detailed build info"
+msgstr "详细版本信息"
+
+msgid "Detele"
+msgstr "删除"
+
+msgid "Direction"
+msgstr "同步方向"
+
+msgid "Discard change the local file"
+msgstr "放弃本地修改"
+
+msgid "Do you want to keep the synchronization relationship?"
+msgstr "是否保留同步关系？"
+
+msgid "Document modified by others, prepare to merge..."
+msgstr "保存时发现他人修改，正在准备合并..."
+
+msgid "Document viewer"
+msgstr "文档查看器"
+
+msgid "Down"
+msgstr "向下"
+
+msgid "Down: Download the site file synchronization to the local *"
+msgstr "向下：将站点的文件更新同步到本地 *"
+
+msgid "Download"
+msgstr "下载"
+
+msgid "Download again"
+msgstr "重新下载"
+
+msgid "Download failed"
+msgstr "下载失败"
+
+msgid "Download finished"
+msgstr "下载成功"
+
+msgid "Download started"
+msgstr "开始下载"
+
+msgid "Downloading {}"
+msgstr "正在下载 {}"
+
+msgid "Duplicated"
+msgstr "文件重名"
+
+msgid ""
+"During the {} process, this folder creates the synchronization "
+"relationship with the site to fast synchronization."
+msgstr " {}过程中，文件夹和站点建立了同步关系，方便后续快速文件同步。"
+
+msgid "Edit"
+msgstr "外部编辑"
+
+msgid "End time"
+msgstr "结束时间"
+
+msgid "Error"
+msgstr "出错"
+
+msgid "Error detail"
+msgstr "错误详情"
+
+msgid "Error details"
+msgstr "错误详细信息"
+
+msgid "Error querying duplicate files: {}"
+msgstr "查询重名文件出错：{}"
+
+msgid "Error: remote file does not exist"
+msgstr "错误: 远端文件不存在"
+
+msgid "Estimated"
+msgstr "预计用时"
+
+msgid "Expired"
+msgstr "过期"
+
+msgid "Failed"
+msgstr "失败"
+
+msgid "Failed to connect, license for this site has expired"
+msgstr "连接失败，站点授权过期"
+
+msgid "Failed to connect, online user count exceeded limit of site license"
+msgstr "连接失败，在线用户数超出许可允许的最大并发数"
+
+msgid "Failed to create locked edit worker."
+msgstr "创建加锁编辑任务失败。"
+
+msgid "Failed to download: file does not exist"
+msgstr "下载失败: 文件不存在"
+
+msgid "Failed to get the expire date of certificate"
+msgstr "获取证书的过期时间失败"
+
+msgid "Failed to get uid"
+msgstr "获取 uid 失败。"
+
+msgid "Failed to get uid."
+msgstr "获取 uid 失败。"
+
+msgid ""
+"Failed to initialize AutoVue, please make sure you have AutoVue installed"
+" (v19)"
+msgstr "初始化 AutoVue 失败，轻确保您计算机上安装了 AutoVue 软件 (v19)"
+
+msgid ""
+"Failed to initialize eDrawings viewer, please make sure you have "
+"eDrawings installed"
+msgstr "初始化 eDrawings 查看器失败，请确保您计算机上安装了 eDrawings 软件"
+
+msgid ""
+"Failed to initialize, please make sure you have corresponding software "
+"installed"
+msgstr "初始化失败，请确保计算机上安装有相应软件"
+
+msgid "Failed to view"
+msgstr "查看失败"
+
+msgid "Failed to write to disk"
+msgstr "写入到磁盘时失败"
+
+msgid "Failed. Please make sure you have required software installed"
+msgstr "失败, 请确保您计算机上装有对应的软件"
+
+msgid "File Sync"
+msgstr "文件同步"
+
+msgid "File does not exist"
+msgstr "文件不存在"
+
+msgid "File has not changed, does not trigger upload"
+msgstr "文件内容没有改变，不触发上传"
+
+msgid "File name is too long"
+msgstr "文件名过长"
+
+msgid "File not found"
+msgstr "文件不存在"
+
+msgid "File not found or is empty."
+msgstr "文件不存在，或是空文件"
+
+msgid "File push"
+msgstr "文件上传"
+
+msgid "File removed"
+msgstr "文件已移除"
+
+msgid "File size limit exceeded"
+msgstr "文件大小超限"
+
+msgid "File sync"
+msgstr "文件同步"
+
+msgid "File sync information"
+msgstr "文件同步信息"
+
+msgid "File transfer exception"
+msgstr "文件传输异常"
+
+msgid "File transfer information"
+msgstr "文件传输信息"
+
+msgid "File viewing"
+msgstr "文件查看"
+
+msgid "File with the same name (see attachments) already exists"
+msgstr "同名文件已经存在"
+
+msgid "File {} modified during uploading, aborted"
+msgstr "文件 {} 在上传过程中被修改，已放弃此次上传"
+
+msgid "Filename"
+msgstr "文件名"
+
+msgid "Files"
+msgstr "文件"
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "Finished"
+msgstr "完成"
+
+msgid "Folder"
+msgstr "文件夹"
+
+msgid "Folder sync information"
+msgstr "文件夹同步信息"
+
+msgid "Folder with the same name (see attachments) already exists"
+msgstr "同名文件夹已经存在"
+
+msgid "Force release"
+msgstr "强制解锁"
+
+msgid "Force upload"
+msgstr "重复上传"
+
+msgid "Forced upload"
+msgstr "强制上传"
+
+msgid "Found a cached local copy of {}"
+msgstr "找到 {} 的本地缓存版本"
+
+msgid "Found conflict with {}"
+msgstr "文件 {} 发生冲突"
+
+msgid "Free"
+msgstr "空闲"
+
+msgid "HTTP Port"
+msgstr "HTTP 端口"
+
+msgid "HTTPS Port"
+msgstr "HTTPS 端口"
+
+msgid "Handling file conflicts"
+msgstr "文件冲突处理"
+
+msgid "Have you finished editing? (Sitebot)"
+msgstr "你编辑完了吗?(站点机器人)"
+
+msgid "Here are all the tasks of Sitebot:"
+msgstr "下面是站点机器人的所有任务："
+
+msgid "I've finished editing"
+msgstr "我已经完成了编辑"
+
+msgid "If reserve the synchronization, it will auto create the site connection."
+msgstr "如果保留同步关系，将会自动建立站点连接。"
+
+msgid "If sync status icon does not work, you need to"
+msgstr "如果文件同步状态图标不能正常工作，您需要"
+
+msgid ""
+"If the above steps do not work,it is recommended to reinstall the "
+"operating system."
+msgstr "如果上述步骤不起作用，建议重装系统。"
+
+msgid ""
+"If the first step does not work, please run this command {} to scan the "
+"system and try to fix the broken files."
+msgstr "如果第 1 步不起作用的话，请运行 {} 对系统进行扫描并自动修复损坏的文件。"
+
+msgid "Install (Requires Administrator privilege)"
+msgstr "安装（需要管理员权限）"
+
+msgid "Install .Net 4.0 runtime"
+msgstr "安装 .Net 4.0"
+
+msgid "Install webfolder driver"
+msgstr "安装映射盘驱动"
+
+msgid "Install webfolder driver program as Administrator"
+msgstr "以 Windows 管理员身份安装驱动程序"
+
+msgid "Interrupted"
+msgstr "中断"
+
+msgid "It will not be deleted from your computer."
+msgstr "此文件不会从您电脑上删除。"
+
+msgid "Item with the same name (see attachments) already exists"
+msgstr "同名项已经存在"
+
+msgid "Last Deal Time"
+msgstr "最近处理时间"
+
+msgid "Local deleted"
+msgstr "本地删除项"
+
+msgid "Local file"
+msgstr "本地文件"
+
+msgid "Local folder"
+msgstr "本地文件夹"
+
+msgid "Local path"
+msgstr "本地路径"
+
+msgid "Local removed"
+msgstr "本地删除冲突"
+
+msgid "Local reserve"
+msgstr "恢复本地"
+
+msgid "Locally removed"
+msgstr "本地删除的"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Lock"
+msgstr "锁"
+
+msgid "Lock failed"
+msgstr "加锁失败"
+
+msgid "Locked edit"
+msgstr "加锁编辑"
+
+msgid "Locks"
+msgstr "锁"
+
+msgid "Login user"
+msgstr "登录用户"
+
+msgid "Logout"
+msgstr "退出"
+
+msgid "MD5 checksum"
+msgstr "MD5 校验值"
+
+msgid "Manual"
+msgstr "手动"
+
+msgid "Messaging"
+msgstr "消息提醒"
+
+msgid "Messaging on {1} turned off for {0}"
+msgstr "{0} 在 {1} 上的消息提醒已关闭"
+
+msgid "Messaging on {1} turned on for {0}"
+msgstr "{0} 在 {1} 上的消息提醒已开启"
+
+msgid "Missing parameter"
+msgstr "缺少参数"
+
+msgid "Missing system patch: {} and the webfolder driver"
+msgstr "缺少系统补丁：{}和映射盘驱动"
+
+msgid "Mount MemoryFS"
+msgstr ""
+
+msgid "Mount site folders as disk drives in your computer"
+msgstr "将站点文件夹直接映射成桌面磁盘驱动器"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Net Speed"
+msgstr "当前网速"
+
+msgid "Netdrive"
+msgstr "映射盘"
+
+msgid "Network error"
+msgstr "网络错误"
+
+msgid ""
+"Network error occurred.\n"
+"Please check your network connection."
+msgstr ""
+"发生网络错误。\n"
+"请检查你的网络连接。"
+
+msgid "Network error. Can't connect server!"
+msgstr "网络错误。无法连接服务器！"
+
+msgid "Network error. Can't not move anything."
+msgstr "网络错误。无法移动文件。"
+
+msgid "New"
+msgstr "新增"
+
+msgid "New message"
+msgstr "新消息"
+
+msgid "New revision of file {} failed to upload due to quota exceeding"
+msgstr "{} 的新版本已经上传"
+
+msgid "New revision of file {} uploaded"
+msgstr "{} 的新版本已经上传"
+
+msgid "New task"
+msgstr "新任务"
+
+msgid "New task: {}"
+msgstr "新任务: {}"
+
+msgid "New version required, upgrade started. Please try again after upgrading."
+msgstr "需要新版本，已经启动升级任务。请在升级完成后重试。"
+
+msgid "No"
+msgstr "否"
+
+msgid "No Proper Programs Found"
+msgstr "没有找到合适的应用程序"
+
+msgid "No Running"
+msgstr "未运行"
+
+msgid "No conflict"
+msgstr "没有冲突"
+
+msgid "No deleted items."
+msgstr "没有已删除的项"
+
+msgid "No file"
+msgstr "没有文件"
+
+msgid "No file of category"
+msgstr "没有文件归属于类别"
+
+msgid "No item in table"
+msgstr "表中没有内容"
+
+msgid "No lock"
+msgstr "当前没有锁"
+
+msgid "No matching connection."
+msgstr "没有匹配的连接。"
+
+msgid "No matching result"
+msgstr "没有匹配结果"
+
+msgid "No matching syncfolder."
+msgstr "没有匹配的同步区。"
+
+msgid "No matching webfolder."
+msgstr "没有匹配的映射盘。"
+
+msgid "No netdrive"
+msgstr "没有映射盘"
+
+msgid "No path specified"
+msgstr "未指定路径"
+
+msgid "No problems found."
+msgstr "没有发现问题。"
+
+msgid "No program could edit {} file"
+msgstr "没有能编辑 {} 文件的程序"
+
+msgid "No program could open files with extension of {}"
+msgstr "没有能用于打开 {} 的程序"
+
+msgid "No program could open {} file"
+msgstr "没有能用于打开 {} 的程序"
+
+msgid "No site connections"
+msgstr "没有站点连接"
+
+msgid "No such task"
+msgstr "无此任务"
+
+msgid "No sync folder"
+msgstr "没有同步区"
+
+msgid "No syncfolder info"
+msgstr "没有同步区"
+
+msgid "No task"
+msgstr "没有任务"
+
+msgid "None"
+msgstr "无"
+
+msgid "Normal"
+msgstr "正常"
+
+msgid "Not allowed to create script task"
+msgstr "不允许创建脚本任务"
+
+msgid "Not finished yet"
+msgstr "尚未结束"
+
+msgid "Not started yet"
+msgstr "尚未开始"
+
+msgid ""
+"Notice: Maybe you should restart your computer to take effect after the "
+"installation is complete."
+msgstr "注：安装完毕，您可能需要重启电脑，才能生效。"
+
+msgid "Notification"
+msgstr "消息提醒"
+
+msgid "Notification off"
+msgstr "提醒关闭"
+
+msgid "Notification on"
+msgstr "提醒开启"
+
+msgid "Obtaining the remote path was failed."
+msgstr "获取远端路径出错"
+
+msgid "Offline"
+msgstr "离线"
+
+msgid "One-time"
+msgstr "单次"
+
+msgid "Ongoing"
+msgstr "进行中"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open Sitebot"
+msgstr "打开站点机器人"
+
+msgid "Open error"
+msgstr "打开出错"
+
+msgid "Open in local folder"
+msgstr "在本地文件夹打开"
+
+msgid "Open on the browser"
+msgstr "在浏览器中打开"
+
+msgid "Open the location of local certificate"
+msgstr "打开本地证书文件的位置"
+
+msgid "Opened"
+msgstr "已打开"
+
+msgid "Opening file..."
+msgstr "正在打开文件……"
+
+msgid "Operation"
+msgstr "操作"
+
+msgid "Operations"
+msgstr "操作"
+
+msgid "Overrwitted"
+msgstr "已覆盖上传"
+
+msgid "Overwrite"
+msgstr "覆盖"
+
+msgid "Owned by"
+msgstr "占用任务"
+
+msgid "Package type"
+msgstr "包类型"
+
+msgid "Parameters incomplete or illegal"
+msgstr "参数不完整，或值非法"
+
+msgid "Pause"
+msgstr "暂停"
+
+msgid "Paused"
+msgstr "暂停"
+
+msgid "Permission denied"
+msgstr "没有权限"
+
+msgid "Permission denied. Please visit via loopback address."
+msgstr "权限不足。请通过环回地址访问。"
+
+msgid "Please contact your network administrator to check DNS"
+msgstr "请联系您的网络管理员检查 DNS"
+
+msgid "Please follow the instructions below to fix it."
+msgstr "请按下面说明进行修复。"
+
+msgid "Please follow the instructions on the SyncPage to activate it."
+msgstr "请按同步页面的说明激活。"
+
+msgid "Please follow these steps to fix it:"
+msgstr "请按下面步骤修复："
+
+msgid ""
+"Please follow this link to get the system patch: {}. If already "
+"installed, just ignore this prompt."
+msgstr "请根据这个链接来获取系统补丁：{}。 如果已经安装，请忽略这个提示。"
+
+msgid "Please replace the certificate files and relaunch the Sitebot"
+msgstr "请更换证书文件并重启站点机器人"
+
+msgid "Please select a file"
+msgstr "选择一个文件"
+
+msgid "Please select a file / folder"
+msgstr "选择文件/文件夹"
+
+msgid "Please select a folder"
+msgstr "选择一个文件夹"
+
+msgid "Please select a local path for syncfolder"
+msgstr "请为同步区选择一个本地路径"
+
+msgid "Please select a non-sync folder"
+msgstr "选择一个非同步区文件夹"
+
+msgid "Please select files"
+msgstr "选择文件"
+
+msgid "Please visit this link to download a new certificate"
+msgstr "请访问这个链接来下载新的证书"
+
+msgid "Please wait"
+msgstr "请稍等"
+
+msgid "Preparing"
+msgstr "准备中"
+
+msgid "Preparing..."
+msgstr "正在准备……"
+
+msgid "Preview 3D file"
+msgstr "3D 文件预览"
+
+msgid "Problem diagnosis"
+msgstr "问题诊断"
+
+msgid "Problem: {}"
+msgstr "问题：{}"
+
+msgid "Process duplicate"
+msgstr "重名/重复文件处理"
+
+msgid "Process subsequent file content duplicates automatically"
+msgstr "自动处理此任务中的重复文件"
+
+msgid "Processing..."
+msgstr "处理中..."
+
+msgid "Push"
+msgstr "向上同步"
+
+msgid "Push conflicts"
+msgstr "向上同步冲突"
+
+msgid "Querying file information"
+msgstr "查询文件信息"
+
+msgid "Quit"
+msgstr "退出"
+
+msgid "Reason"
+msgstr "原因"
+
+msgid "Recent file transfers"
+msgstr "最近的文件上传下载信息"
+
+msgid "Refresh"
+msgstr "刷新"
+
+msgid "Remote file does not exist"
+msgstr "远端文件不存在"
+
+msgid "Remote remove"
+msgstr "删除线上"
+
+msgid "Remote removed"
+msgstr "线上删除冲突"
+
+msgid "Remove"
+msgstr "删除"
+
+msgid "Remove file failed: "
+msgstr "删除文件失败："
+
+msgid "Remove folder failed: "
+msgstr "删除目录失败："
+
+msgid "Remove sync"
+msgstr "不再同步"
+
+msgid "Remove synchronization relationship"
+msgstr "去除"
+
+msgid "Remove this file?"
+msgstr "删除这个文件吗？"
+
+msgid "Rename and retry"
+msgstr "改名重传"
+
+msgid "Rename and retry uploading"
+msgstr "改名重传"
+
+msgid "Rename process"
+msgstr "重名处理"
+
+msgid "Renamed"
+msgstr "已改名上传"
+
+msgid "Reserve"
+msgstr "保留"
+
+msgid "Resolve conflict"
+msgstr "冲突解决"
+
+msgid "Restart explorer"
+msgstr "重启资源管理器"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Reveal in folder"
+msgstr "在文件夹中显示"
+
+msgid "Running"
+msgstr "正在运行"
+
+msgid "Script task"
+msgstr "脚本任务"
+
+msgid ""
+"Script task #{} failed, script name: {}, args: {}, kw: {}\n"
+"traceback information:\n"
+"{}"
+msgstr ""
+"脚本任务 (ID: {})失败，脚本名称 {}，参数：args: {}, kw: {}\n"
+"traceback 信息：\n"
+"{}"
+
+msgid ""
+"Script task #{} failed, traceback information:\n"
+"{}"
+msgstr ""
+"脚本任务 (ID: {})失败，详细信息：\n"
+"{}"
+
+msgid "Select"
+msgstr "选择"
+
+msgid "Select a file"
+msgstr "选择一个文件"
+
+msgid "Select all"
+msgstr "全选"
+
+msgid "Server-side path"
+msgstr "工作平台路径"
+
+msgid "Set default"
+msgstr "设为默认"
+
+msgid "Setting Save Successfully."
+msgstr "设置成功"
+
+msgid "Setup sync folder"
+msgstr "建立同步区关联"
+
+msgid "Shared editing"
+msgstr "共享编辑"
+
+msgid "Show sync menu item and status icon for files."
+msgstr "在桌面显示文件同步菜单和状态图标"
+
+msgid "Site"
+msgstr "站点"
+
+msgid "Site file"
+msgstr "站点文件"
+
+msgid "Site file and local file will be deleted, Are you sure?"
+msgstr "站点文件和本地文件都将被删除，你确定吗？"
+
+msgid "Site file is deleted and new version can not be uploaded."
+msgstr "站点文件被删除，无法上传新版本。"
+
+msgid "Site folder"
+msgstr "站点文件夹"
+
+msgid "Site name"
+msgstr "站点"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Solution: "
+msgstr "解决方法："
+
+msgid ""
+"Someone else modified this file during your editing, your file has been "
+"saved as a branched version."
+msgstr "在您编辑期间，有人修改了此文件，您的文件已被保存为分支版本"
+
+msgid "Source file deleted"
+msgstr "快捷方式源文件被删除"
+
+msgid "Start"
+msgstr "启动"
+
+msgid "Start sync"
+msgstr "启动同步"
+
+msgid ""
+"Start the command line as an administrator and run this command {}, try "
+"to start the NULL service."
+msgstr "以管理员身份运行命令行并运行 {}，尝试启动 NULL 服务。"
+
+msgid "Start time"
+msgstr "执行时间"
+
+msgid "Started"
+msgstr "启动时间"
+
+msgid "Started at"
+msgstr "开始时间"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Stop folder sync"
+msgstr "停止文件夹同步"
+
+msgid "Stop sync"
+msgstr "停止同步"
+
+msgid "Subcommands"
+msgstr "子命令"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Subsequent file duplicates will be automatically cancelled"
+msgstr "后续文件发生重名时自动取消上传"
+
+msgid "Subsequent file duplicates will be automatically overwritted"
+msgstr "后续文件发生重名时自动覆盖上传"
+
+msgid "Successful activation"
+msgstr "激活成功"
+
+msgid "Sync"
+msgstr "双向"
+
+msgid "Sync conflicts"
+msgstr "同步冲突"
+
+msgid "Sync finished"
+msgstr "同步完成"
+
+msgid "Sync folder"
+msgstr "同步文件夹"
+
+msgid ""
+"Sync status icon and webfolders won't work properly until you restart "
+"explorer."
+msgstr "端口变化，需要重启资源管理器，同步状态图标和映射盘才能正常工作。"
+
+msgid "Sync time"
+msgstr "同步时间"
+
+msgid "Sync: Local and site are synchronized with each other *"
+msgstr "双向：本地和站点的文件更新相互同步 *"
+
+msgid "Syncing"
+msgstr "同步中"
+
+msgid "Task"
+msgstr "任务"
+
+msgid "Task \"{}\" failed.You can view this task in \"Task\" page in Sitebot."
+msgstr "{} 任务失败。您可以在站点机器人的「任务」页面中查看此任务。"
+
+msgid "Task Error"
+msgstr "任务出错"
+
+msgid "Task ID not specified"
+msgstr "任务 ID 未指定"
+
+msgid "Task deleted"
+msgstr "任务已删除"
+
+msgid "Task detail"
+msgstr "任务详情"
+
+msgid "Task does not exist"
+msgstr "任务不存在"
+
+msgid "Task finished"
+msgstr "任务完成"
+
+msgid "Task paused"
+msgstr "任务已暂停"
+
+msgid "Task recovery"
+msgstr "任务恢复"
+
+msgid "Task running abnormaly"
+msgstr "任务运行异常"
+
+msgid "Task started"
+msgstr "任务已开始"
+
+msgid "Task started, {:d} items to download"
+msgstr "任务开始, 共有 {:d} 项等待下载"
+
+msgid "Task terminated"
+msgstr "任务终止"
+
+msgid "Tasks"
+msgstr "任务"
+
+msgid "Tasks recovered"
+msgstr "任务已恢复运行"
+
+msgid "The NULL service is abnormal."
+msgstr "NULL 服务运行异常。"
+
+msgid "The SyncPlugin is not activated."
+msgstr "同步插件未激活。"
+
+msgid "The assistant auto-upgrade was disabled"
+msgstr "站点机器人自动升级被禁用"
+
+msgid "The certificate has expired"
+msgstr "证书已经过期"
+
+msgid "The certificate is close to expiring date"
+msgstr "证书临近过期"
+
+msgid "The current version webfolder can only run on Windows"
+msgstr "当前版本的映射盘只能在 Windows 上运行"
+
+msgid "The folder sync task has been aborted: {}"
+msgstr "文件夹同步任务已经中止：{}"
+
+msgid "The folder will no longer be synchronized, Are you sure?"
+msgstr "此文件夹将不能再进行文件同步，确认吗？"
+
+msgid ""
+"The length of local path is {} characters, which exceeds the path limit "
+"of Windows."
+msgstr "文件本地路径长度为 {} 个字符，超过了 Windows 的路径长度限制。"
+
+msgid "The local file is deleted."
+msgstr "本地文件被删除."
+
+msgid "The local file(version {}) and site file both changed."
+msgstr "本地文件(版本{})和站点文件都已被修改。"
+
+msgid "The local has changed!"
+msgstr "本地有修改！"
+
+msgid ""
+"The local synchronization directory has been deleted, synchronization "
+"relationship will be released."
+msgstr "本地同步目录被删除，同步关系将会被解除"
+
+msgid "The path has not been synchronized."
+msgstr "该路径未曾进行过同步。"
+
+msgid "The site connection does not exist"
+msgstr "该站点连接不存在"
+
+msgid "The site file is deleted."
+msgstr "站点文件被删除"
+
+msgid "The site folder was removed"
+msgstr "站点文件夹被删除"
+
+msgid "The site has updated!"
+msgstr "站点有更新！"
+
+msgid "The source folder does not exists"
+msgstr "原始文件夹不存在"
+
+msgid "The syncfolder of webfolder {}"
+msgstr "映射盘 {} 内置的同步文件夹"
+
+msgid ""
+"The upload task found {} duplicate names or duplicate files, please "
+"handle them in the transfer progress page"
+msgstr "上传任务发现有 {} 个文件重名或重复，请到传输页面处理"
+
+msgid "There are {} files conflict"
+msgstr "有{}个文件冲突"
+
+msgid ""
+"There files conflict occurred when synchronizing, please resolve these "
+"conflicts"
+msgstr "以下文件在同步时发生冲突，请依次解决冲突！"
+
+msgid ""
+"There have some excel files which on the editing mode, please exit the "
+"current editing cell."
+msgstr "有一些excel文件处于编辑模式，请退出当前编辑格。"
+
+msgid "This current version WebFolder does not support this OS"
+msgstr "当前版本的映射盘不支持此操作系统"
+
+msgid "This feature is not supported in current version"
+msgstr "当前版本不支持此功能"
+
+msgid "This file has not been synchronized."
+msgstr "该文件未曾进行过同步。"
+
+msgid "This task is already running"
+msgstr "此任务已经在运行"
+
+msgid "This task is already running, please wait..."
+msgstr "此任务已经在运行，请稍候……"
+
+msgid "Total"
+msgstr "文件总数"
+
+msgid "Transform Progress"
+msgstr "传输进度"
+
+msgid "Troubleshooting"
+msgstr "疑难解答"
+
+msgid "Try reset ports on next assistant start."
+msgstr "尝试在下次启动时重置回默认端口"
+
+msgid "Try to reinstall Sitebot"
+msgstr "请尝试重新安装站点机器人"
+
+msgid "Unable to download target file"
+msgstr "无法下载此文件"
+
+msgid "Unable to edit your file {}"
+msgstr "无法编辑文件{}"
+
+msgid "Unable to open file"
+msgstr "无法打开文件"
+
+msgid ""
+"Unable to start locked_edit worker.\n"
+"Reason: {}"
+msgstr ""
+"无法启动加锁编辑。\n"
+"原因：{}"
+
+msgid ""
+"Unable to view online.\n"
+"Reason: {}"
+msgstr ""
+"无法在线查看。\n"
+"原因：{}"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Unlock failed"
+msgstr "解锁失败"
+
+msgid "Unlock failed, retry."
+msgstr "解锁失败，请重试"
+
+msgid "Unmount"
+msgstr "卸载"
+
+msgid "Unsupported OS version"
+msgstr "不支持的操作系统版本"
+
+msgid "Unsupported operating system"
+msgstr "不支持的操作系统"
+
+msgid "Up"
+msgstr "向上"
+
+msgid "Up: Update the local file synchronization to the site"
+msgstr "向上：将本地的文件更新同步到站点"
+
+msgid "Update (Linux)"
+msgstr "Linux 版本升级"
+
+msgid "Update certificate"
+msgstr "更新证书"
+
+msgid "Upgrade"
+msgstr "升级"
+
+msgid "Upload"
+msgstr "上传"
+
+msgid "Upload again"
+msgstr "重新上传"
+
+msgid "Upload as new revision"
+msgstr "覆盖上传"
+
+msgid "Upload file failed: Permission denied"
+msgstr "文件上传失败：没有权限"
+
+msgid "Upload finished"
+msgstr "上传成功"
+
+msgid "Upload started"
+msgstr "开始上传"
+
+msgid "Username"
+msgstr "用户"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "View"
+msgstr "查看"
+
+msgid "View detail"
+msgstr "查看详情"
+
+msgid "View log"
+msgstr "查看日志"
+
+msgid "View new local deleted items"
+msgstr "查看本地新删除项"
+
+msgid "View online"
+msgstr "在线查看"
+
+msgid "View online version"
+msgstr "查看线上版本"
+
+msgid "View task"
+msgstr "查看任务"
+
+msgid "Viewer launched"
+msgstr "查看器已打开"
+
+msgid "Waiting"
+msgstr "等待运行"
+
+msgid "WaitingFinished"
+msgstr "等待完成"
+
+msgid "Web server log"
+msgstr "服务日志"
+
+msgid "Webfolder"
+msgstr "映射盘"
+
+msgid "Webfolder driver is not installed"
+msgstr "映射盘驱动未安装"
+
+msgid ""
+"Webfolder is currently unavailable as the dependencies have not been "
+"installed."
+msgstr "检测到相关依赖还未安装，不能使用映射盘。"
+
+msgid "Webfolder {} removed"
+msgstr "映射盘 {} 已经卸载"
+
+msgid "Windows does not support downloading files with long file names"
+msgstr "Windows 不支持下载过长文件名的文件"
+
+msgid "Worker {} removed"
+msgstr "任务 {} 已经删除"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "Yesterday"
+msgstr "昨天"
+
+msgid "You are already editing {}"
+msgstr "您已经在编辑 {}"
+
+msgid ""
+"You are editing one or more files so Sitebot is unable to quit.\n"
+"Please finish editing first before trying to quit."
+msgstr ""
+"你正在进行文件编辑，站点机器人不能退出。\n"
+"请完成编辑后再尝试退出。"
+
+msgid ""
+"You can compare the different content of these file and merge it into "
+"local file."
+msgstr "你可以比较内容差异，合并到本地文件。"
+
+msgid "You can now enable Sitebot messaging"
+msgstr "您现在可以开启站点机器人消息提醒"
+
+msgid "You can visit that site to enable notification"
+msgstr "您可以访问该站点来开启消息提醒"
+
+msgid "You cancelled uploading of this file. It was moved to {}"
+msgstr "您取消了该文件的上传。文件已移入 {}"
+
+msgid "You have no permission to download {}, skipped"
+msgstr "没有权限下载 {}，已经略过"
+
+msgid ""
+"You have not selected a folder to download for a long time. Please try "
+"again"
+msgstr "由于您长时间没有选择下载到的文件路径，选择已失效，请重试"
+
+msgid "You have not selected a folder. Please try again"
+msgstr "您没有选择下载到本地的路径，请确认后重试"
+
+msgid "You need to downgrade to an old version to use Sitebot on this site."
+msgstr "您需要降级到旧版本才能在此站点上使用站点机器人"
+
+msgid "You need to downgrade to use Sitebot on this site."
+msgstr "您需要降级到旧版本才能在此站点上使用站点机器人"
+
+msgid ""
+"You need to have webfolder driver installed. Please run troubleshooting "
+"from context menu of tray icon."
+msgstr "您需要安装映射盘驱动。请从托盘图标右键菜单运行故障诊断程序。"
+
+msgid ""
+"You need to set above ports at personal menu > Sitebot at the the top "
+"right corner in sites you use."
+msgstr "您需要到站点右上角的个人下拉菜单 - 站点机器人子菜单中，设置为使用以上端口。"
+
+msgid "You should manually turn on messaging on {}: {}"
+msgstr "您需要再次手动开启 {} 站点的桌面消息提醒: {}"
+
+msgid ""
+"Your editor or operating system seems to be misconfigured, please "
+"consider reinstalling the editor."
+msgstr "您的编辑器或操作系统似乎配置错误，请考虑重新安装编辑器。"
+
+msgid ""
+"Your operating system is outdated, Windows 7 SP1 or newer is required to "
+"use webfolder"
+msgstr "您的操作系统太旧，至少需要 Windows 7 SP1 才能使用映射盘功能"
+
+msgid "Your selected folder is not valid. Please try again"
+msgstr "您选择了一个无效的文件夹，请确认后重试"
+
+msgid "[Image] {}"
+msgstr "[图片] {}"
+
+msgid "[{}][Chat] {} said"
+msgstr "[{}][聊天] {} 说"
+
+msgid "[{}][Notify] {} {}"
+msgstr "[{}][通知] {} {}"
+
+msgid "auto"
+msgstr "自动"
+
+msgid "commented"
+msgstr "评论"
+
+msgid "conflict_backup"
+msgstr "冲突备份"
+
+msgid "content_duplicated_file_link_text"
+msgstr "相同内容的文件"
+
+msgid "context_duplicated_file_prefix"
+msgstr "站点上存在"
+
+msgid "context_duplicated_file_suffix"
+msgstr "，您可以："
+
+msgid "created"
+msgstr "创建"
+
+msgid "document"
+msgstr "文档"
+
+msgid "down"
+msgstr "向下"
+
+msgid "download"
+msgstr "下载"
+
+msgid "edit"
+msgstr "编辑"
+
+msgid "edit programs"
+msgstr "设置"
+
+msgid "edited"
+msgstr "编辑"
+
+msgid "error"
+msgstr "出错"
+
+msgid "file edit application"
+msgstr "文件编辑应用"
+
+msgid "file extention is required"
+msgstr "必须输入文件后缀"
+
+msgid "file removal is disabled"
+msgstr "禁止删除文件"
+
+msgid "finished"
+msgstr "完成"
+
+msgid "fixed revision"
+msgstr "定版"
+
+msgid "folder removal is disabled"
+msgstr "禁止删除目录"
+
+msgid "free"
+msgstr "空闲"
+
+msgid "help.text.log_debug"
+msgstr ""
+"<p><strong>注意：这是一个高级功能，并可能影响站点机器人的运行速度。请仅在您遇到问题时，或技术支持/开发人员明确要求时才进行操作。</strong></p>"
+"\n"
+"<p>日志设置保存在<code>%%USERPROFILE%%\\edo_assistent</code>目录下的<code>logging.json</code>文件中。使用文本编辑器打开这个文件，在靠近文件末尾处找到所有的<code>\"handlers\":"
+" []</code>改为<code>\"handlers\": [\"debug_file\"]</code></p>\n"
+"<p>在修改完成后，您可以再次尝试执行可以重现问题的任务。此时任务日志中会包含更详细的调试内容。</p>\n"
+"<p>调试日志获取完毕后，请将日志设置恢复到初始状态，以免影响您的正常使用。</p>"
+
+msgid "help.title.log_debug"
+msgstr "如何调整日志输出"
+
+msgid "input file extention, eg: .mp3"
+msgstr "输入文件后缀，比如: .mp3"
+
+msgid "install the webfolder driver (Requires Administrator privilege)"
+msgstr "安装映射盘驱动（需要管理员权限）"
+
+msgid "manual"
+msgstr "手动"
+
+msgid "mentioned you in comment"
+msgstr "在评论中提到您"
+
+msgid "mentioned you in group"
+msgstr "在群聊中提到您"
+
+msgid "open windows fail"
+msgstr "打开窗口失败"
+
+msgid "open windows success"
+msgstr "打开窗口成功"
+
+msgid "p2pdownload"
+msgstr "局域网加速下载"
+
+msgid "pause sync success"
+msgstr "暂停同步区成功"
+
+msgid "paused"
+msgstr "已暂停"
+
+msgid "prepare"
+msgstr "准备中"
+
+msgid "published"
+msgstr "发布"
+
+msgid "reminded"
+msgstr "催办"
+
+msgid "requires privileged access"
+msgstr "需要管理员权限"
+
+msgid "resigned workflow"
+msgstr "更改流程"
+
+msgid "running"
+msgstr "运行中"
+
+msgid "search edit program"
+msgstr "查找编辑应用"
+
+msgid "set as default"
+msgstr "设为编辑应用"
+
+msgid "set edit program for different file type"
+msgstr "设置使用何种应用来打开编辑不同类型的文件"
+
+msgid "shared"
+msgstr "分享"
+
+msgid "signed workflow"
+msgstr "触发流程"
+
+msgid "sync"
+msgstr "双向"
+
+msgid "syncfolder error"
+msgstr "同步区错误"
+
+msgid "the syncfolder is exist"
+msgstr "同步区已存在"
+
+msgid "unknown"
+msgstr "未知"
+
+msgid "up"
+msgstr "向上"
+
+msgid "updated revision"
+msgstr "更新版本"
+
+msgid "upload"
+msgstr "上传"
+
+msgid "version"
+msgstr "版本"
+
+msgid "view"
+msgstr "查看"
+
+msgid "{0} items ({1} ...)  uploaded"
+msgstr "{1} 等 {0} 项已经成功上传"
+
+msgid "{0} processed"
+msgstr "{0} 已处理"
+
+msgid "{1} uploaded"
+msgstr "{1} 已经成功上传"
+
+msgid "{:d} folder(s), {:d} file(s)"
+msgstr "{:d}个文件夹, {:d}个文件"
+
+msgid ""
+"{}\n"
+"  {} items"
+msgstr ""
+
+msgid ""
+"{}\n"
+"attachments: "
+msgstr ""
+
+msgid ""
+"{}\n"
+"related: {}"
+msgstr ""
+
+msgid "{} conflicts found during this pulling"
+msgstr "在pull的过程中发现了{}个冲突"
+
+msgid "{} has been blocked from running because it's not signed."
+msgstr "{} 已被阻止运行，因为它不包含有效签名。"
+
+msgid "{} is not exists! Stop editing"
+msgstr "{} 不存在！编辑停止"
+
+msgid "{} is not in a sync folder"
+msgstr "{} 不是一个同步区"
+
+msgid "{} running error and will retry soon"
+msgstr "{}运行出错，稍后将重试"
+
+msgid "{}. Local path is: {}"
+msgstr "{}。本地路径是: {}"
+
+msgid "{}attachments: "
+msgstr "{}附件: "
+
+msgid "{}related: {}"
+msgstr "{}关联: {}"
+
+#~ msgid "{0} is no longer trusted"
+#~ msgstr "站点 {0} 不再被信任"
+
+#~ msgid "{0} is now trusted"
+#~ msgstr "您已信任站点 {0}"
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Download PDF"
+#~ msgstr "下载 PDF"
+
+#~ msgid "Downloading"
+#~ msgstr "下载中"
+
+#~ msgid "Failed to acquire administrator privilege, "
+#~ msgstr "请求管理员权限失败，"
+
+#~ msgid "Failed to install sync plugin"
+#~ msgstr "安装同步插件失败"
+
+#~ msgid "Install sync plugin"
+#~ msgstr "安装同步插件"
+
+#~ msgid "Package validation fails, check your network situation"
+#~ msgstr "安装包验证失败，请检查您的网络状况"
+
+#~ msgid "Processing"
+#~ msgstr "处理中"
+
+#~ msgid "Start installing sync plugin"
+#~ msgstr "开始安装同步插件"
+
+#~ msgid "Sync plugin installed"
+#~ msgstr "安装同步插件成功"
+
+#~ msgid "Sync plugin is being installed (administrator privilege required)."
+#~ msgstr "正在安装同步插件(需要管理员权限)。"
+
+#~ msgid "Trying to install SyncPlugin to mount this webfolder"
+#~ msgstr "正在安装同步助手，以使用映射盘功能"
+
+#~ msgid "Upgrade sync assistant"
+#~ msgstr "升级同步助手"
+
+#~ msgid "Upgrade sync plugin"
+#~ msgstr "升级同步插件"
+
+#~ msgid "{} processed"
+#~ msgstr "{} 已处理"
+
+#~ msgid "Sitebot Configuration"
+#~ msgstr "站点机器人设置"
+
+#~ msgid "Settings"
+#~ msgstr "设置"
+
+#~ msgid "Unlock failed, try to unlock again later."
+#~ msgstr "解锁失败，稍后进行重试。"
+
+#~ msgid "File selection"
+#~ msgstr "文件选择"
+
+#~ msgid "Folder selection"
+#~ msgstr "文件夹选择"
+
+#~ msgid "Note: there are sync folder(s) inside {}"
+#~ msgstr "注意：在 {} 里有同步区"
+
+#~ msgid "Note: {} is a sync folder or in a sync folder"
+#~ msgstr "{} 不是一个同步区"
+
+#~ msgid "I know"
+#~ msgstr "我知道了"
+
+#~ msgid "Cannot merge into PDF document, files might be corrupted or malformed"
+#~ msgstr "抱歉，由于文件格式有问题，指定文件不支持合并成 PDF"
+
+#~ msgid "Merge PDFs"
+#~ msgstr "合并PDF"
+
+#~ msgid "Merged PDF file {} was downloaded to {}"
+#~ msgstr "合并的 PDF 文件 {} 已经下载到 {}"
+
+#~ msgid "Task started, {:d} items to merge"
+#~ msgstr "任务开始, 共有 {:d} 项等待合并"
+
+#~ msgid "{:d} files not merged, see the task log for details"
+#~ msgstr "{:d} 个文件没有合并，详情请查看日志"
+
+#~ msgid "{} cannot be converted to PDF, thus is skipped"
+#~ msgstr "{} 无法转换成 PDF，已略过此文件"
+
+#~ msgid "No sync anymore"
+#~ msgstr "不再同步"
+
+#~ msgid "{0} abnormal files"
+#~ msgstr "有{0}个异常文件"
+
+#~ msgid "Download completed"
+#~ msgstr "下载完成"
+
+msgid "Online"
+msgstr "在线"
+
+#~ msgid "Upload completed"
+#~ msgstr "上传完成"
+
+#~ msgid "{site_name}{username}: {count:d} unread"
+#~ msgstr "{site_name}{username}: {count:d} 未读"
+
+#~ msgid "Remove file failed: site disable remove files"
+#~ msgstr "删除文件失败：站点禁止了删除文件"
+
+#~ msgid "Remove folder failed: site disable remove folders"
+#~ msgstr "删除目录失败：站点禁止了删除目录"
+
+#~ msgid "site disable remove files"
+#~ msgstr "站点禁止了删除文件"
+
+#~ msgid "site disable remove folders"
+#~ msgstr "站点禁止了删除目录"
+
+#~ msgid "Default ports occupied"
+#~ msgstr "站点机器人默认端口被占用"
+
+#~ msgid "Authentication failed"
+#~ msgstr "身份验证失败"
+
+#~ msgid "Cert illegal or expired"
+#~ msgstr "证书非法或已失效"
+
+#~ msgid "File Not Found"
+#~ msgstr "文件未找到"
+
+#~ msgid "Have you finished editing? (Sitebot)"
+#~ msgstr "已经退出编辑了吗？（站点机器人）"
+
+#~ msgid "I've finished editing"
+#~ msgstr "已经退出编辑"
+
+#~ msgid "LAN P2P download"
+#~ msgstr "局域网加速下载"
+
+#~ msgid "Missing uid or chunk_list"
+#~ msgstr "缺少 uid 或 chunk_list"
+
+#~ msgid "Missing uid or chunk_num"
+#~ msgstr "缺少 uid 或 chunk_num"
+
+#~ msgid "New revision of file {} failed to upload due to quota exceeding"
+#~ msgstr "因服务器容量超限，文件 {} 的新版本未能上传成功"
+
+#~ msgid "No program could edit {} file"
+#~ msgstr "没有能用于编辑 {} 的程序"
+
+#~ msgid "No program could open {} file"
+#~ msgstr "没有程序可用于打开 {}"
+
+#~ msgid "Ok"
+#~ msgstr "好"
+

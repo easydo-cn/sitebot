@@ -1,0 +1,95 @@
+<!--
+/*
+ * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
+ *
+ * This program is free software: you can use, redistribute, and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3
+ * or later ("AGPL"), as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+<!doctype html>
+<html lang="{{lang}}">
+<head>
+  <meta charset="utf-8">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+  {% block styles %}
+    <style type="text/css">
+      .tab-content {
+        margin: 1em 1em 0 1em;
+      }
+      .form-horizontal .control-label {
+        width: auto;
+      }
+      .form-horizontal .controls {
+        margin-left: 100px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  {% endblock %}
+</head>
+<body>
+{% block content %}
+  <div class="tab-content">
+
+    <form class="form-horizontal">
+      <p>{{_('Concurrent ports conflicted, Sitebot has automatically changed to use the following ports instead.')}}</p>
+      <div class="control-group">
+        <label for="http_port" class="control-label">{{_('HTTP Port')}}</label>
+        <div class="controls">
+          <input type="number" max="65535" mmin="0" step="1" id="http_port" disabled readonly value="{{config['http_port']}}">
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="https_port" class="control-label">{{_('HTTPS Port')}}</label>
+        <div class="controls">
+          <input type="number" max="65535" mmin="0" step="1" id="https_port" disabled readonly value="{{config['https_port']}}">
+        </div>
+      </div>
+      <p>{{_('You need to set above ports at personal menu > Sitebot at the the top right corner in sites you use.')}}</p>
+      <p class="auto_changed hidden">{{_('Sync status icon and webfolders won\'t work properly until you restart explorer.')}}</p>
+      <div class="control-group auto_changed hidden">
+        <div class="controls">
+          <button class="btn btn-default" id="restart_explorer">{{_('Restart explorer')}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/static/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="/static/jquery.jsonp.min.js"></script>
+  <script type="text/javascript">
+    // 站点机器人启动时自动切换了可用端口，在加载这个页面时会带上 ?auto_changed
+    if (/auto_changed/.test(window.location.search)) {
+      window.native && native.resizeWindow(window.innerWidth, 360);
+      $('.auto_changed').removeClass('hidden');
+      $(document.body).on('click', '#restart_explorer', function(){
+        $.ajax({
+          cache: false,
+          url: window.location.toString(),
+          method: 'POST',
+          dataType: 'json',
+          data: {action: 'restart_explorer'},
+          success: function(){
+            window.native && native.closeWindow();
+          }
+        });
+        return false;
+      });
+    }
+  </script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!--
+/*
+ * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
+ *
+ * This program is free software: you can use, redistribute, and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3
+ * or later ("AGPL"), as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+<style type="text/css">
+    p {
+        -webkit-margin-before: 0em;
+        -webkit-margin-after: 0em;
+    }
+    h2, ol {
+        -webkit-margin-before: 0.5em;
+        -webkit-margin-after: 0.5em;
+    }
+    .panel {
+        min-height: 370px;
+    }
+    .problem {
+        -webkit-margin-after: 1em;
+    }
+    p.version {
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #444;
+    }
+    .page-header {
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }
+</style>
+<div class="panel">
+    <div class="page-header"><h2>{{ title }}</h2></div>
+    <p class="version">
+        <small>
+            {{ version_info }}
+            <a href="#" onclick="return openWithBrowser('/admin/viewlog?name=webserver');">{{ viewlog }}</a>
+        </small>
+    </p>
+    {% if not diagnosis %}
+    <p>{{ _("No problems found.") }}</p>
+    {% else %}
+        {% for diagnose in diagnosis %}
+            <div class="problem">
+                <p class="text-error">
+                    <strong>{{ _("Problem: {}").format(diagnose.title) }}</strong>
+                </p>
+                <p>
+                {{ _("Solution: ") }}
+                {% if diagnose.instructions|length > 1 %}
+                    {{ _("Please follow the instructions below to fix it.") }}
+                    <ol>
+                    {% for instruction in diagnose.instructions %}
+                        <li>{{ instruction }}</li>
+                    {% endfor %}
+                    </ol>
+                {% else %}
+                    {% if diagnose.ports %}
+                        {{ _('Sitebot has automatically changed to use the following ports instead.') }}<br>
+                        <span style="padding-left: 20px;">
+                            {{ _('HTTP Port') }} <input disabled value="{{ diagnose.ports.http }}">
+                            {{ _('HTTPS Port') }} <input disabled value="{{ diagnose.ports.https }}">
+                        </span>
+                        <ol>
+                            <li>{{ _('You need to set above ports at personal menu > Sitebot at the the top right corner in sites you use.') }}</li>
+                            <li>{{ _('If sync status icon does not work, you need to') }} <a href="#" onclick="restartExplorer();">{{ _('Restart explorer') }}</a></li>
+                            <li><a href="#" onclick="resetPortsOnNextStart();">{{ _('Try reset ports on next assistant start.') }}</a></li>
+                        </ol>
+                    {% elif diagnose.dokan_not_installed %}
+                        <a href="#" onclick="installDokan();">{{ _('Install (Requires Administrator privilege)') }}</a>
+                    {pass% else %}
+                        {{ diagnose.instructions[0] }}
+                    {% endif %}
+                {% endif %}
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+<script type="text/javascript">
+    function openWithBrowser(link) {
+        if (/^\//.test(link)) { link = EDO.BaseURL + link; }
+        native.openWithBrowser(link);
+        return false;
+    }
+    function restartExplorer() {
+        $.post(EDO.BaseURL + '/admin/config', {action: 'restart_explorer'});
+        return false;
+    }
+    function resetPortsOnNextStart() {
+        $.post(EDO.BaseURL + '/admin/config', {action: 'reset_ports_on_next_start'});
+        return false;
+    }
+    function installDokan(){
+        $.post(EDO.BaseURL + '/worker/new/install_webfolder_driver', {
+            version: EDO.Version, build_number: EDO.BuildNumber
+        });
+        return false;
+    }
+</script>

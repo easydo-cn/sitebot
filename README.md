@@ -21,4 +21,4 @@
 安装可参考：[站点机器人安装手册](https://work.easydo.cn/++intid++1582173372/@zopen.docs:view_file_default)
 
 ## 自动化脚本开发 ##
-自动化脚本开发可参数：[站点机器人自动化脚本开发教程](https://work.easydo.cn/++intid++1593460469/@zopen.docs:view_file_default)
+自动化脚本开发可参考：[站点机器人自动化脚本开发教程](https://work.easydo.cn/++intid++1593460469/@zopen.docs:view_file_default)

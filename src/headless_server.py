@@ -34,7 +34,7 @@ from utils import (
 )
 import config
 from config import (
-    BUILD_NUMBER, VERSION, ALLOW_DOMAIN, HTTP_PORT,
+    BUILD_NUMBER, VERSION, HTTP_PORT,
     HTTPS_PORT, BIND_ADDRESS, CURRENT_DIR, LOG_DATA, APP_DATA
 )
 

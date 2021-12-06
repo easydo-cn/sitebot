@@ -21,24 +21,20 @@ import os
 import time
 import json
 import logging
-import copy
 import inspect
 import signal
-import sys
-
 from libs import workerdb
-import ui_client
 from datetime import datetime
 from multiprocessing import Process, current_process
 import threading
 import psutil
 from flask import current_app, has_app_context
 
-from errors import SitebotException, Retry, LogicError
+from errors import SitebotException, Retry
 from config import (
     WORKER_STORAGE_DIR, LOG_DATA, VERSION,
     BUILD_NUMBER, RETRY_INTERVAL, AUTO_START_INTERVAL,
-    GIT_INFO, WORKERS,
+    GIT_INFO
 )
 from ui_client import _request_api
 from utils import (

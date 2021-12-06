@@ -1,0 +1,117 @@
+<!--
+/*
+ * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
+ *
+ * This program is free software: you can use, redistribute, and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3
+ * or later ("AGPL"), as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+{% extends "manager_base.html" %}
+{% block styles %}
+{{ super() }}
+    <style type="text/css">
+        .blue { color: blue; }
+        .gray { color: gray; }
+        .green { color: green; }
+        .red { color: red; }
+        .yellow { color: yellow; }
+        .finished { color: #3E48CE; }
+        .interrupted { color: #FFC90F; }
+        #workers-description {
+            padding: .4em .6em;
+        }
+        table.fixed {
+            margin-bottom: 5px;
+            table-layout: fixed;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="tab-content">
+        <p id="workers-description">{{_("Here are all the tasks of Sitebot:")}}<a class="refresh pull-right">{{_("Refresh")}}</a></p>
+        {% if not workers %}
+            <div colspan="3" class="text-center alert alert-info" style="margin-bottom: 5px;">
+                {{_('No task')}}
+            </div>
+        {% else %}
+            <table class="table table-striped table-hover fixed">
+                <thead>
+                <tr>
+                    <th style="display: none;">worker_id</th>
+                    <th class="sort" data-sort="int">{{_('Start time')}}</th>
+                    <th>{{_('Task')}}</th>
+                    <th>{{_('Status')}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for worker in workers %}
+                    <tr class="worker_detail">
+                        <td class="worker_id" style="display: none;">{{worker.worker_id}}</td>
+                        <td>{{worker.start_time}}</td>
+                        <td>
+                            <a href="#">
+                                {% if worker.detail.auto %}
+                                    {{_("auto")}} {{_(worker.title | lower)}}
+                                {% else %}
+                                    {{_(worker.title)}}
+                                {% endif %}
+                            </a>
+                        </td>
+                        <td>
+                            {% if worker.state == 'running' %}
+                                <i class="fa fa-circle green" title="{{_('Running')}}"></i> {{_('Running')}}
+                            {% elif worker.state == 'finished' %}
+                                {% if worker.detail.auto %}
+                                    <i class="fa fa-circle yellow" title="{{_('Waiting')}}"></i> {{_('Waiting')}}
+                                {% else %}
+                                    <i class="fa fa-circle finished" title="{{_('Finished')}}"></i> {{_("Finished")}}
+                                {% endif %}
+                            {% elif worker.state == 'paused' %}
+                                <i class="fa fa-circle interrupted" title="{{_('Interrupted')}}"></i> {{_("Interrupted")}}
+                            {% elif worker.state == 'error' %}
+                                <i class="fa fa-circle red" title="{{_('Error')}}"></i> {{_("Error")}}
+                            {% elif worker.state == 'prepare' %}
+                                <i class="fa fa-circle blue" title="{{_('Preparing')}}"></i> {{_("Preparing")}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $("tr.worker_detail").click(function() {
+            var wid = parseInt($(this).find(".worker_id").text());
+            if (isNaN(wid)) {
+                alert("Worker_id must be a number.");
+            } else {
+                $.ajax({
+                    cache: false,
+                    url: '/ui/report_detail',
+                    type: 'POST',
+                    data: {
+                        worker_id: wid
+                    },
+                    dataType: 'json',
+                    success: function(d) {}
+                });
+            }
+        });
+        $(".refresh").click(function() {
+            window.location.reload();
+        });
+    </script>
+{% endblock %}

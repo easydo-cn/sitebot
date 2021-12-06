@@ -1,0 +1,40 @@
+<!--
+/*
+ * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
+ *
+ * This program is free software: you can use, redistribute, and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3
+ * or later ("AGPL"), as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+{% macro form_radio(id, name, value, filed, icon_name) %}
+    <div class="radio">
+        <label>
+            <input type="radio" name={{ id }} id={{ id }} value={{ value }} {% if filed == value %}checked {% endif %}>
+            <div><i class={{icon_name}}></i>{{ _(name) }}</div>
+        </label>
+    </div>
+{% endmacro %}
+
+{{ _('Up') }}
+{{ _('Down') }}
+{{ _('Sync') }}
+{{ _('One-time')}}
+{{ _('Manual') }}
+{{ _('Free') }}
+{{ _('Auto') }}
+{{ _('up') }}
+{{ _('down') }}
+{{ _('sync') }}
+{{ _('manual') }}
+{{ _('free') }}
+{{ _('Up: Update the local file synchronization to the site')}}
+{{ _('Down: Download the site file synchronization to the local *')}}
+{{ _('Sync: Local and site are synchronized with each other *') }}

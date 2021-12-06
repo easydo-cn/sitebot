@@ -1,0 +1,80 @@
+<!--
+/*
+ * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
+ *
+ * This program is free software: you can use, redistribute, and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3
+ * or later ("AGPL"), as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+{% extends "base.html" %}
+
+{% block main_content %}
+  <div class="tab-pane active">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>{{_('Package type')}}</th>
+          <th>{{_('Version')}}</th>
+          <th>{{_('Build')}}</th>
+          <th>{{_('MD5 checksum')}}</th>
+          <th>{{_('Download')}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for update in updates %}
+          <tr>
+            <td>{{update.dist}}</td>
+            <td>{{update.version}}</td>
+            <td>{{update.build_number}}</td>
+            <td>{{update.md5}}</td>
+            <td>
+              <a href="{{update.url}}">{{_('Click to download')}}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+  $('[data-toggle="popover"]').popover();
+  $('.error-popup').on('click', function(e){
+    var error_popup = window.open();
+    error_popup.document.write([
+      '<html>',
+      '<head><title>{{_('Error details')}}</title></head>',
+      '<body><pre>',
+      $(this).data('traceback'),
+      '</pre></body>',
+      '</html>'].join('')
+    );
+  });
+  $('a.worker-control').on('click', function(e){
+    var _row = $(this).closest('tr');
+    $.ajax({
+      etarget: $(this),
+      url: $(this).attr('href'),
+      dataType: 'JSON',
+      type: 'GET',
+      success: function(result){
+        setTimeout(function(){
+          window.location.reload();
+        }, 2);
+      }
+    });
+    return false;
+  });
+
+</script>
+{% endblock %}

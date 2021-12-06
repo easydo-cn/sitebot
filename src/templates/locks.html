@@ -1,0 +1,80 @@
+<!--
+/*
+ * Copyright (c) 2019 EasyDo, Inc. <panjunyong@easydo.cn>
+ *
+ * This program is free software: you can use, redistribute, and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3
+ * or later ("AGPL"), as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+{% extends "base.html" %}
+
+{% block main_content %}
+  <div class="tab-pane active" id="locks">
+    {% if not locks %}
+      <div colspan="9" class="text-center alert alert-info">
+        {{_('No lock')}}
+      </div>
+    {% else %}
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>{{_('Lock')}}</th>
+            <th>{{_('Owned by')}}</th>
+            <th>{{_('Operations')}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lock_name, lock in locks.items() %}
+            <tr>
+              <td>{{lock_name}}{% if lock.description %}: {{lock.description}}{% endif %}</td>
+              <td>
+                <a href="/admin/worker_detail?worker_id={{lock.worker_id}}">{{lock.worker_id}}</a>
+              </td>
+              <td>
+                <a class="lock-control-release" href="/admin/locks"
+                  data-action="force_release"
+                  data-lock_name="{{ lock_name | urlencode }}"
+                  data-worker_id="{{lock.worker_id}}">{{_('Force release')}}</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+  $('a.lock-control-release').on('click', function(e){
+    var action = $(this).data('action'),
+        lock_name = $(this).data('lock_name'),
+        worker_id = $(this).data('worker_id');
+    $.ajax({
+        url: $(this).attr('href'),
+        dataType: 'JSON',
+        data: {
+            action: action,
+            lock_name: decodeURIComponent(lock_name),
+            worker_id: worker_id
+        },
+        type: 'POST',
+        success: function(result){
+            setTimeout(function(){
+                window.location.reload();
+            }, 1 * 1000);
+        }
+    });
+    return false;
+  });
+</script>
+{% endblock %}
